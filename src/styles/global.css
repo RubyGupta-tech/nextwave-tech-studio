@@ -961,41 +961,122 @@ nav a:hover::after {
     line-height: 1.7;
 }
 
+.testimonials-display-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
 .testimonials-viewport {
     width: 100%;
-    max-width: 800px;
-    margin: 0 auto;
     overflow: hidden;
-    padding: 20px 0;
+    padding: 30px 0;
 }
 
 .testimonials-track {
     display: flex;
-    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
     will-change: transform;
 }
 
 .testimonial-slide {
     min-width: 100%;
     flex-shrink: 0;
-    padding: 0 15px;
     box-sizing: border-box;
     display: flex;
     justify-content: center;
+    padding: 0 10px;
+}
+
+.testimonial-group {
+    display: flex;
+    gap: 30px;
+    width: 100%;
+    max-width: 1100px; /* Capped for readability */
+    justify-content: center;
+    align-items: stretch;
+    box-sizing: border-box;
 }
 
 .testimonial-card {
     background: rgba(255, 255, 255, 0.04);
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 20px;
-    padding: 40px;
-    transition: transform 0.3s ease, border-color 0.3s ease;
-    backdrop-filter: blur(12px);
+    padding: 45px 35px;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(16px);
     text-align: left;
-    max-width: 700px;
-    width: 100%;
+    width: calc(50% - 15px); /* Precise split accounting for gap */
+    box-sizing: border-box;
     position: relative;
+    display: flex;
+    flex-direction: column;
 }
+
+.testimonial-text {
+    font-size: 16px;
+    line-height: 1.8;
+    color: #CBD5E1;
+    margin-bottom: 28px;
+    font-style: italic;
+    white-space: normal !important; /* Force wrap always */
+}
+
+/* Common Slider Nav Buttons */
+.slider-nav-btn {
+    position: absolute; /* Absolute for both sliders */
+    top: 50%;
+    transform: translateY(-50%) scale(0.9);
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    background: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    color: #FFFFFF;
+    opacity: 0;
+    visibility: hidden;
+    z-index: 20;
+}
+
+.slider-nav-btn.prev { left: -70px; }
+.slider-nav-btn.next { right: -70px; }
+
+.testimonials-display-wrapper:hover .slider-nav-btn,
+.slider-display-wrapper:hover .slider-nav-btn {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(-50%) scale(1);
+}
+
+@media (max-width: 1400px) {
+    .slider-nav-btn.prev { left: 10px; }
+    .slider-nav-btn.next { right: 10px; }
+}
+
+.slider-nav-btn svg {
+    width: 30px;
+    height: 30px;
+    fill: currentColor;
+}
+
+.slider-nav-btn:hover {
+    background: #06B6D4;
+    border-color: #06B6D4;
+    transform: scale(1.1);
+    box-shadow: 0 0 15px rgba(6, 182, 212, 0.4);
+}
+
+/* DELETE THESE - Unified above */
 
 .testimonials-dots {
     display: flex;
@@ -2266,6 +2347,14 @@ nav a:hover::after {
         font-size: 28px;
     }
 
+    .testimonials-display-wrapper {
+        gap: 0;
+    }
+
+    .slider-nav-btn {
+        display: none !important; /* Hide arrows on mobile */
+    }
+
     .testimonials-viewport {
         max-width: 100%;
         padding: 10px 0;
@@ -2275,9 +2364,19 @@ nav a:hover::after {
         padding: 0 10px;
     }
 
+    .testimonial-group {
+        display: flex;
+        flex-direction: column; /* Force single column on mobile */
+        width: 100%;
+        gap: 0;
+    }
+
     .testimonial-card {
-        padding: 24px;
+        padding: 30px 24px;
         border-radius: 16px;
+        width: 100%;
+        flex: none;
+        max-width: 100%;
     }
 
     .testimonial-text {
@@ -2615,6 +2714,13 @@ nav a:hover::after {
     animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+
+/* ===================== SHOWCASE SLIDER NAILS ===================== */
+.slider-display-wrapper {
+    position: relative;
+    width: 100%;
+}
+/* Arrows unified in common slider-nav-btn classes above */
 
 /* ===================== SHOWCASE SLIDER ===================== */
 .showcase-slider-section {

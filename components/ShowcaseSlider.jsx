@@ -30,13 +30,23 @@ const ShowcaseSlider = () => {
     const handleTouchEnd = () => {
         if (touchStart - touchEnd > 75) {
             // Swipe Left
-            setCurrentIndex((prev) => (prev + 1) % projects.length);
+            nextSlide();
         }
 
         if (touchStart - touchEnd < -75) {
             // Swipe Right
-            setCurrentIndex((prev) => (prev - 1 + projects.length) % projects.length);
+            prevSlide();
         }
+    };
+
+    const nextSlide = () => {
+        setCurrentIndex((prev) => (prev + 1) % projects.length);
+        setIsAutoPlaying(false);
+    };
+
+    const prevSlide = () => {
+        setCurrentIndex((prev) => (prev - 1 + projects.length) % projects.length);
+        setIsAutoPlaying(false);
     };
 
     const goToSlide = (index) => {
@@ -50,50 +60,62 @@ const ShowcaseSlider = () => {
                 <div className="section-label">INTERACTIVE SHOWCASE</div>
                 <h2 className="slider-heading">A Closer Look</h2>
                 
-                <div className="slider-outer">
-                    <div 
-                        className="slider-track-window"
-                        onTouchStart={handleTouchStart}
-                        onTouchMove={handleTouchMove}
-                        onTouchEnd={handleTouchEnd}
-                        onMouseDown={handleTouchStart}
-                        onMouseMove={handleTouchMove}
-                        onMouseUp={handleTouchEnd}
-                    >
-                        <div className="slider-track" style={{ transform: `translateX(-${currentIndex * 100}%)` }}>
-                            {projects.map((project, index) => (
-                                <div key={index} className={`slider-slide ${index === currentIndex ? 'active' : ''}`}>
-                                    <div className="slide-content">
-                                        <div className="slide-visual">
-                                            <div className="premium-mockup">
-                                                <div className="mockup-header">
-                                                    <div className="mockup-dots">
-                                                        <span></span><span></span><span></span>
+                <div className="slider-display-wrapper">
+                    <button className="slider-nav-btn prev" onClick={prevSlide} aria-label="Previous project">
+                        <svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+                    </button>
+
+                    <div className="slider-outer">
+                        <div 
+                            className="slider-track-window"
+                            onTouchStart={handleTouchStart}
+                            onTouchMove={handleTouchMove}
+                            onTouchEnd={handleTouchEnd}
+                            onMouseDown={handleTouchStart}
+                            onMouseMove={handleTouchMove}
+                            onMouseUp={handleTouchEnd}
+                            onMouseEnter={() => setIsAutoPlaying(false)}
+                            onMouseLeave={() => setIsAutoPlaying(true)}
+                        >
+                            <div className="slider-track" style={{ transform: `translateX(-${currentIndex * 100}%)` }}>
+                                {projects.map((project, index) => (
+                                    <div key={index} className={`slider-slide ${index === currentIndex ? 'active' : ''}`}>
+                                        <div className="slide-content">
+                                            <div className="slide-visual">
+                                                <div className="premium-mockup">
+                                                    <div className="mockup-header">
+                                                        <div className="mockup-dots">
+                                                            <span></span><span></span><span></span>
+                                                        </div>
+                                                        <div className="mockup-url">{project.link.replace('https://', '')}</div>
                                                     </div>
-                                                    <div className="mockup-url">{project.link.replace('https://', '')}</div>
-                                                </div>
-                                                <div className="mockup-screen">
-                                                    <img src={project.image} alt={project.title} className="parallax-img" />
-                                                    <div className="mockup-overlay">
-                                                        <a href={project.link} target="_blank" rel="noopener noreferrer" className="mockup-btn">
-                                                            Visit Live Site
-                                                        </a>
+                                                    <div className="mockup-screen">
+                                                        <img src={project.image} alt={project.title} className="parallax-img" />
+                                                        <div className="mockup-overlay">
+                                                            <a href={project.link} target="_blank" rel="noopener noreferrer" className="mockup-btn">
+                                                                Visit Live Site
+                                                            </a>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div className="slide-info">
-                                            <h3 className="slide-title" style={{ color: project.color }}>{project.title}</h3>
-                                            <p className="slide-desc">{project.description}</p>
-                                            <div className="slide-footer">
-                                                <div className="slide-index">0{index + 1} / 0{projects.length}</div>
+                                            <div className="slide-info">
+                                                <h3 className="slide-title" style={{ color: project.color }}>{project.title}</h3>
+                                                <p className="slide-desc">{project.description}</p>
+                                                <div className="slide-footer">
+                                                    <div className="slide-index">0{index + 1} / 0{projects.length}</div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            ))}
+                                ))}
+                            </div>
                         </div>
                     </div>
+
+                    <button className="slider-nav-btn next" onClick={nextSlide} aria-label="Next project">
+                        <svg viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+                    </button>
                 </div>
                 
                 <div className="slider-pagination">
