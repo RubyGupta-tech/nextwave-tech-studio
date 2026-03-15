@@ -2227,10 +2227,10 @@ nav a:hover::after {
         grid-template-columns: none !important;
         overflow-x: auto;
         scroll-snap-type: x mandatory;
-        padding: 10px 4px 30px;
-        gap: 20px;
+        padding: 20px 20px 40px; /* More side padding for centering */
+        gap: 16px;
         -webkit-overflow-scrolling: touch;
-        scrollbar-width: none; /* Hide scrollbar for clean look */
+        scrollbar-width: none;
     }
 
     .testimonials-grid::-webkit-scrollbar {
@@ -2238,13 +2238,17 @@ nav a:hover::after {
     }
 
     .testimonial-card {
-        min-width: 85vw; /* Almost full width for mobile slides */
+        min-width: 80vw; /* Reduced to show "peek" of next card */
+        max-width: 80vw;
         scroll-snap-align: center;
         flex-shrink: 0;
+        padding: 24px; /* Slightly tighter on mobile */
     }
 
     .testimonial-text {
         font-size: 14px;
+        white-space: normal !important; /* Force wrap */
+        line-height: 1.6;
     }
 
     /* About */
