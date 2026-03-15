@@ -9,6 +9,10 @@ import Testimonials from "../components/Testimonials";
 import About from "../components/About";
 import Contact from "../components/Contact";
 import Footer from "../components/Footer";
+import TrustBar from "../components/TrustBar";
+import Process from "../components/Process";
+import FloatingCTA from "../components/FloatingCTA";
+import ShowcaseSlider from "../components/ShowcaseSlider";
 
 // Sub-pages
 import WebsiteCreation from "../components/pages/WebsiteCreation";
@@ -18,19 +22,39 @@ import MoreCustomers from "../components/pages/MoreCustomers";
 import InternetMarketing from "../components/pages/InternetMarketing";
 import EnterpriseDevelopment from "../components/pages/EnterpriseDevelopment";
 
+import PortfolioPage from "../components/pages/PortfolioPage";
+
 import "./styles/global.css";
 
-const Home = () => (
-    <>
-        <Hero />
-        <StatsBar />
-        <Services />
-        <Portfolio />
-        <Testimonials />
-        <About />
-        <Contact />
-    </>
-);
+const Home = () => {
+    React.useEffect(() => {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('revealed');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        return () => observer.disconnect();
+    }, []);
+
+    return (
+        <>
+            <Hero />
+            <div className="reveal"><TrustBar /></div>
+            <div className="reveal"><StatsBar /></div>
+            <div className="reveal"><Services /></div>
+            <div className="reveal"><Process /></div>
+            <div className="reveal"><ShowcaseSlider /></div>
+            <div className="reveal"><About /></div>
+            <div className="reveal"><Testimonials /></div>
+            <div className="reveal"><Contact /></div>
+            <FloatingCTA />
+        </>
+    );
+};
 
 function App() {
     return (
@@ -39,6 +63,7 @@ function App() {
                 <Navbar />
                 <Routes>
                     <Route path="/" element={<Home />} />
+                    <Route path="/portfolio" element={<PortfolioPage />} />
                     <Route path="/services/website-creation" element={<WebsiteCreation />} />
                     <Route path="/services/website-updates" element={<WebsiteUpdates />} />
                     <Route path="/services/website-fixes" element={<WebsiteFixes />} />

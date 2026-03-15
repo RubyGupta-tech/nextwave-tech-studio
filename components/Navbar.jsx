@@ -1,11 +1,14 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import "../src/styles/global.css";
 
 const Navbar = () => {
     const [menuOpen, setMenuOpen] = useState(false);
+    const location = useLocation();
+    const activeHash = location.hash || (location.pathname === "/" ? "#home" : "");
 
     const closeMenu = () => setMenuOpen(false);
+    const isActive = (hash) => activeHash === hash;
 
     return (
         <header className="navbar">
@@ -29,21 +32,21 @@ const Navbar = () => {
             </button>
 
             <nav className={menuOpen ? "nav-open" : ""}>
-                <Link to="/" onClick={closeMenu}>Home</Link>
+                <Link to="/" onClick={closeMenu} className={location.pathname === "/" && !location.hash ? "active" : ""}>Home</Link>
                 <div className="dropdown">
-                    <a href="/#services" className="dropbtn" onClick={closeMenu}>Services &#9662;</a>
+                    <a href="/#services" className={`dropbtn ${activeHash.includes("services") ? "active" : ""}`} onClick={closeMenu}>Services &#9662;</a>
                     <div className="dropdown-content">
-                        <Link to="/services/website-creation" onClick={closeMenu}>Website Creation</Link>
-                        <Link to="/services/website-updates" onClick={closeMenu}>Website Updates</Link>
-                        <Link to="/services/website-fixes" onClick={closeMenu}>Website Fixes</Link>
-                        <Link to="/services/more-customers" onClick={closeMenu}>More Customers</Link>
-                        <Link to="/services/internet-marketing" onClick={closeMenu}>Internet Marketing</Link>
-                        <Link to="/services/enterprise-development" onClick={closeMenu}>Enterprise Apps</Link>
+                        <NavLink to="/services/website-creation" onClick={closeMenu}>Website Creation</NavLink>
+                        <NavLink to="/services/website-updates" onClick={closeMenu}>Website Updates</NavLink>
+                        <NavLink to="/services/website-fixes" onClick={closeMenu}>Website Fixes</NavLink>
+                        <NavLink to="/services/more-customers" onClick={closeMenu}>More Customers</NavLink>
+                        <NavLink to="/services/internet-marketing" onClick={closeMenu}>Internet Marketing</NavLink>
+                        <NavLink to="/services/enterprise-development" onClick={closeMenu}>Enterprise Apps</NavLink>
                     </div>
                 </div>
-                <a href="/#portfolio" onClick={closeMenu}>Portfolio</a>
-                <a href="/#about" onClick={closeMenu}>About</a>
-                <a href="/#contact" onClick={closeMenu}>Contact</a>
+                <NavLink to="/portfolio" onClick={closeMenu}>Portfolio</NavLink>
+                <a href="/#about" className={isActive("#about") ? "active" : ""} onClick={closeMenu}>About</a>
+                <a href="/#contact" className={isActive("#contact") ? "active" : ""} onClick={closeMenu}>Contact</a>
             </nav>
         </header>
     );
