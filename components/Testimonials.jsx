@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "../src/styles/global.css";
 
 const testimonials = [
@@ -29,6 +29,28 @@ const testimonials = [
 ];
 
 const Testimonials = () => {
+    const [activeIndex, setActiveIndex] = useState(0);
+    const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+    const scrollRef = useRef(null);
+
+    useEffect(() => {
+        if (!isAutoPlaying) return;
+
+        const interval = setInterval(() => {
+            setActiveIndex((current) => (current + 1) % testimonials.length);
+        }, 5000);
+
+        return () => clearInterval(interval);
+    }, [isAutoPlaying]);
+
+    // Handle dot navigation
+    const goToSlide = (index) => {
+        setActiveIndex(index);
+        setIsAutoPlaying(false); // Pause auto-play on manual interaction
+        // Resume after 10 seconds of inactivity
+        setTimeout(() => setIsAutoPlaying(true), 10000);
+    };
+
     return (
         <section className="testimonials-section">
             <div className="testimonials-container">
@@ -37,19 +59,40 @@ const Testimonials = () => {
                 <p className="testimonials-subheading">
                     Real results for real businesses — from non-profits to enterprise.
                 </p>
-                <div className="testimonials-grid">
-                    {testimonials.map((t, index) => (
-                        <div key={index} className="testimonial-card">
-                            <div className="testimonial-quote-icon">"</div>
-                            <p className="testimonial-text">{t.quote}</p>
-                            <div className="testimonial-author">
-                                <div className="testimonial-avatar">{t.avatar}</div>
-                                <div>
-                                    <div className="testimonial-name">{t.name}</div>
-                                    <div className="testimonial-title">{t.title}</div>
+                
+                <div className="testimonials-viewport">
+                    <div 
+                        className="testimonials-track"
+                        style={{ transform: `translateX(-${activeIndex * 100}%)` }}
+                        onMouseEnter={() => setIsAutoPlaying(false)}
+                        onMouseLeave={() => setIsAutoPlaying(true)}
+                    >
+                        {testimonials.map((t, index) => (
+                            <div key={index} className="testimonial-slide">
+                                <div className="testimonial-card">
+                                    <div className="testimonial-quote-icon">"</div>
+                                    <p className="testimonial-text">{t.quote}</p>
+                                    <div className="testimonial-author">
+                                        <div className="testimonial-avatar">{t.avatar}</div>
+                                        <div>
+                                            <div className="testimonial-name">{t.name}</div>
+                                            <div className="testimonial-title">{t.title}</div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        ))}
+                    </div>
+                </div>
+
+                <div className="testimonials-dots">
+                    {testimonials.map((_, index) => (
+                        <button
+                            key={index}
+                            className={`dot ${index === activeIndex ? 'active' : ''}`}
+                            onClick={() => goToSlide(index)}
+                            aria-label={`Go to testimonial ${index + 1}`}
+                        />
                     ))}
                 </div>
             </div>
