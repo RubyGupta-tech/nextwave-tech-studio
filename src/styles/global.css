@@ -254,10 +254,10 @@ nav a:hover::after {
 }
 
 @keyframes floatParticle {
-    0% { transform: translateY(100vh) scale(0); opacity: 0; }
-    10% { opacity: 0.9; } /* Brighter and faster fade-in */
+    0% { transform: translateY(110%) scale(0); opacity: 0; }
+    10% { opacity: 0.9; } 
     80% { opacity: 0.9; }
-    100% { transform: translateY(-100px) scale(1.2); opacity: 0; }
+    100% { transform: translateY(-20vh) scale(1.2); opacity: 0; }
 }
 
 .glow-trail-particle:nth-child(1) { left: 10%; animation-duration: 8s; animation-delay: 0s; }
@@ -280,6 +280,27 @@ nav a:hover::after {
 .glow-trail-particle:nth-child(18) { left: 75%; animation-duration: 15s; animation-delay: 0s; }
 .glow-trail-particle:nth-child(19) { left: 90%; animation-duration: 8s; animation-delay: 4s; }
 .glow-trail-particle:nth-child(20) { left: 2%; animation-duration: 13s; animation-delay: 7s; }
+.glow-trail-particle:nth-child(n+21) { opacity: 0.8; width: 2px; height: 2px; }
+.glow-trail-particle:nth-child(21) { left: 12%; animation-duration: 11s; animation-delay: 1s; }
+.glow-trail-particle:nth-child(22) { left: 28%; animation-duration: 9s; animation-delay: 3s; }
+.glow-trail-particle:nth-child(23) { left: 42%; animation-duration: 15s; animation-delay: 5s; }
+.glow-trail-particle:nth-child(24) { left: 58%; animation-duration: 10s; animation-delay: 2s; }
+.glow-trail-particle:nth-child(25) { left: 72%; animation-duration: 14s; animation-delay: 6s; }
+.glow-trail-particle:nth-child(26) { left: 88%; animation-duration: 8s; animation-delay: 4s; }
+.glow-trail-particle:nth-child(27) { left: 7%; animation-duration: 12s; animation-delay: 8s; }
+.glow-trail-particle:nth-child(28) { left: 22%; animation-duration: 16s; animation-delay: 2s; }
+.glow-trail-particle:nth-child(29) { left: 37%; animation-duration: 7s; animation-delay: 5s; }
+.glow-trail-particle:nth-child(30) { left: 52%; animation-duration: 13s; animation-delay: 3s; }
+.glow-trail-particle:nth-child(31) { left: 67%; animation-duration: 10s; animation-delay: 7s; }
+.glow-trail-particle:nth-child(32) { left: 82%; animation-duration: 15s; animation-delay: 1s; }
+.glow-trail-particle:nth-child(33) { left: 97%; animation-duration: 9s; animation-delay: 4s; }
+.glow-trail-particle:nth-child(34) { left: 18%; animation-duration: 14s; animation-delay: 6s; }
+.glow-trail-particle:nth-child(35) { left: 33%; animation-duration: 11s; animation-delay: 2s; }
+.glow-trail-particle:nth-child(36) { left: 48%; animation-duration: 8s; animation-delay: 8s; }
+.glow-trail-particle:nth-child(37) { left: 63%; animation-duration: 12s; animation-delay: 5s; }
+.glow-trail-particle:nth-child(38) { left: 78%; animation-duration: 16s; animation-delay: 3s; }
+.glow-trail-particle:nth-child(39) { left: 93%; animation-duration: 10s; animation-delay: 1s; }
+.glow-trail-particle:nth-child(40) { left: 4%; animation-duration: 13s; animation-delay: 9s; }
 
 /* Animated background glow orbs */
 .hero-glow {
