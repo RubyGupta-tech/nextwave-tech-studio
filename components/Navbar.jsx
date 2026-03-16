@@ -20,7 +20,7 @@ const Navbar = () => {
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                 }}
             >
-                <img src="/nextwave_tech_logo.jpeg" alt="NextWave Tech Logo" className="navbar-logo" />
+                <img src="/NextWave_logo1.web.jpeg" alt="NextWave Tech Logo" className="navbar-logo" />
                 <div className="brand-title">
                     <span className="footer-brand-next">NEXT</span><span className="footer-brand-wave">WAVE</span>
                     <span className="footer-brand-sub">TECH STUDIO</span>
