@@ -1,7 +1,22 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import '../../src/styles/global.css';
 
 const WebsiteCreation = () => {
+    useEffect(() => {
+        window.scrollTo(0, 0);
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('revealed');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        return () => observer.disconnect();
+    }, []);
+
     return (
         <div className="subpage">
             <div className="page-hero">
@@ -20,18 +35,35 @@ const WebsiteCreation = () => {
                         </p>
                     </div>
 
-                    <div className="services-grid-primary" style={{ marginTop: '40px' }}>
-                        <div className="service-block">
-                            <h3>Custom Architecture</h3>
-                            <p>No cookie-cutter templates. We build bespoke digital experiences tailored to your brand's unique needs and identity.</p>
+                    <div className="services-grid-premium" style={{ marginTop: '60px' }}>
+                        {/* Custom Architecture */}
+                        <div className="premium-service-card reveal">
+                            <div className="card-layer-bg"></div>
+                            <div className="premium-card-content">
+                                <div className="card-icon-top">🏛️</div>
+                                <h3>Custom Architecture</h3>
+                                <p>No cookie-cutter templates. We build bespoke digital experiences tailored to your brand's unique needs and identity.</p>
+                            </div>
                         </div>
-                        <div className="service-block">
-                            <h3>Responsive Design</h3>
-                            <p>Flawless execution across all devices. We ensure your site looks stunning on desktop, tablet, and mobile.</p>
+
+                        {/* Responsive Design */}
+                        <div className="premium-service-card reveal">
+                            <div className="card-layer-bg"></div>
+                            <div className="premium-card-content">
+                                <div className="card-icon-top">📱</div>
+                                <h3>Responsive Design</h3>
+                                <p>Flawless execution across all devices. We ensure your site looks stunning on desktop, tablet, and mobile.</p>
+                            </div>
                         </div>
-                        <div className="service-block">
-                            <h3>Conversion Focused</h3>
-                            <p>Beautiful design paired with highly effective UI/UX functionality to drive leads and maximize your ROI.</p>
+
+                        {/* Conversion Focused */}
+                        <div className="premium-service-card reveal">
+                            <div className="card-layer-bg"></div>
+                            <div className="premium-card-content">
+                                <div className="card-icon-top">📈</div>
+                                <h3>Conversion Focused</h3>
+                                <p>Beautiful design paired with highly effective UI/UX functionality. We optimize every touchpoint to drive leads and maximize your ROI.</p>
+                            </div>
                         </div>
                     </div>
 

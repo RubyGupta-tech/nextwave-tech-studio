@@ -3719,9 +3719,20 @@ nav a:hover::after {
 
 .about-hero .lead {
     font-size: 20px;
-    color: #94A3B8;
+    color: #94A3B8; /* Slate gray on dark background */
     margin-bottom: 40px;
     line-height: 1.6;
+}
+
+/* Improve paragraph contrast on light backgrounds */
+.about-page .lead, 
+.about-page .subtitle {
+    color: #475569 !important; /* Darker slate for readability on white/light-gray */
+}
+
+.about-page .gray-bg .lead,
+.about-page .gray-bg p {
+    color: #334155;
 }
 
 .about-cta-btn {
@@ -3773,7 +3784,7 @@ nav a:hover::after {
 
 .story-pill p {
     font-size: 14px;
-    color: #94A3B8;
+    color: #475569; /* Darker for mobile visibility */
     line-height: 1.5;
     margin: 0;
 }
@@ -4008,6 +4019,25 @@ nav a:hover::after {
     background: #F8FAFC;
 }
 
+.expertise-mini-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: 30px;
+}
+
+@media (max-width: 600px) {
+    .expertise-mini-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .about-page p, 
+    .about-page .lead {
+        font-size: 16px !important;
+        line-height: 1.6 !important;
+    }
+}
+
 .aesthetic-frame-left {
     position: relative;
     padding: 20px;
@@ -4228,5 +4258,96 @@ nav a:hover::after {
     background: #0891B2;
     transform: scale(1.05);
     box-shadow: 0 10px 20px rgba(6, 182, 212, 0.3);
+}
+
+/* ===================== PREMIUM SERVICE CARDS (STACK EFFECT) ===================== */
+.services-grid-premium {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+    padding: 20px 0;
+}
+
+.premium-service-card {
+    position: relative;
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 24px;
+    padding: 50px 40px;
+    transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+    z-index: 1;
+}
+
+.card-layer-bg {
+    position: absolute;
+    inset: 0;
+    background: #06B6D4;
+    border-radius: 24px;
+    z-index: -1;
+    opacity: 0;
+    transform: translate(0, 0);
+    transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.premium-service-card:hover {
+    transform: translateY(-15px) translateX(-5px);
+    border-color: #06B6D4;
+    box-shadow: 20px 20px 60px rgba(0, 0, 0, 0.05);
+}
+
+.premium-service-card:hover .card-layer-bg {
+    opacity: 0.1;
+    transform: translate(15px, 15px); /* The "Stack" effect */
+}
+
+.card-icon-top {
+    font-size: 48px;
+    margin-bottom: 30px;
+    background: rgba(6, 182, 212, 0.05);
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 20px;
+    border: 1px solid rgba(6, 182, 212, 0.1);
+    transition: all 0.4s ease;
+}
+
+.premium-service-card:hover .card-icon-top {
+    transform: scale(1.1) rotate(-5deg);
+    background: #06B6D4;
+    color: white;
+}
+
+.premium-card-content h3 {
+    font-size: 26px;
+    color: #0F172A;
+    margin-bottom: 20px;
+    font-weight: 800;
+}
+
+.premium-card-content p {
+    font-size: 17px;
+    color: #64748B;
+    line-height: 1.7;
+}
+
+@media (max-width: 992px) {
+    .services-grid-premium {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .services-grid-premium {
+        grid-template-columns: 1fr;
+    }
+    .premium-service-card:hover {
+        transform: translateY(-10px);
+    }
+    .premium-service-card:hover .card-layer-bg {
+        transform: translate(10px, 10px);
+    }
 }
 

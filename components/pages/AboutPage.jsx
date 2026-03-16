@@ -114,7 +114,7 @@ const AboutPage = () => {
                         <p>
                             With a track record of delivering high-stakes digital products, I bring a unique blend of technical mastery and strategic design to every project.
                         </p>
-                        <div className="expertise-mini-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginTop: '30px' }}>
+                        <div className="expertise-mini-grid">
                             <div className="expertise-item">
                                 <h3 style={{ fontSize: '18px', color: '#06B6D4' }}>🚀 High-Velocity</h3>
                                 <p style={{ fontSize: '14px' }}>Fast-loading, scalable React apps.</p>
