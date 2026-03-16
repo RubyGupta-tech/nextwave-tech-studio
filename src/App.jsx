@@ -24,6 +24,7 @@ import InternetMarketing from "../components/pages/InternetMarketing";
 import EnterpriseDevelopment from "../components/pages/EnterpriseDevelopment";
 
 import PortfolioPage from "../components/pages/PortfolioPage";
+import AboutPage from "../components/pages/AboutPage";
 
 import "./styles/global.css";
 
@@ -65,6 +66,7 @@ function App() {
                 <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/portfolio" element={<PortfolioPage />} />
+                    <Route path="/about" element={<AboutPage />} />
                     <Route path="/services/website-creation" element={<WebsiteCreation />} />
                     <Route path="/services/website-updates" element={<WebsiteUpdates />} />
                     <Route path="/services/website-fixes" element={<WebsiteFixes />} />

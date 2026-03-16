@@ -12,7 +12,7 @@ const Contact = () => {
     };
 
     return (
-        <section id="contact" className="contact-section">
+        <section id="contact" className="contact-section" style={{ scrollMarginTop: '100px' }}>
             <div className="contact-split">
 
                 {/* ── LEFT PANEL ── */}

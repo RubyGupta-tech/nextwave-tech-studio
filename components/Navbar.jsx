@@ -52,7 +52,7 @@ const Navbar = () => {
                     </div>
                 </div>
                 <NavLink to="/portfolio" onClick={closeMenu}>Portfolio</NavLink>
-                <a href="/#about" className={isActive("#about") ? "active" : ""} onClick={closeMenu}>About</a>
+                <NavLink to="/about" onClick={closeMenu}>About</NavLink>
                 <a href="/#contact" className={isActive("#contact") ? "active" : ""} onClick={closeMenu}>Contact</a>
             </nav>
         </header>
