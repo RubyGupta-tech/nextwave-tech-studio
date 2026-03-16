@@ -237,25 +237,27 @@ nav a:hover::after {
 
 .glow-trail-particle {
     position: absolute;
-    width: 4px; /* Scaled up for "pop" */
+    bottom: 0; /* Anchor to bottom so they float UP */
+    width: 4px;
     height: 4px;
-    background: #FFFFFF; /* Pure white for star effect */
+    background: #FFFFFF;
     border-radius: 50%;
-    box-shadow: 0 0 14px #FFFFFF, 0 0 28px rgba(255, 255, 255, 0.6); 
-    animation: floatParticle 10s ease-in-out infinite;
+    box-shadow: 0 0 16px #FFFFFF, 0 0 32px rgba(255, 255, 255, 0.6); 
+    animation: floatParticle 10s linear infinite;
     opacity: 0;
+    pointer-events: none;
 }
 
 .glow-trail-particle:nth-child(odd) { 
     background: #06B6D4; 
-    box-shadow: 0 0 14px #06B6D4, 0 0 28px rgba(6, 182, 212, 0.5); 
+    box-shadow: 0 0 16px #06B6D4, 0 0 32px rgba(6, 182, 212, 0.5); 
 }
 
 @keyframes floatParticle {
-    0% { transform: translateY(110%) scale(0); opacity: 0; }
+    0% { transform: translateY(10vh) scale(0); opacity: 0; }
     10% { opacity: 0.9; } 
-    80% { opacity: 0.9; }
-    100% { transform: translateY(-20vh) scale(1.2); opacity: 0; }
+    90% { opacity: 0.9; }
+    100% { transform: translateY(-70vh) scale(1.5); opacity: 0; }
 }
 
 .glow-trail-particle:nth-child(1) { left: 10%; animation-duration: 8s; animation-delay: 0s; }
