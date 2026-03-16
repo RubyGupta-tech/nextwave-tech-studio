@@ -13,6 +13,7 @@ import TrustBar from "../components/TrustBar";
 import Process from "../components/Process";
 import FloatingCTA from "../components/FloatingCTA";
 import ShowcaseSlider from "../components/ShowcaseSlider";
+import ChatWidget from "../components/ChatWidget";
 
 // Sub-pages
 import WebsiteCreation from "../components/pages/WebsiteCreation";
@@ -72,6 +73,7 @@ function App() {
                     <Route path="/services/enterprise-development" element={<EnterpriseDevelopment />} />
                 </Routes>
                 <Footer />
+                <ChatWidget />
             </div>
         </Router>
     );
