@@ -9,8 +9,8 @@ const PortfolioPage = () => {
 
     return (
         <main className="portfolio-page">
-            <ShowcaseSlider />
             <Portfolio />
+            <ShowcaseSlider />
             <section className="portfolio-cta-wrapper">
                 <div className="portfolio-cta-box">
                     <h2 className="portfolio-cta-title">Ready to start your project?</h2>

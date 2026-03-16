@@ -16,7 +16,7 @@ const Hero = () => {
                 </svg>
                 <div className="hero-glow-trails">
                     {[...Array(40)].map((_, i) => (
-                        <div key={i} className="glow-trail-particle"></div>
+                        <div key={i} className="hero-star-particle"></div>
                     ))}
                 </div>
             </div>
