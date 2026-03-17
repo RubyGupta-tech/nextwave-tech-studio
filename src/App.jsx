@@ -21,6 +21,8 @@ import WebsiteUpdates from "../components/pages/WebsiteUpdates";
 import WebsiteFixes from "../components/pages/WebsiteFixes";
 import MoreCustomers from "../components/pages/MoreCustomers";
 import InternetMarketing from "../components/pages/InternetMarketing";
+import SEOMarketing from "../components/pages/SEOMarketing";
+import ADACompliance from "../components/pages/ADACompliance";
 import EnterpriseDevelopment from "../components/pages/EnterpriseDevelopment";
 
 import PortfolioPage from "../components/pages/PortfolioPage";
@@ -73,6 +75,8 @@ function App() {
                     <Route path="/services/more-customers" element={<MoreCustomers />} />
                     <Route path="/services/internet-marketing" element={<InternetMarketing />} />
                     <Route path="/services/enterprise-development" element={<EnterpriseDevelopment />} />
+                    <Route path="/services/seo-marketing" element={<SEOMarketing />} />
+                    <Route path="/services/ada-compliance" element={<ADACompliance />} />
                 </Routes>
                 <Footer />
                 <ChatWidget />

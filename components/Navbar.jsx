@@ -47,8 +47,10 @@ const Navbar = () => {
                         <NavLink to="/services/website-updates" onClick={closeMenu}>Website Updates</NavLink>
                         <NavLink to="/services/website-fixes" onClick={closeMenu}>Website Fixes</NavLink>
                         <NavLink to="/services/more-customers" onClick={closeMenu}>More Customers</NavLink>
+                        <NavLink to="/services/seo-marketing" onClick={closeMenu}>SEO & Marketing</NavLink>
                         <NavLink to="/services/internet-marketing" onClick={closeMenu}>Internet Marketing</NavLink>
                         <NavLink to="/services/enterprise-development" onClick={closeMenu}>Enterprise Apps</NavLink>
+                        <NavLink to="/services/ada-compliance" onClick={closeMenu}>ADA Compliance</NavLink>
                     </div>
                 </div>
                 <NavLink to="/portfolio" onClick={closeMenu}>Portfolio</NavLink>

@@ -596,15 +596,15 @@ nav a:hover::after {
 /* 1. Immediate Needs Grid */
 .services-grid-primary {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 24px;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px; /* Slightly reduced gap to save space */
 }
 
 .service-block {
     background-color: #FFFFFF;
     border: 1px solid #E2E8F0;
     border-radius: 8px;
-    padding: 40px 32px;
+    padding: 24px 16px; /* Reduced from 40px 32px to fit 6 in a row */
     text-align: center;
     text-decoration: none;
     color: inherit;
@@ -612,7 +612,7 @@ nav a:hover::after {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    min-height: 280px;
+    min-height: 240px; /* Slightly reduced min-height */
 }
 
 .service-block:hover {
@@ -4348,6 +4348,117 @@ nav a:hover::after {
     }
     .premium-service-card:hover .card-layer-bg {
         transform: translate(10px, 10px);
+    }
+}
+
+/* ===================== TECH MASTERY SHOWCASE ===================== */
+.tech-mastery-section {
+    margin: 100px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 80px;
+}
+
+.tech-group-title {
+    font-size: 28px;
+    font-weight: 800;
+    color: #0F172A;
+    margin-bottom: 40px;
+    text-align: center;
+    position: relative;
+    padding-bottom: 15px;
+}
+
+.tech-group-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 4px;
+    background: #06B6D4;
+    border-radius: 2px;
+}
+
+.tech-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 30px;
+    justify-content: center;
+}
+
+.tech-card {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 20px;
+    padding: 30px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    cursor: default;
+}
+
+.tech-icon {
+    width: 60px;
+    height: 60px;
+    background: #F8FAFC;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 18px;
+    color: #475569;
+    border: 1px solid #E2E8F0;
+    transition: all 0.4s ease;
+}
+
+.tech-card span {
+    font-size: 15px;
+    font-weight: 700;
+    color: #1E293B;
+    letter-spacing: 0.5px;
+}
+
+.tech-card:hover {
+    transform: translateY(-10px);
+    border-color: #06B6D4;
+    box-shadow: 0 20px 40px rgba(6, 182, 212, 0.1);
+}
+
+.tech-card:hover .tech-icon {
+    background: #06B6D4;
+    color: #FFFFFF;
+    border-color: #06B6D4;
+    transform: rotate(10deg);
+}
+
+/* Specific Tech Colors/Branding (Optional but Premium) */
+.tech-card.wordpress:hover { box-shadow: 0 20px 40px rgba(33, 117, 155, 0.2); }
+.tech-card.shopify:hover { box-shadow: 0 20px 40px rgba(149, 191, 71, 0.2); }
+.tech-card.react:hover { box-shadow: 0 20px 40px rgba(97, 218, 251, 0.2); }
+.tech-card.nextjs:hover { box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2); }
+
+@media (max-width: 768px) {
+    .tech-mastery-section {
+        margin: 60px 0;
+        gap: 60px;
+    }
+    .tech-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+    .tech-group-title {
+        font-size: 24px;
+    }
+}
+
+@media (max-width: 480px) {
+    .tech-grid {
+        grid-template-columns: 1fr;
     }
 }
 

@@ -67,6 +67,61 @@ const WebsiteCreation = () => {
                         </div>
                     </div>
 
+                    {/* Technical Mastery Showcase */}
+                    <div className="tech-mastery-section reveal">
+                        <div className="tech-group">
+                            <h3 className="tech-group-title">Standard Website Platforms & Builders</h3>
+                            <div className="tech-grid">
+                                <div className="tech-card wordpress">
+                                    <div className="tech-icon">WP</div>
+                                    <span>WordPress</span>
+                                </div>
+                                <div className="tech-card squarespace">
+                                    <div className="tech-icon">SQ</div>
+                                    <span>Squarespace</span>
+                                </div>
+                                <div className="tech-card wix">
+                                    <div className="tech-icon">WX</div>
+                                    <span>Wix</span>
+                                </div>
+                                <div className="tech-card shopify">
+                                    <div className="tech-icon">SH</div>
+                                    <span>Shopify</span>
+                                </div>
+                                <div className="tech-card webflow">
+                                    <div className="tech-icon">WF</div>
+                                    <span>Webflow</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="tech-group">
+                            <h3 className="tech-group-title">Tailored Design Technology Solutions</h3>
+                            <div className="tech-grid">
+                                <div className="tech-card nextjs">
+                                    <div className="tech-icon">NX</div>
+                                    <span>Next.js</span>
+                                </div>
+                                <div className="tech-card react">
+                                    <div className="tech-icon">RE</div>
+                                    <span>React</span>
+                                </div>
+                                <div className="tech-card python">
+                                    <div className="tech-icon">PY</div>
+                                    <span>Python</span>
+                                </div>
+                                <div className="tech-card php">
+                                    <div className="tech-icon">PH</div>
+                                    <span>PHP</span>
+                                </div>
+                                <div className="tech-card java">
+                                    <div className="tech-icon">JV</div>
+                                    <span>Java</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div className="cta-section">
                         <h2>Looking for a better website?</h2>
                         <a href="/#contact" className="primary-btn">Let's Talk</a>

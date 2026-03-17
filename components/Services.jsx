@@ -28,6 +28,16 @@ const Services = () => {
             <p>Optimize your website and Paid Ad Campaigns!</p>
             <span className="cta-link">Grow My Business &rarr;</span>
           </Link>
+          <Link to="/services/seo-marketing" className="service-block">
+            <h3>SEO & MARKETING</h3>
+            <p>Helping businesses get found, chosen, and contacted.</p>
+            <span className="cta-link">Get Found Online &rarr;</span>
+          </Link>
+          <Link to="/services/ada-compliance" className="service-block">
+            <h3>ADA COMPLIANCE</h3>
+            <p>Make your site accessible to all and ensure legal compliance.</p>
+            <span className="cta-link">Check My Site &rarr;</span>
+          </Link>
         </div>
 
         {/* Detailed Services */}
