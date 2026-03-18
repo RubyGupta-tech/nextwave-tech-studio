@@ -1006,6 +1006,29 @@ nav a:hover::after {
 .testimonials-section {
     padding: 100px 20px;
     background-color: #0F172A;
+    position: relative;
+    border-top: 3px solid #FFFFFF;
+    border-bottom: 3px solid #FFFFFF;
+}
+
+.testimonials-section::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: #1ABC9C;
+}
+
+.testimonials-section::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: #1ABC9C;
 }
 
 .testimonials-container {
