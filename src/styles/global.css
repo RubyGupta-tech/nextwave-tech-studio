@@ -20,7 +20,7 @@ body {
 
 a {
     text-decoration: none;
-    color: #2563EB;
+    color: #1ABC9C;
     /* Electric Blue */
 }
 
@@ -34,8 +34,8 @@ h3 {
 }
 
 button {
-    background-color: #2563EB;
-    /* Electric Blue */
+    background-color: #1ABC9C;
+    /* Teal */
     color: #FFFFFF;
     font-family: 'Poppins', sans-serif;
     font-weight: 600;
@@ -47,8 +47,8 @@ button {
 }
 
 button:hover {
-    background-color: #06B6D4;
-    /* Turquoise accent */
+    background-color: #16A085;
+    /* Darker Teal transition */
 }
 
 /* Header / Navbar */
@@ -107,22 +107,22 @@ nav a::after {
     height: 2px;
     bottom: -4px;
     left: 0;
-    background-color: #06B6D4;
+    background-color: #1ABC9C;
     /* Matching turquoise underline */
     transition: width 0.3s ease-in-out;
 }
 
 nav a:hover {
-    color: #06B6D4;
+    color: #1ABC9C;
 }
 
 nav a.active {
-    color: #2563EB;
+    color: #1ABC9C;
 }
 
 nav a.active::after {
     width: 100%;
-    background-color: #2563EB;
+    background-color: #1ABC9C;
 }
 
 nav a:hover::after {
@@ -178,7 +178,7 @@ nav a:hover::after {
 
 .dropdown-content a:hover {
     background-color: #F8FAFC;
-    color: #06B6D4;
+    color: #1ABC9C;
 }
 
 .dropdown:hover .dropdown-content {
@@ -269,8 +269,8 @@ nav a:hover::after {
 }
 
 .hero-star-particle:nth-child(7n) { 
-    background: #06B6D4; /* Ice Blue */
-    box-shadow: 0 0 15px #06B6D4, 0 0 30px rgba(6, 182, 212, 0.5);
+    background: #1ABC9C; /* Ice Blue */
+    box-shadow: 0 0 15px #1ABC9C, 0 0 30px rgba(6, 182, 212, 0.5);
     width: 5px;
     height: 5px;
     filter: blur(0px); /* Sharp stars */
@@ -300,11 +300,11 @@ nav a:hover::after {
     }
     .hero-star-particle:nth-child(odd) {
         width: 6px;
-        box-shadow: 0 0 15px #06B6D4, 0 0 30px rgba(6, 182, 212, 0.6);
+        box-shadow: 0 0 15px #1ABC9C, 0 0 30px rgba(6, 182, 212, 0.6);
     }
 }
 .hero-star-particle:nth-child(odd) {
-    box-shadow: 0 0 25px #06B6D4, 0 0 50px rgba(6, 182, 212, 0.8);
+    box-shadow: 0 0 25px #1ABC9C, 0 0 50px rgba(6, 182, 212, 0.8);
 }
 
 .hero-star-particle:nth-child(1) { left: 10%; animation-duration: 8s; animation-delay: 0s; }
@@ -363,7 +363,7 @@ nav a:hover::after {
 .hero-glow-1 {
     width: 500px;
     height: 500px;
-    background: radial-gradient(circle, #06B6D4, transparent 70%);
+    background: radial-gradient(circle, #1ABC9C, transparent 70%);
     top: -150px;
     left: -150px;
     animation-duration: 9s;
@@ -372,7 +372,7 @@ nav a:hover::after {
 .hero-glow-2 {
     width: 450px;
     height: 450px;
-    background: radial-gradient(circle, #2563EB, transparent 70%);
+    background: radial-gradient(circle, #1ABC9C, transparent 70%);
     bottom: -120px;
     right: -120px;
     animation-duration: 11s;
@@ -436,7 +436,7 @@ nav a:hover::after {
     padding: 4px 0;
     background: transparent;
     border: none;
-    color: #06B6D4;
+    color: #1ABC9C;
     font-size: 14px;
     font-weight: 700;
     text-transform: uppercase;
@@ -449,7 +449,7 @@ nav a:hover::after {
     content: '';
     width: 24px;
     height: 1px;
-    background: #06B6D4;
+    background: #1ABC9C;
     display: block;
 }
 
@@ -457,7 +457,7 @@ nav a:hover::after {
     content: '';
     width: 24px;
     height: 1px;
-    background: #06B6D4;
+    background: #1ABC9C;
     display: block;
 }
 
@@ -476,7 +476,7 @@ nav a:hover::after {
 
 .typing-text {
     /* Bold Turquoise/Blue gradient for the dynamic text */
-    background: linear-gradient(to right, #06B6D4, #2563EB);
+    background: linear-gradient(to right, #1ABC9C, #1ABC9C);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -530,7 +530,7 @@ nav a:hover::after {
 .hero-cta {
     display: inline-block;
     padding: 18px 48px;
-    background: linear-gradient(135deg, #06B6D4, #2563EB);
+    background: #1ABC9C;
     color: #FFFFFF;
     font-weight: 700;
     font-size: 16px;
@@ -541,7 +541,7 @@ nav a:hover::after {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     border: none;
     cursor: pointer;
-    box-shadow: 0 4px 20px rgba(37, 99, 235, 0.35);
+    box-shadow: 0 4px 20px rgba(26, 188, 156, 0.35);
     position: relative;
     overflow: hidden;
     margin-top: 12px;
@@ -573,7 +573,7 @@ nav a:hover::after {
 
 .hero-cta:hover {
     transform: translateY(-5px) scale(1.02);
-    box-shadow: 0 12px 36px rgba(6, 182, 212, 0.5), 0 4px 16px rgba(37, 99, 235, 0.4);
+    box-shadow: 0 12px 36px rgba(26, 188, 156, 0.5), 0 4px 16px rgba(22, 160, 133, 0.4);
     color: #FFFFFF;
 }
 
@@ -617,9 +617,9 @@ nav a:hover::after {
 
 .service-block:hover {
     transform: translateY(-8px);
-    box-shadow: 0 12px 24px rgba(6, 182, 212, 0.15);
-    /* Subtle turquoise glow */
-    border-color: #06B6D4;
+    box-shadow: 0 12px 24px rgba(26, 188, 156, 0.15);
+    /* Subtle teal glow */
+    border-color: #1ABC9C;
 }
 
 .service-block h3 {
@@ -641,7 +641,7 @@ nav a:hover::after {
 
 .cta-link {
     font-weight: 700;
-    color: #06B6D4;
+    color: #1ABC9C;
     text-transform: uppercase;
     font-size: 14px;
     letter-spacing: 1px;
@@ -650,7 +650,7 @@ nav a:hover::after {
 }
 
 .service-block:hover .cta-link {
-    color: #2563EB;
+    color: #1ABC9C;
     /* Shifts to electric blue on hover */
 }
 
@@ -687,7 +687,7 @@ nav a:hover::after {
     bottom: 0;
     width: 60px;
     height: 4px;
-    background: linear-gradient(to right, #06B6D4, #2563EB);
+    background: linear-gradient(to right, #1ABC9C, #1ABC9C);
 }
 
 .detailed-service p {
@@ -761,7 +761,7 @@ nav a:hover::after {
     justify-content: center;
     align-items: center;
     gap: 0;
-    background: linear-gradient(135deg, #06B6D4, #2563EB);
+    background: linear-gradient(135deg, #1ABC9C, #1ABC9C);
     padding: 40px 20px;
     flex-wrap: wrap;
 }
@@ -809,7 +809,7 @@ nav a:hover::after {
     font-weight: 700;
     letter-spacing: 3px;
     text-transform: uppercase;
-    color: #06B6D4;
+    color: #1ABC9C;
     margin-bottom: 12px;
 }
 
@@ -962,7 +962,7 @@ nav a:hover::after {
 }
 
 .visit-site-btn:hover {
-    background: #06B6D4;
+    background: #1ABC9C;
     color: #FFFFFF;
 }
 
@@ -1138,8 +1138,8 @@ nav a:hover::after {
 }
 
 .slider-nav-btn:hover {
-    background: #06B6D4;
-    border-color: #06B6D4;
+    background: #1ABC9C;
+    border-color: #1ABC9C;
     transform: scale(1.1);
     box-shadow: 0 0 15px rgba(6, 182, 212, 0.4);
 }
@@ -1165,7 +1165,7 @@ nav a:hover::after {
 }
 
 .dot.active {
-    background: #06B6D4;
+    background: #1ABC9C;
     transform: scale(1.3);
     box-shadow: 0 0 10px rgba(6, 182, 212, 0.5);
 }
@@ -1178,7 +1178,7 @@ nav a:hover::after {
 .testimonial-quote-icon {
     font-size: 64px;
     line-height: 0.6;
-    color: #06B6D4;
+    color: #1ABC9C;
     font-family: Georgia, serif;
     margin-bottom: 20px;
     opacity: 0.7;
@@ -1202,7 +1202,7 @@ nav a:hover::after {
     width: 46px;
     height: 46px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #06B6D4, #2563EB);
+    background: linear-gradient(135deg, #1ABC9C, #1ABC9C);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1272,7 +1272,7 @@ nav a:hover::after {
 .about-value-card:hover {
     transform: translateY(-6px);
     box-shadow: 0 12px 32px rgba(37, 99, 235, 0.08);
-    border-color: #06B6D4;
+    border-color: #1ABC9C;
 }
 
 .about-value-icon {
@@ -1327,7 +1327,7 @@ nav a:hover::after {
     font-weight: 800;
     letter-spacing: 4px;
     text-transform: uppercase;
-    color: #06B6D4;
+    color: #1ABC9C;
     margin-bottom: 28px;
     display: flex;
     align-items: center;
@@ -1339,7 +1339,7 @@ nav a:hover::after {
     display: inline-block;
     width: 32px;
     height: 2px;
-    background: #06B6D4;
+    background: #1ABC9C;
     border-radius: 2px;
 }
 
@@ -1353,7 +1353,7 @@ nav a:hover::after {
 }
 
 .contact-left-accent {
-    background: linear-gradient(to right, #06B6D4, #2563EB);
+    background: linear-gradient(to right, #1ABC9C, #1ABC9C);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -1403,7 +1403,7 @@ nav a:hover::after {
     width: 40px;
     height: 40px;
     border-radius: 10px;
-    background: linear-gradient(135deg, #06B6D4, #2563EB);
+    background: linear-gradient(135deg, #1ABC9C, #1ABC9C);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1534,7 +1534,7 @@ nav a:hover::after {
 .crf-field input:focus,
 .crf-field select:focus,
 .crf-field textarea:focus {
-    border-bottom-color: #06B6D4;
+    border-bottom-color: #1ABC9C;
 }
 
 .crf-field textarea {
@@ -1547,7 +1547,7 @@ nav a:hover::after {
     justify-content: center;
     gap: 10px;
     padding: 16px 32px;
-    background: linear-gradient(135deg, #06B6D4 0%, #2563EB 100%);
+    background: linear-gradient(135deg, #1ABC9C 0%, #1ABC9C 100%);
     color: #FFFFFF;
     font-weight: 700;
     font-size: 15px;
@@ -1614,7 +1614,7 @@ nav a:hover::after {
 .contact-blob-1 {
     width: 500px;
     height: 500px;
-    background: #06B6D4;
+    background: #1ABC9C;
     top: -100px;
     right: -100px;
 }
@@ -1622,7 +1622,7 @@ nav a:hover::after {
 .contact-blob-2 {
     width: 400px;
     height: 400px;
-    background: #2563EB;
+    background: #1ABC9C;
     bottom: -80px;
     left: -80px;
 }
@@ -1752,7 +1752,7 @@ nav a:hover::after {
 }
 
 .contact-subheading strong {
-    color: #06B6D4;
+    color: #1ABC9C;
 }
 
 /* Main card */
@@ -1834,7 +1834,7 @@ nav a:hover::after {
 .contact-form-new input.field-active,
 .contact-form-new select.field-active,
 .contact-form-new textarea.field-active {
-    border-color: #06B6D4;
+    border-color: #1ABC9C;
     box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.12);
     background: rgba(6, 182, 212, 0.04);
 }
@@ -1849,7 +1849,7 @@ nav a:hover::after {
     justify-content: center;
     gap: 10px;
     padding: 16px 36px;
-    background: linear-gradient(135deg, #06B6D4, #2563EB);
+    background: linear-gradient(135deg, #1ABC9C, #1ABC9C);
     color: #FFFFFF;
     font-weight: 700;
     font-size: 16px;
@@ -1923,7 +1923,7 @@ nav a:hover::after {
 
 /* ===================== FOOTER — LIGHT TEAL TO WHITE ===================== */
 .footer {
-    background: linear-gradient(160deg, #06B6D4 0%, #a5f3fc 30%, #e0f9fc 60%, #ffffff 100%);
+    background: linear-gradient(160deg, #1ABC9C 0%, #a5f3fc 30%, #e0f9fc 60%, #ffffff 100%);
     color: #1E293B;
     padding: 80px 20px 0;
     border-top: 2px solid rgba(6, 182, 212, 0.25);
@@ -1989,7 +1989,7 @@ nav a:hover::after {
     font-size: 30px;
     font-weight: 700;
     letter-spacing: -1px;
-    background: linear-gradient(to right, #06B6D4, #2563EB);
+    background: linear-gradient(to right, #1ABC9C, #1ABC9C);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -2038,7 +2038,7 @@ nav a:hover::after {
 }
 
 .social-link:hover {
-    background: linear-gradient(135deg, #06B6D4, #2563EB);
+    background: linear-gradient(135deg, #1ABC9C, #1ABC9C);
     border-color: transparent;
     color: #FFFFFF;
     transform: translateY(-3px) scale(1.1);
@@ -2081,12 +2081,12 @@ nav a:hover::after {
     left: 0;
     width: 0;
     height: 1.5px;
-    background: linear-gradient(to right, #06B6D4, #2563EB);
+    background: linear-gradient(to right, #1ABC9C, #1ABC9C);
     transition: width 0.25s ease;
 }
 
 .footer-links a:hover {
-    color: #06B6D4;
+    color: #1ABC9C;
     transform: translateX(4px);
 }
 
@@ -2123,7 +2123,7 @@ nav a:hover::after {
 }
 
 .footer-bottom-links a:hover {
-    color: #06B6D4;
+    color: #1ABC9C;
 }
 
 
@@ -2148,7 +2148,7 @@ nav a:hover::after {
     font-weight: 700;
     margin-bottom: 16px;
     /* Turquoise/Blue gradient text to match original brand title choice */
-    background: linear-gradient(to right, #06B6D4, #2563EB);
+    background: linear-gradient(to right, #1ABC9C, #1ABC9C);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -2210,7 +2210,7 @@ nav a:hover::after {
 .primary-btn {
     display: inline-block;
     padding: 16px 40px;
-    background: linear-gradient(to right, #06B6D4, #2563EB);
+    background: linear-gradient(to right, #1ABC9C, #1ABC9C);
     color: #FFFFFF;
     font-weight: 700;
     font-size: 16px;
@@ -2640,7 +2640,7 @@ nav a:hover::after {
 
 .client-logo:hover {
     opacity: 1;
-    color: #06B6D4;
+    color: #1ABC9C;
     transform: scale(1.05);
 }
 
@@ -2708,7 +2708,7 @@ nav a:hover::after {
     top: 50%;
     transform: translateY(-50%);
     font-size: 24px;
-    color: #06B6D4;
+    color: #1ABC9C;
     opacity: 0.5;
 }
 
@@ -2762,7 +2762,7 @@ nav a:hover::after {
 }
 
 .cta-button-small {
-    background: linear-gradient(135deg, #06B6D4, #2563EB);
+    background: linear-gradient(135deg, #1ABC9C, #1ABC9C);
     color: #FFFFFF;
     padding: 8px 16px;
     border-radius: 50px;
@@ -2988,7 +2988,7 @@ nav a:hover::after {
 }
 
 .mockup-btn:hover {
-    background: #06B6D4;
+    background: #1ABC9C;
     color: white;
 }
 
@@ -3011,7 +3011,7 @@ nav a:hover::after {
 }
 
 .pager-dot.active {
-    background: #06B6D4;
+    background: #1ABC9C;
     width: 90px;
     box-shadow: 0 0 20px rgba(6, 182, 212, 0.3);
 }
@@ -3072,7 +3072,7 @@ nav a:hover::after {
 .portfolio-hero-btn {
     display: inline-block;
     padding: 20px 45px;
-    background: #06B6D4;
+    background: #1ABC9C;
     color: white;
     text-decoration: none;
     font-weight: 800;
@@ -3162,7 +3162,7 @@ nav a:hover::after {
 .portfolio-card:hover {
     transform: translateY(-15px) scale(1.02);
     box-shadow: 0 40px 80px -20px rgba(0, 0, 0, 0.15);
-    border-color: #06B6D4;
+    border-color: #1ABC9C;
 }
 
 /* Browser Mockup Polish */
@@ -3263,7 +3263,7 @@ nav a:hover::after {
 }
 
 .portfolio-card:hover .portfolio-card-title {
-    color: #06B6D4;
+    color: #1ABC9C;
 }
 
 /* Hover Overlay for Site Link */
@@ -3285,7 +3285,7 @@ nav a:hover::after {
 
 .visit-site-btn {
     padding: 14px 28px;
-    background: #06B6D4;
+    background: #1ABC9C;
     color: white;
     text-decoration: none;
     border-radius: 100px;
@@ -3375,7 +3375,7 @@ nav a:hover::after {
 .portfolio-cta-btn {
     display: inline-block;
     padding: 18px 48px;
-    background: #06B6D4;
+    background: #1ABC9C;
     color: white;
     font-weight: 700;
     font-size: 18px;
@@ -3417,7 +3417,7 @@ nav a:hover::after {
     width: 60px;
     height: 60px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #06B6D4, #2563EB);
+    background: linear-gradient(135deg, #1ABC9C, #1ABC9C);
     color: #FFFFFF;
     border: none;
     cursor: pointer;
@@ -3508,7 +3508,7 @@ nav a:hover::after {
 .bot-avatar {
     width: 45px;
     height: 45px;
-    background: linear-gradient(135deg, #06B6D4, #2563EB);
+    background: linear-gradient(135deg, #1ABC9C, #1ABC9C);
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -3565,11 +3565,11 @@ nav a:hover::after {
 .chat-input-row input:focus,
 .chat-input-row textarea:focus {
     outline: none;
-    border-color: #06B6D4;
+    border-color: #1ABC9C;
 }
 
 .chat-submit-btn {
-    background: linear-gradient(to right, #06B6D4, #2563EB);
+    background: linear-gradient(to right, #1ABC9C, #1ABC9C);
     color: #FFFFFF;
     border: none;
     padding: 14px;
@@ -3616,7 +3616,7 @@ nav a:hover::after {
 .reset-btn {
     background: none;
     border: none;
-    color: #06B6D4;
+    color: #1ABC9C;
     text-decoration: underline;
     font-size: 13px;
     margin-top: 20px;
@@ -3676,7 +3676,7 @@ nav a:hover::after {
 
 .innovation-gradient {
     color: #00d2ff;
-    background: linear-gradient(90deg, #00d2ff, #2563EB, #00d2ff);
+    background: linear-gradient(90deg, #00d2ff, #1ABC9C, #00d2ff);
     background-size: 200% auto;
     -webkit-background-clip: text;
     background-clip: text;
@@ -3702,7 +3702,7 @@ nav a:hover::after {
     padding: 6px 16px;
     background: rgba(6, 182, 212, 0.1);
     border: 1px solid rgba(6, 182, 212, 0.3);
-    color: #06B6D4;
+    color: #1ABC9C;
     border-radius: 20px;
     font-size: 14px;
     font-weight: 700;
@@ -3738,7 +3738,7 @@ nav a:hover::after {
 .about-cta-btn {
     display: inline-block;
     padding: 16px 36px;
-    background: #06B6D4;
+    background: #1ABC9C;
     color: #FFFFFF;
     border-radius: 8px;
     font-weight: 700;
@@ -3769,13 +3769,13 @@ nav a:hover::after {
 
 .story-pill {
     background: rgba(6, 182, 212, 0.05);
-    border-left: 3px solid #06B6D4;
+    border-left: 3px solid #1ABC9C;
     padding: 20px;
     border-radius: 0 12px 12px 0;
 }
 
 .story-pill h4 {
-    color: #06B6D4;
+    color: #1ABC9C;
     font-size: 16px;
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -3808,7 +3808,7 @@ nav a:hover::after {
     left: 0;
     width: 60px;
     height: 4px;
-    background: #06B6D4;
+    background: #1ABC9C;
 }
 
 .trust-badges-mini {
@@ -3831,7 +3831,7 @@ nav a:hover::after {
 }
 
 .badge-icon {
-    color: #06B6D4;
+    color: #1ABC9C;
     font-weight: 900;
 }
 
@@ -3847,8 +3847,8 @@ nav a:hover::after {
     left: 0;
     width: 80%;
     height: 80%;
-    border-top: 2px solid #06B6D4;
-    border-left: 2px solid #06B6D4;
+    border-top: 2px solid #1ABC9C;
+    border-left: 2px solid #1ABC9C;
     z-index: 0;
 }
 
@@ -3889,7 +3889,7 @@ nav a:hover::after {
 .expertise-card:hover {
     transform: translateY(-10px);
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
-    border-color: #06B6D4;
+    border-color: #1ABC9C;
 }
 
 .expertise-icon {
@@ -3954,7 +3954,7 @@ nav a:hover::after {
 .cta-btn-primary {
     display: inline-block;
     padding: 18px 48px;
-    background: linear-gradient(135deg, #06B6D4, #2563EB);
+    background: linear-gradient(135deg, #1ABC9C, #1ABC9C);
     color: #FFFFFF;
     font-weight: 700;
     font-size: 16px;
@@ -4050,8 +4050,8 @@ nav a:hover::after {
     right: 0;
     width: 80%;
     height: 80%;
-    border-top: 2px solid #06B6D4;
-    border-right: 2px solid #06B6D4;
+    border-top: 2px solid #1ABC9C;
+    border-right: 2px solid #1ABC9C;
     z-index: 0;
 }
 
@@ -4066,7 +4066,7 @@ nav a:hover::after {
     display: inline-block;
     padding: 6px 14px;
     background: rgba(6, 182, 212, 0.1);
-    color: #06B6D4;
+    color: #1ABC9C;
     font-weight: 800;
     border-radius: 4px;
     font-size: 14px;
@@ -4115,13 +4115,13 @@ nav a:hover::after {
     left: 0;
     width: 0;
     height: 100%;
-    background: #06B6D4;
+    background: #1ABC9C;
     transition: width 0.6s cubic-bezier(0.8, 0, 0.2, 1);
     z-index: -1;
 }
 
 .mosaic-card:hover {
-    border-color: #06B6D4;
+    border-color: #1ABC9C;
     transform: translateY(-10px);
     box-shadow: 0 20px 40px rgba(6, 182, 212, 0.3);
 }
@@ -4245,7 +4245,7 @@ nav a:hover::after {
 .cta-btn-primary {
     display: inline-block;
     padding: 16px 40px;
-    background: #06B6D4;
+    background: #1ABC9C;
     color: #fff;
     font-weight: 700;
     border-radius: 50px;
@@ -4281,7 +4281,7 @@ nav a:hover::after {
 .card-layer-bg {
     position: absolute;
     inset: 0;
-    background: #06B6D4;
+    background: #1ABC9C;
     border-radius: 24px;
     z-index: -1;
     opacity: 0;
@@ -4291,7 +4291,7 @@ nav a:hover::after {
 
 .premium-service-card:hover {
     transform: translateY(-15px) translateX(-5px);
-    border-color: #06B6D4;
+    border-color: #1ABC9C;
     box-shadow: 20px 20px 60px rgba(0, 0, 0, 0.05);
 }
 
@@ -4316,7 +4316,7 @@ nav a:hover::after {
 
 .premium-service-card:hover .card-icon-top {
     transform: scale(1.1) rotate(-5deg);
-    background: #06B6D4;
+    background: #1ABC9C;
     color: white;
 }
 
@@ -4377,7 +4377,7 @@ nav a:hover::after {
     transform: translateX(-50%);
     width: 60px;
     height: 4px;
-    background: #06B6D4;
+    background: #1ABC9C;
     border-radius: 2px;
 }
 
@@ -4425,14 +4425,14 @@ nav a:hover::after {
 
 .tech-card:hover {
     transform: translateY(-10px);
-    border-color: #06B6D4;
+    border-color: #1ABC9C;
     box-shadow: 0 20px 40px rgba(6, 182, 212, 0.1);
 }
 
 .tech-card:hover .tech-icon {
-    background: #06B6D4;
+    background: #1ABC9C;
     color: #FFFFFF;
-    border-color: #06B6D4;
+    border-color: #1ABC9C;
     transform: rotate(10deg);
 }
 
