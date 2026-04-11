@@ -15,7 +15,7 @@ const AdminDashboard = () => {
     setError(null);
 
     try {
-      const response = await fetch('/api/leads', {
+      const response = await fetch('/api/get-leads', {
         headers: {
           'x-nextwave-auth': password
         }
@@ -66,6 +66,8 @@ const AdminDashboard = () => {
           <form onSubmit={handleLogin}>
             <input 
               type="password" 
+              id="admin-password"
+              name="admin-password"
               placeholder="Enter Admin Password" 
               value={password}
               onChange={(e) => setPassword(e.target.value)}
