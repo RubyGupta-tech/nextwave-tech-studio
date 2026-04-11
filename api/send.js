@@ -11,7 +11,8 @@ export default async function handler(req, res) {
 
   try {
     // 1. Send lead notification to NextWave Admin
-    const leadNotification = await resend.emails.send({
+    // 1. Send lead notification to NextWave Admin
+    const { data: leadData, error: leadError } = await resend.emails.send({
       from: 'NextWave Studio <hello@send.dnextwave.com>',
       to: ['d.nextwavetech@gmail.com'],
       subject: `New Lead: ${name} - ${service}`,
@@ -28,10 +29,13 @@ export default async function handler(req, res) {
       `,
     });
 
-    console.log('Lead Notification Data:', leadNotification);
+    if (leadError) {
+      console.error('Resend Lead Error:', leadError);
+      return res.status(400).json({ error: leadError.message, type: 'lead_error' });
+    }
 
     // 2. Send confirmation auto-reply to the client
-    const clientConfirmation = await resend.emails.send({
+    const { data: confirmData, error: confirmError } = await resend.emails.send({
       from: 'NextWave Studio <hello@send.dnextwave.com>',
       to: [email],
       subject: 'Inquiry Received - NextWave Tech Studio',
@@ -53,15 +57,18 @@ export default async function handler(req, res) {
       `,
     });
 
-    console.log('Client Confirmation Data:', clientConfirmation);
+    if (confirmError) {
+      console.error('Resend Confirmation Error:', confirmError);
+      return res.status(400).json({ error: confirmError.message, type: 'confirmation_error' });
+    }
 
     return res.status(200).json({ 
       success: true, 
-      leadId: leadNotification.data?.id,
-      confirmId: clientConfirmation.data?.id 
+      leadId: leadData?.id,
+      confirmId: confirmData?.id 
     });
   } catch (error) {
     console.error('Email Sending Hard Error:', error);
-    return res.status(400).json({ error: error.message, stack: error.stack });
+    return res.status(500).json({ error: 'Internal server error', details: error.message });
   }
 }
