@@ -60,9 +60,6 @@ export default async function handler(req, res) {
       subject: 'We Received Your Inquiry - NextWave Tech Studio',
       html: `
         <div style="font-family: 'Inter', sans-serif; padding: 40px; color: #333; max-width: 600px; margin: auto; border: 1px solid #eee; border-radius: 12px;">
-          <div style="text-align: center; margin-bottom: 30px;">
-            <img src="https://dnextwave.com/NextWave_logo1.web.jpeg" alt="NextWave Logo" style="width: 200px; height: auto;" />
-          </div>
           
           <h2 style="color: #1ABC9C; font-size: 24px; margin-bottom: 16px;">Thank you for reaching out!</h2>
           <p style="font-size: 16px; line-height: 1.6;">Hi ${name},</p>
