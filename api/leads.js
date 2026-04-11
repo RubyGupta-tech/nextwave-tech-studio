@@ -10,8 +10,12 @@ export default async function handler(req, res) {
   const authHeader = req.headers['x-admin-password'];
   const correctPassword = process.env.ADMIN_PASSWORD;
 
+  if (!correctPassword) {
+    return res.status(500).json({ error: 'Server Error: ADMIN_PASSWORD is not set in Vercel settings.' });
+  }
+
   if (!authHeader || authHeader !== correctPassword) {
-    return res.status(401).json({ error: 'Unauthorized: Invalid or missing password' });
+    return res.status(401).json({ error: 'Invalid password. Please try again.' });
   }
 
   try {
