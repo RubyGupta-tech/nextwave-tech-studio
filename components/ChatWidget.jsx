@@ -30,6 +30,7 @@ const ChatWidget = () => {
             email: e.target[1].value,
             service: "Chat Widget Inquiry",
             message: e.target[2].value,
+            source: 'chat_widget'
         };
 
         try {

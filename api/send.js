@@ -1,4 +1,5 @@
 import { Resend } from 'resend';
+import { sql } from '@vercel/postgres';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -7,9 +8,21 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { name, email, service, message } = req.body;
+  const { name, email, service, message, source = 'website_form' } = req.body;
 
   try {
+    // 0. Save lead to Database (Vercel Postgres)
+    try {
+      await sql`
+        INSERT INTO leads (name, email, service, message, source)
+        VALUES (${name}, ${email}, ${service}, ${message}, ${source})
+      `;
+      console.log('Lead saved to database successfully');
+    } catch (dbError) {
+      // We log but don't fail the whole request if DB fails, so email still goes out
+      console.error('Database Save Error:', dbError);
+    }
+
     // 1. Send lead notification to NextWave Admin
     // 1. Send lead notification to NextWave Admin
     const { data: leadData, error: leadError } = await resend.emails.send({
