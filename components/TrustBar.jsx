@@ -3,6 +3,7 @@ import "../src/styles/global.css";
 
 const TrustBar = () => {
     const clients = [
+        "Kid's Campus Zone",
         "FGB Consulting", 
         "Quantum Leap Wealth", 
         "PG Photography", 
@@ -13,7 +14,7 @@ const TrustBar = () => {
     
     return (
         <section className="trust-bar">
-            <p className="trust-label">Empowering Small Businesses & Non-Profits</p>
+            <p className="trust-label">Empowering Schools, Small Businesses & Non-Profits</p>
             <div className="logo-container">
                 <div className="logo-track">
                     {clients.concat(clients).map((client, index) => (
