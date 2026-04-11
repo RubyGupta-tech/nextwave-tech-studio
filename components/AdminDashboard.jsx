@@ -77,6 +77,9 @@ const AdminDashboard = () => {
             <button type="submit" disabled={loading}>
               {loading ? 'Verifying...' : 'Login ➔'}
             </button>
+            <div style={{ marginTop: '15px', fontSize: '10px', color: 'rgba(255,255,255,0.3)' }}>
+              System Version: v2.0 (Bypass-Active)
+            </div>
           </form>
         </div>
       </div>
