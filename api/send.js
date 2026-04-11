@@ -29,8 +29,20 @@ export default async function handler(req, res) {
           </div>
           <p style="margin-top: 24px;"><strong>Message:</strong></p>
           <p style="white-space: pre-wrap; background: #fff; padding: 15px; border: 1px solid #e2e8f0; border-radius: 6px;">${message}</p>
-          <div style="text-align: center; margin-top: 30px; font-size: 11px; color: #94A3B8; text-transform: uppercase; letter-spacing: 1px;">
-            NEXTWAVE TECH STUDIO · www.dnextwave.com
+          <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #e2e8f0;">
+            <table align="center" border="0" cellpadding="0" cellspacing="0" style="margin: auto;">
+              <tr>
+                <td style="padding-right: 15px;">
+                  <img src="https://dnextwave.com/NextWave_logo1.web.jpeg" alt="Logo" style="width: 45px; height: auto; border-radius: 4px;" />
+                </td>
+                <td style="text-align: left; border-left: 1px solid #e2e8f0; padding-left: 15px;">
+                  <div style="font-weight: 700; color: #0B1F3A; font-size: 14px; letter-spacing: 0.5px;">NEXTWAVE TECH STUDIO</div>
+                  <div style="font-size: 12px; color: #64748B; margin-top: 2px;">
+                    <a href="https://www.dnextwave.com" style="color: #1ABC9C; text-decoration: none;">www.dnextwave.com</a> | 925-318-1134
+                  </div>
+                </td>
+              </tr>
+            </table>
           </div>
         </div>
       `,
@@ -64,8 +76,21 @@ export default async function handler(req, res) {
           <p style="font-size: 16px; line-height: 1.6;">We look forward to potentially working together to build your digital impact.</p>
           
           <div style="margin-top: 40px; padding-top: 25px; border-top: 1px solid #eee;">
-            <p style="margin: 0; font-weight: 700; color: #0B1F3A;">The NextWave Team</p>
-            <a href="https://www.dnextwave.com" style="color: #1ABC9C; text-decoration: none; font-weight: 600; font-size: 14px;">www.dnextwave.com</a>
+            <table border="0" cellpadding="0" cellspacing="0">
+              <tr>
+                <td style="padding-right: 15px;">
+                  <img src="https://dnextwave.com/NextWave_logo1.web.jpeg" alt="Logo" style="width: 50px; height: auto; border-radius: 5px;" />
+                </td>
+                <td style="border-left: 2px solid #1ABC9C; padding-left: 15px;">
+                  <div style="font-weight: 800; color: #0B1F3A; font-size: 16px; letter-spacing: -0.5px;">NextWave Tech Studio</div>
+                  <div style="font-size: 14px; color: #64748B; margin-top: 4px;">
+                    <a href="https://www.dnextwave.com" style="color: #1ABC9C; text-decoration: none; font-weight: 600;">www.dnextwave.com</a>
+                    <span style="margin: 0 8px; color: #CBD5E1;">|</span>
+                    <span style="color: #475569;">925-318-1134</span>
+                  </div>
+                </td>
+              </tr>
+            </table>
           </div>
         </div>
       `,
