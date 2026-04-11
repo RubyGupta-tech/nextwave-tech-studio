@@ -28,6 +28,8 @@ import EnterpriseDevelopment from "../components/pages/EnterpriseDevelopment";
 import PortfolioPage from "../components/pages/PortfolioPage";
 import AboutPage from "../components/pages/AboutPage";
 
+import AdminDashboard from "../components/AdminDashboard";
+
 import "./styles/global.css";
 
 const Home = () => {
@@ -60,27 +62,36 @@ const Home = () => {
     );
 };
 
+function AppContent() {
+    const isAdmin = window.location.pathname === '/admin';
+    
+    return (
+        <div className="App">
+            {!isAdmin && <Navbar />}
+            <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/admin" element={<AdminDashboard />} />
+                <Route path="/portfolio" element={<PortfolioPage />} />
+                <Route path="/about" element={<AboutPage />} />
+                <Route path="/services/website-creation" element={<WebsiteCreation />} />
+                <Route path="/services/website-updates" element={<WebsiteUpdates />} />
+                <Route path="/services/website-fixes" element={<WebsiteFixes />} />
+                <Route path="/services/more-customers" element={<MoreCustomers />} />
+                <Route path="/services/internet-marketing" element={<InternetMarketing />} />
+                <Route path="/services/enterprise-development" element={<EnterpriseDevelopment />} />
+                <Route path="/services/seo-marketing" element={<SEOMarketing />} />
+                <Route path="/services/ada-compliance" element={<ADACompliance />} />
+            </Routes>
+            {!isAdmin && <Footer />}
+            {!isAdmin && <ChatWidget />}
+        </div>
+    );
+}
+
 function App() {
     return (
         <Router>
-            <div className="App">
-                <Navbar />
-                <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/portfolio" element={<PortfolioPage />} />
-                    <Route path="/about" element={<AboutPage />} />
-                    <Route path="/services/website-creation" element={<WebsiteCreation />} />
-                    <Route path="/services/website-updates" element={<WebsiteUpdates />} />
-                    <Route path="/services/website-fixes" element={<WebsiteFixes />} />
-                    <Route path="/services/more-customers" element={<MoreCustomers />} />
-                    <Route path="/services/internet-marketing" element={<InternetMarketing />} />
-                    <Route path="/services/enterprise-development" element={<EnterpriseDevelopment />} />
-                    <Route path="/services/seo-marketing" element={<SEOMarketing />} />
-                    <Route path="/services/ada-compliance" element={<ADACompliance />} />
-                </Routes>
-                <Footer />
-                <ChatWidget />
-            </div>
+            <AppContent />
         </Router>
     );
 }
