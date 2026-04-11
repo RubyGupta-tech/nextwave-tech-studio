@@ -15,7 +15,9 @@ export default async function handler(req, res) {
   }
 
   if (!authHeader || authHeader !== correctPassword) {
-    return res.status(401).json({ error: 'Invalid password. Please try again.' });
+    return res.status(401).json({ 
+      error: `Invalid password. (Server expected length: ${correctPassword.length}, but got: ${authHeader?.length || 0})` 
+    });
   }
 
   try {
