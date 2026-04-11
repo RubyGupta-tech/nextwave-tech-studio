@@ -12,7 +12,7 @@ export default async function handler(req, res) {
   try {
     // 1. Send lead notification to NextWave Admin
     const leadNotification = await resend.emails.send({
-      from: 'NextWave Studio <hello@nextwavetech.studio>',
+      from: 'NextWave Studio <hello@send.nextwavetech.studio>',
       to: ['d.nextwavetech@gmail.com'],
       subject: `New Lead: ${name} - ${service}`,
       html: `
@@ -30,7 +30,7 @@ export default async function handler(req, res) {
 
     // 2. Send confirmation auto-reply to the client
     const clientConfirmation = await resend.emails.send({
-      from: 'NextWave Studio <hello@nextwavetech.studio>',
+      from: 'NextWave Studio <hello@send.nextwavetech.studio>',
       to: [email],
       subject: 'Inquiry Received - NextWave Tech Studio',
       html: `
