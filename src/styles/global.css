@@ -1399,11 +1399,23 @@ nav a:hover::after {
     font-weight: 450;
 }
 
-.about-paragraph-narrow {
-    font-size: 18px;
-    color: #475569;
-    max-width: 700px;
-    margin: 0 auto;
+.about-intro-split {
+    max-width: 720px;
+    margin: 0 auto 64px auto;
+    text-align: center;
+}
+
+.about-lead {
+    font-size: 20px;
+    color: #0F172A; /* Bold Navy */
+    line-height: 1.6;
+    margin-bottom: 24px;
+    font-weight: 600;
+}
+
+.about-mission {
+    font-size: 17px;
+    color: #475569; /* Softer slate */
     line-height: 1.8;
 }
 

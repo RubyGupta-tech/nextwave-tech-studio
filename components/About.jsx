@@ -17,11 +17,16 @@ const About = () => {
                 <div className="about-header">
                     <div className="section-label">WHO WE ARE</div>
                     <h2 className="about-heading">Built on Trust. Driven by Results.</h2>
-                    <p className="about-intro">
-                        At NextWave Tech Studio, we combine creativity, technical expertise, and strategic thinking
-                        to deliver scalable digital solutions for businesses of all sizes. Our mission is simple:
-                        transform your ideas into reality with professional web and digital services that actually work.
-                    </p>
+                    <div className="about-intro-split">
+                        <p className="about-lead">
+                            At NextWave Tech Studio, we combine creativity, technical expertise, and strategic thinking
+                            to deliver scalable digital solutions for businesses of all sizes.
+                        </p>
+                        <p className="about-mission">
+                            Our mission is simple: transform your ideas into reality with professional web 
+                            and digital services that actually work.
+                        </p>
+                    </div>
                 </div>
                 <div className="about-values-grid">
                     {values.map((v, i) => (
