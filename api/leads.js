@@ -7,8 +7,8 @@ export default async function handler(req, res) {
   }
 
   // 2. Check for the admin password in the headers
-  const authHeader = req.headers['x-admin-password'];
-  const correctPassword = process.env.ADMIN_PASSWORD;
+  const authHeader = req.headers['x-admin-password']?.trim();
+  const correctPassword = process.env.ADMIN_PASSWORD?.trim();
 
   if (!correctPassword) {
     return res.status(500).json({ error: 'Server Error: ADMIN_PASSWORD is not set in Vercel settings.' });
