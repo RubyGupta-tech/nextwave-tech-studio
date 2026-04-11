@@ -20,24 +20,23 @@ const Contact = () => {
         };
 
         try {
-            // For production, this calls our /api/send serverless function
             const response = await fetch('/api/send', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload),
             });
 
+            const result = await response.json();
+
             if (response.ok) {
                 setSubmitted(true);
                 e.target.reset();
             } else {
-                throw new Error('Failed to send message. Please try again later.');
+                throw new Error(result.error || 'Failed to send message. Please try again later.');
             }
         } catch (err) {
             console.error("Submission error:", err);
-            // Fallback for local dev if API isn't running
-            setError("Note: The API endpoint is ready! In a local dev environment without a serverless runner, this request might fail, but it's set up for deployment.");
-            // We set submitted to true for demo purposes if desired, but here we show error
+            setError(err.message);
         } finally {
             setIsSending(false);
         }
