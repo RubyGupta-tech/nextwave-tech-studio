@@ -49,7 +49,7 @@ const Hero = () => {
                     <span className="highlight-pill">Enterprise Apps</span>
                 </div>
 
-                <Link to="/services/website-creation" className="hero-cta animate-fade-in-up" style={{ animationDelay: "0.7s" }}>Get Your Free Consultation</Link>
+                <a href="/#contact" className="hero-cta animate-fade-in-up" style={{ animationDelay: "0.7s" }}>Get Your Free Consultation</a>
             </div>
         </section>
     );
