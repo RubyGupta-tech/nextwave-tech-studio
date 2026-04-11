@@ -28,6 +28,8 @@ export default async function handler(req, res) {
       `,
     });
 
+    console.log('Lead Notification Data:', leadNotification);
+
     // 2. Send confirmation auto-reply to the client
     const clientConfirmation = await resend.emails.send({
       from: 'NextWave Studio <hello@send.dnextwave.com>',
@@ -51,13 +53,15 @@ export default async function handler(req, res) {
       `,
     });
 
+    console.log('Client Confirmation Data:', clientConfirmation);
+
     return res.status(200).json({ 
       success: true, 
       leadId: leadNotification.data?.id,
       confirmId: clientConfirmation.data?.id 
     });
   } catch (error) {
-    console.error('Email Error:', error);
-    return res.status(400).json({ error: error.message });
+    console.error('Email Sending Hard Error:', error);
+    return res.status(400).json({ error: error.message, stack: error.stack });
   }
 }
