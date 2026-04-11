@@ -40,6 +40,9 @@ export default async function handler(req, res) {
                   <div style="font-size: 12px; color: #64748B; margin-top: 2px;">
                     <a href="https://www.dnextwave.com" style="color: #1ABC9C; text-decoration: none;">www.dnextwave.com</a> | 925-318-1134
                   </div>
+                  <div style="font-size: 12px; color: #64748B; margin-top: 2px;">
+                    <a href="mailto:d.nextwavetech@gmail.com" style="color: #64748B; text-decoration: none;">d.nextwavetech@gmail.com</a>
+                  </div>
                 </td>
               </tr>
             </table>
@@ -82,8 +85,11 @@ export default async function handler(req, res) {
                   <div style="font-weight: 800; color: #0B1F3A; font-size: 16px; letter-spacing: -0.5px;">NextWave Tech Studio</div>
                   <div style="font-size: 14px; color: #64748B; margin-top: 4px;">
                     <a href="https://www.dnextwave.com" style="color: #1ABC9C; text-decoration: none; font-weight: 600;">www.dnextwave.com</a>
+                  </div>
+                  <div style="font-size: 14px; color: #64748B; margin-top: 2px;">
+                    <a href="mailto:d.nextwavetech@gmail.com" style="color: #475569; text-decoration: none;">d.nextwavetech@gmail.com</a>
                     <span style="margin: 0 8px; color: #CBD5E1;">|</span>
-                    <span style="color: #475569;">925-318-1134</span>
+                    <span>925-318-1134</span>
                   </div>
                 </td>
               </tr>

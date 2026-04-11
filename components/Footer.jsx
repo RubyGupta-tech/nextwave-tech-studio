@@ -60,7 +60,7 @@ const Footer = () => {
             <div className="footer-bottom">
                 <span>© {new Date().getFullYear()} NextWave Tech Studio. All rights reserved.</span>
                 <span className="footer-bottom-links">
-                    <a href="#">Privacy Policy</a> · <a href="#">Terms of Service</a>
+                    <a href="mailto:d.nextwavetech@gmail.com">d.nextwavetech@gmail.com</a> · <a href="https://www.dnextwave.com">www.dnextwave.com</a>
                 </span>
             </div>
         </footer>
