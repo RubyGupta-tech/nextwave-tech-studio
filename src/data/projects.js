@@ -47,4 +47,12 @@ export const projects = [
         link: "https://dronegirlz.org/",
         color: "#8B5CF6",
     },
+    {
+        title: "Kid's Campus Zone",
+        description: "A comprehensive school management portal featuring student enrollment, fee tracking, and intuitive administrative dashboards.",
+        tags: ["Education", "Management Portal", "Full Stack"],
+        image: "/images/portfolio/kidscampus.png",
+        link: "https://school-website-yt7m.vercel.app/",
+        color: "#10B981",
+    },
 ];

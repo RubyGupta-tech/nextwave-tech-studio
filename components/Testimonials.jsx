@@ -100,8 +100,17 @@ const Testimonials = () => {
                                     <div className="testimonial-group">
                                         {group.map((t, index) => (
                                             <div key={index} className="testimonial-card">
-                                                <div className="testimonial-quote-icon">"</div>
-                                                <p className="testimonial-text">{t.quote}</p>
+                                                <div className="testimonial-stars">
+                                                    {[...Array(5)].map((_, i) => (
+                                                        <svg key={i} viewBox="0 0 24 24" className="star-icon"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                                                    ))}
+                                                </div>
+                                                <div className="testimonial-quote-wrapper">
+                                                    <svg className="testimonial-quote-svg" width="40" height="30" viewBox="0 0 40 30" fill="currentColor">
+                                                        <path d="M0 18.2857C0 14.6667 0.933333 11.2381 2.8 8C4.66667 4.7619 7.4 2.09524 11 0V7.14286C8.86667 7.71429 7.23333 8.7619 6.1 10.2857C4.96667 11.8095 4.4 13.5238 4.4 15.4286V18.2857H11V30H0V18.2857ZM20.4 18.2857C20.4 14.6667 21.3333 11.2381 23.2 8C25.0667 4.7619 27.8 2.09524 31.4 0V7.14286C29.2667 7.71429 27.6333 8.7619 26.5 10.2857C25.3667 11.8095 24.8 13.5238 24.8 15.4286V18.2857H31.4V30H20.4V18.2857Z" />
+                                                    </svg>
+                                                    <p className="testimonial-text">{t.quote}</p>
+                                                </div>
                                                 <div className="testimonial-author">
                                                     <div className="testimonial-avatar">{t.avatar}</div>
                                                     <div>
@@ -132,6 +141,38 @@ const Testimonials = () => {
                         />
                     ))}
                 </div>
+            </div>
+
+            <div className="testimonials-wave bottom">
+                <svg
+                    viewBox="0 0 1440 180"
+                    xmlns="http://www.w3.org/2000/svg"
+                    preserveAspectRatio="none"
+                >
+                    {/* Teal wave (replacing gold) */}
+                    <path
+                        className="wave-line-1"
+                        d="M0,90 C240,20 480,160 720,120 960,80 1200,140 1440,90"
+                        fill="none"
+                        stroke="#1ABC9C"
+                        strokeWidth="6"
+                    />
+            
+                    {/* White wave */}
+                    <path
+                        className="wave-line-2"
+                        d="M0,120 C300,60 540,180 780,140 1020,100 1200,160 1440,120"
+                        fill="none"
+                        stroke="#ffffff"
+                        strokeWidth="4"
+                    />
+            
+                    {/* White fill to blend into form */}
+                    <path
+                        d="M0,140 C360,80 1080,200 1440,140 L1440,180 L0,180 Z"
+                        fill="#ffffff"
+                    />
+                </svg>
             </div>
         </section>
     );

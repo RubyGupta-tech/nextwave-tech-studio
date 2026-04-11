@@ -4,6 +4,8 @@ const ChatWidget = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [showLeadHook, setShowLeadHook] = useState(false);
     const [formSubmitted, setFormSubmitted] = useState(false);
+    const [isSending, setIsSending] = useState(false);
+    const [error, setError] = useState(null);
 
     // Show the lead hook message after 3 seconds
     useEffect(() => {
@@ -18,10 +20,41 @@ const ChatWidget = () => {
         setShowLeadHook(false);
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // In a real app, you'd send this to your backend/email
-        setFormSubmitted(true);
+        setIsSending(true);
+        setError(null);
+
+        const payload = {
+            name: e.target[0].value,
+            email: e.target[1].value,
+            service: "Chat Widget Inquiry",
+            message: e.target[2].value,
+        };
+
+        try {
+            const response = await fetch('/api/send', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload),
+            });
+
+            if (response.ok) {
+                setFormSubmitted(true);
+                e.target.reset();
+            } else {
+                throw new Error('Failed to send');
+            }
+        } catch (err) {
+            console.error("Chat submission error:", err);
+            // Fallback for local dev or network issues
+            setError("Could not send. Check your connection or API setup.");
+            // For demo purposes, we'll still show success so the UI doesn't feel broken 
+            // but in production this should be handled strictly.
+            // setFormSubmitted(true); 
+        } finally {
+            setIsSending(false);
+        }
     };
 
     return (
@@ -79,9 +112,10 @@ const ChatWidget = () => {
                                 <div className="chat-input-row">
                                     <textarea placeholder="How can we help?" rows="3" required></textarea>
                                 </div>
-                                <button type="submit" className="chat-submit-btn">
-                                    Send Message 🚀
+                                <button type="submit" className="chat-submit-btn" disabled={isSending}>
+                                    {isSending ? "Sending..." : "Send Message 🚀"}
                                 </button>
+                                {error && <p className="chat-error-msg">{error}</p>}
                             </form>
                         </>
                     ) : (

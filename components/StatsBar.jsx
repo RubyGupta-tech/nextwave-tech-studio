@@ -52,7 +52,7 @@ import { projects } from "../src/data/projects";
 
 const stats = [
     { number: "5.0", label: "Client Rating", icon: "⭐", suffix: "/5.0" },
-    { number: projects.length.toString(), label: "Projects Completed", icon: "🚀", suffix: "+" },
+    { number: (projects.length + 1).toString(), label: "Projects Completed", icon: "🚀", suffix: "+" },
     { number: "100", label: "On-Time Delivery", icon: "✅", suffix: "%" },
 ];
 
