@@ -87,15 +87,15 @@ const ShowcaseSlider = () => {
                                                         <div className="mockup-dots">
                                                             <span></span><span></span><span></span>
                                                         </div>
-                                                        <div className="mockup-url">{project.link.replace('https://', '')}</div>
+                                                        <div className="mockup-url">{project.title.toLowerCase().replace(/\s+/g, '')}.studio</div>
                                                     </div>
                                                     <div className="mockup-screen">
                                                         <img src={project.image} alt={project.title} className="parallax-img" />
-                                                        <div className="mockup-overlay">
+                                                        {/* <div className="mockup-overlay">
                                                             <a href={project.link} target="_blank" rel="noopener noreferrer" className="mockup-btn">
                                                                 Visit Live Site
                                                             </a>
-                                                        </div>
+                                                        </div> */}
                                                     </div>
                                                 </div>
                                             </div>
