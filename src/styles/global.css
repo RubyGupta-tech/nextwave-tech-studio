@@ -1390,6 +1390,15 @@ nav a:hover::after {
     margin-bottom: 20px;
 }
 
+.about-intro {
+    font-size: 19px;
+    color: #1E293B; /* Darker, more readable navy */
+    max-width: 800px;
+    margin: 0 auto 40px auto;
+    line-height: 1.8;
+    font-weight: 450;
+}
+
 .about-paragraph-narrow {
     font-size: 18px;
     color: #475569;
