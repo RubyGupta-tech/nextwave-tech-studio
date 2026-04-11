@@ -87,7 +87,7 @@ const ShowcaseSlider = () => {
                                                         <div className="mockup-dots">
                                                             <span></span><span></span><span></span>
                                                         </div>
-                                                        <div className="mockup-url">{project.title.toLowerCase().replace(/\s+/g, '')}.studio</div>
+                                                        <div className="mockup-url">{project.title.toLowerCase().replace(/\s+/g, '')}.com</div>
                                                     </div>
                                                     <div className="mockup-screen">
                                                         <img src={project.image} alt={project.title} className="parallax-img" />
