@@ -7,7 +7,7 @@ export default async function handler(req, res) {
   }
 
   // 2. Check for the admin password in the headers
-  const authHeader = req.headers['x-admin-password']?.trim();
+  const authHeader = req.headers['x-nextwave-auth']?.trim();
   const correctPassword = process.env.ADMIN_PASSWORD?.trim();
 
   if (!correctPassword) {

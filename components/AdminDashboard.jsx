@@ -17,7 +17,7 @@ const AdminDashboard = () => {
     try {
       const response = await fetch('/api/leads', {
         headers: {
-          'x-admin-password': password
+          'x-nextwave-auth': password
         }
       });
 
