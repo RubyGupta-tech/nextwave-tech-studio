@@ -56,8 +56,8 @@ const Services = () => {
 
         {/* Detailed Services */}
         <div className="services-detailed">
-          <div className="detailed-service reveal">
-            <h2>Internet Marketing</h2>
+          <div className="service-block glass-panel reveal" style={{ textAlign: 'left', padding: '50px' }}>
+            <h3 style={{ fontSize: '28px', marginBottom: '20px' }}>Internet Marketing</h3>
             <p>
               Through modern internet marketing techniques, we help clients increase traffic, improve conversion rates, and get more customers.
             </p>
@@ -67,8 +67,8 @@ const Services = () => {
             <Link to="/services/internet-marketing" className="cta-link">Learn More &rarr;</Link>
           </div>
 
-          <div className="detailed-service reveal">
-            <h2>Enterprise Web App Development</h2>
+          <div className="service-block glass-panel reveal" style={{ textAlign: 'left', padding: '50px' }}>
+            <h3 style={{ fontSize: '28px', marginBottom: '20px' }}>Enterprise Web App Development</h3>
             <p>
               Our programmers focus on solving complex business problems. We build Enterprise-level web applications using modern, scalable programming methodology.
             </p>
