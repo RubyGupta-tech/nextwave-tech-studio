@@ -13,10 +13,11 @@ const values = [
 const About = () => {
     return (
         <section id="about" className="about-section">
+            <div className="light-pool" style={{ top: '20%', right: '-10%' }}></div>
             <div className="about-container">
-                <div className="about-header">
+                <div className="about-header reveal">
                     <div className="section-label">WHO WE ARE</div>
-                    <h2 className="about-heading">Built on Trust. Driven by Results.</h2>
+                    <h2 className="about-heading">Built on Trust. <span className="innovation-gradient">Driven by Results.</span></h2>
                     <div className="about-intro-split">
                         <p className="about-lead">
                             At NextWave Tech Studio, we combine creativity, technical expertise, and strategic thinking
@@ -30,8 +31,8 @@ const About = () => {
                 </div>
                 <div className="about-values-grid">
                     {values.map((v, i) => (
-                        <div key={i} className="about-value-card">
-                            <div className="about-value-icon">{v.icon}</div>
+                        <div key={i} className="about-value-card glass-panel reveal" style={{ transitionDelay: `${i * 0.1}s` }}>
+                            <div className="about-value-icon animate-floating">{v.icon}</div>
                             <h3 className="about-value-title">{v.title}</h3>
                             <p className="about-value-desc">{v.desc}</p>
                         </div>

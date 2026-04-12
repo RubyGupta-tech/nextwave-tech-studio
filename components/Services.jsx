@@ -5,35 +5,36 @@ import "../src/styles/global.css";
 const Services = () => {
   return (
     <section id="services" className="services-section">
+      <div className="light-pool light-pool-magenta" style={{ top: '10%', left: '-10%' }}></div>
       <div className="services-container">
         {/* Immediate Needs Grid */}
         <div className="services-grid-primary">
-          <Link to="/services/website-creation" className="service-block">
+          <Link to="/services/website-creation" className="service-block glass-panel reveal">
             <h3>I NEED A WEBSITE</h3>
             <p>We build you a new website or redesign your existing one.</p>
             <span className="cta-link">Build My Site &rarr;</span>
           </Link>
-          <Link to="/services/website-updates" className="service-block">
+          <Link to="/services/website-updates" className="service-block glass-panel reveal">
             <h3>WEBSITE UPDATES</h3>
             <p>Small changes or regular on-going updates, we can help.</p>
             <span className="cta-link">Help Update My Site &rarr;</span>
           </Link>
-          <Link to="/services/website-fixes" className="service-block">
+          <Link to="/services/website-fixes" className="service-block glass-panel reveal">
             <h3>WEBSITE FIXES</h3>
             <p>Website not working? Need it to load and run faster?</p>
             <span className="cta-link">Help Fix My Site &rarr;</span>
           </Link>
-          <Link to="/services/more-customers" className="service-block">
+          <Link to="/services/more-customers" className="service-block glass-panel reveal">
             <h3>MORE CUSTOMERS</h3>
             <p>Optimize your website and Paid Ad Campaigns!</p>
             <span className="cta-link">Grow My Business &rarr;</span>
           </Link>
-          <Link to="/services/seo-marketing" className="service-block">
+          <Link to="/services/seo-marketing" className="service-block glass-panel reveal">
             <h3>SEO & MARKETING</h3>
             <p>Helping businesses get found, chosen, and contacted.</p>
             <span className="cta-link">Get Found Online &rarr;</span>
           </Link>
-          <Link to="/services/ada-compliance" className="service-block">
+          <Link to="/services/ada-compliance" className="service-block glass-panel reveal">
             <h3>ADA COMPLIANCE</h3>
             <p>Make your site accessible to all and ensure legal compliance.</p>
             <span className="cta-link">Check My Site &rarr;</span>
