@@ -34,7 +34,7 @@ const Services = () => {
             <p>Helping businesses get found, chosen, and contacted.</p>
             <span className="cta-link">Get Found Online &rarr;</span>
           </Link>
-          <Link to="/services/ada-compliance" className="service-block glass-panel reveal">
+          <Link to="/services/ada-compliance" className="service-block glass-panel ada-card-white reveal">
             <h3>ADA COMPLIANCE</h3>
             <p>Make your site accessible to all and ensure legal compliance.</p>
             <span className="cta-link">Check My Site &rarr;</span>

@@ -4163,6 +4163,31 @@ body {
     background: rgba(0, 210, 255, 0.03);
 }
 
+/* Special ADA White Card */
+.service-block.ada-card-white {
+    background: #FFFFFF !important;
+    border: 1px solid #E2E8F0 !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1) !important;
+}
+
+.service-block.ada-card-white h3 {
+    color: #0F172A !important;
+}
+
+.service-block.ada-card-white p {
+    color: #475569 !important;
+}
+
+.service-block.ada-card-white .cta-link {
+    color: #1ABC9C !important;
+    font-weight: 800;
+}
+
+.service-block.ada-card-white:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15) !important;
+}
+
 /* Detailed Services Visibility Fix */
 .services-detailed {
     margin-top: 80px;
