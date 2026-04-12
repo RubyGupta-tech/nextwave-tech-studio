@@ -3302,6 +3302,7 @@ nav a:hover::after {
 @media (max-width: 768px) {
     .portfolio-hero {
         padding: 120px 0 80px;
+        background-attachment: scroll;
     }
 }
 
