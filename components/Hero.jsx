@@ -24,7 +24,7 @@ const Hero = () => {
             <div className="container">
                 <div className="hero-split-wrapper">
                     <div className="hero-content-left reveal">
-                        <div className="hero-badge-glass animate-floating">Web Excellence 2026</div>
+                        <div className="hero-badge-glass animate-floating">Freelance Web Developer</div>
                         
                         <h1>
                             Powerful websites for{' '}
@@ -59,7 +59,7 @@ const Hero = () => {
                         </Link>
                     </div>
 
-                    <div className="hero-asset-right animate-floating reveal">
+                    <div className="hero-asset-right animate-floating reveal hide-on-mobile">
                         <div className="asset-glow-aura"></div>
                         <img 
                             src="/images/hero_tech_showcase.png" 
