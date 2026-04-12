@@ -16,6 +16,7 @@ const WebsiteCreation = () => {
         return () => observer.disconnect();
     }, []);
 
+    return (
         <div className="subpage">
             <section className="about-hero">
                 <div className="hero-waves-container">
