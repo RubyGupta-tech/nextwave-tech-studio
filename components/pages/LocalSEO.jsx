@@ -50,7 +50,7 @@ const LocalSEO = () => {
                     <div className="cta-section">
                         <h2>Ready to get more local customers?</h2>
                         <Link 
-                            to="/#contact" 
+                            to="/?nav=contact" 
                             className="primary-btn"
                             onClick={() => window.sessionStorage.setItem('scroll_to_contact', 'true')}
                         >

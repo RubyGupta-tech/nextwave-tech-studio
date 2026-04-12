@@ -40,7 +40,7 @@ const InternetMarketing = () => {
                     <div className="cta-section">
                         <h2>Ready to launch your next campaign?</h2>
                         <Link 
-                            to="/#contact" 
+                            to="/?nav=contact" 
                             className="primary-btn"
                             onClick={() => window.sessionStorage.setItem('scroll_to_contact', 'true')}
                         >

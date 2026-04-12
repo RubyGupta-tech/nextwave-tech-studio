@@ -15,7 +15,13 @@ const FinalCTA = () => {
                             Let's build your next digital masterpiece together.
                         </p>
                         <div className="final-cta-group">
-                            <a href="/#contact" className="hero-cta">Get Started Now</a>
+                            <Link 
+                                to="/?nav=contact" 
+                                className="hero-cta"
+                                onClick={() => window.sessionStorage.setItem('scroll_to_contact', 'true')}
+                            >
+                                Get Started Now
+                            </Link>
                         </div>
                     </div>
                     <div className="final-cta-glow"></div>

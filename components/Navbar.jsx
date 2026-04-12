@@ -53,8 +53,8 @@ const Navbar = () => {
                 <NavLink to="/portfolio" onClick={closeMenu}>Portfolio</NavLink>
                 <NavLink to="/about" onClick={closeMenu}>About</NavLink>
                 <Link 
-                    to="/#contact" 
-                    className={isActive("#contact") ? "active" : ""} 
+                    to="/?nav=contact" 
+                    className={location.search.includes("nav=contact") ? "active" : ""} 
                     onClick={() => {
                         closeMenu();
                         window.sessionStorage.setItem('scroll_to_contact', 'true');

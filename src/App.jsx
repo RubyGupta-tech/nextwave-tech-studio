@@ -33,39 +33,44 @@ import AdminDashboard from "../components/AdminDashboard";
 
 import "./styles/global.css";
 
-// --- Global Scroll Handler ---
-const ScrollToHash = () => {
-    const { pathname, hash } = useLocation();
+// --- Global Navigation Monitor ---
+const NavigationMonitor = () => {
+    const { pathname, search, hash } = useLocation();
 
     useEffect(() => {
-        const checkScroll = () => {
-            const isRedirectionActive = window.sessionStorage.getItem('scroll_to_contact') === 'true';
-            const hasContactHash = hash === '#contact';
-            const shouldScrollToContact = hasContactHash || isRedirectionActive;
-            
-            if (shouldScrollToContact && pathname === '/') {
-                // REDIRECTION SHIELD: Don't allow scroll-to-top if we're headed to contact
-                setTimeout(() => {
-                    let attempts = 0;
-                    const scrollInterval = setInterval(() => {
-                        const contactSection = document.getElementById('contact');
-                        if (contactSection) {
-                            window.sessionStorage.removeItem('scroll_to_contact');
-                            contactSection.scrollIntoView({ behavior: 'smooth' });
-                            clearInterval(scrollInterval);
-                        }
-                        attempts++;
-                        if (attempts > 50) clearInterval(scrollInterval);
-                    }, 100);
-                }, 300);
-            } else if (!hash && !isRedirectionActive) {
-                // Only reset scroll to top if we're NOT headed to contact
-                window.scrollTo({ top: 0, behavior: 'auto' });
-            }
+        const queryParams = new URLSearchParams(search);
+        const target = queryParams.get('nav');
+        const isContactTarget = target === 'contact' || window.sessionStorage.getItem('scroll_to_contact') === 'true';
+
+        const runScrollLock = (targetId) => {
+            let attempts = 0;
+            const scrollLockInterval = setInterval(() => {
+                const element = document.getElementById(targetId);
+                if (element) {
+                    element.scrollIntoView({ behavior: 'smooth' });
+                    
+                    // Once we've reached a high enough attempt count or find the element, 
+                    // we can clean up but we keep scrolling for a bit to "lock" it 
+                    // against reveal animations shifting the page height.
+                    if (attempts > 10) {
+                        window.sessionStorage.removeItem('scroll_to_contact');
+                        // Clean URL without refreshing
+                        const newUrl = window.location.pathname + window.location.hash;
+                        window.history.replaceState({}, '', newUrl);
+                    }
+                }
+                attempts++;
+                if (attempts > 30) clearInterval(scrollLockInterval); // 3 seconds total lock
+            }, 100);
         };
 
-        checkScroll();
-    }, [pathname, hash]);
+        if (pathname === '/' && isContactTarget) {
+            runScrollLock('contact');
+        } else if (!target && !hash && !window.sessionStorage.getItem('scroll_to_contact')) {
+            // General page reset
+            window.scrollTo({ top: 0, behavior: 'auto' });
+        }
+    }, [pathname, search, hash]);
 
     return null;
 };
@@ -109,7 +114,7 @@ function AppContent() {
     
     return (
         <div className="App">
-            <ScrollToHash />
+            <NavigationMonitor />
             {!isAdmin && <Navbar />}
             <Routes>
                 <Route path="/" element={<Home />} />

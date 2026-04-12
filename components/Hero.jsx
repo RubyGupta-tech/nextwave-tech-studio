@@ -50,7 +50,7 @@ const Hero = () => {
                 </div>
 
                 <Link 
-                    to="/#contact" 
+                    to="/?nav=contact" 
                     className="hero-cta animate-fade-in-up" 
                     style={{ animationDelay: "0.7s" }}
                     onClick={() => window.sessionStorage.setItem('scroll_to_contact', 'true')}

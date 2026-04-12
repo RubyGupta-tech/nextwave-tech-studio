@@ -52,7 +52,7 @@ const Footer = () => {
                         </li>
                         <li>
                             <Link 
-                                to="/#contact" 
+                                to="/?nav=contact" 
                                 onClick={() => window.sessionStorage.setItem('scroll_to_contact', 'true')}
                             >
                                 Contact

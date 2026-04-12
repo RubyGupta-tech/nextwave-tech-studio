@@ -51,7 +51,7 @@ const PortfolioPage = () => {
                     </p>
                     <div className="hero-cta-group">
                         <Link 
-                            to="/#contact" 
+                            to="/?nav=contact" 
                             className="portfolio-hero-btn"
                             onClick={() => window.sessionStorage.setItem('scroll_to_contact', 'true')}
                         >

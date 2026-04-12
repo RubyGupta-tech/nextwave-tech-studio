@@ -124,7 +124,7 @@ const WebsiteCreation = () => {
                     <div className="cta-section">
                         <h2>Looking for a better website?</h2>
                         <Link 
-                            to="/#contact" 
+                            to="/?nav=contact" 
                             className="primary-btn"
                             onClick={() => window.sessionStorage.setItem('scroll_to_contact', 'true')}
                         >

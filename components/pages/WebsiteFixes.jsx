@@ -39,7 +39,7 @@ const WebsiteFixes = () => {
                     <div className="cta-section">
                         <h2>Is your website down or underperforming?</h2>
                         <Link 
-                            to="/#contact" 
+                            to="/?nav=contact" 
                             className="primary-btn"
                             onClick={() => window.sessionStorage.setItem('scroll_to_contact', 'true')}
                         >

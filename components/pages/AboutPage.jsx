@@ -52,7 +52,7 @@ const AboutPage = () => {
                             I help businesses transcend the ordinary. Every line of code I write and every pixel I place is driven by a single mission: to turn your vision into a high-performance digital asset.
                         </p>
                         <Link 
-                            to={{ pathname: "/", hash: "#contact" }}
+                            to="/?nav=contact"
                             className="about-cta-btn"
                             onClick={() => window.sessionStorage.setItem('scroll_to_contact', 'true')}
                         >
@@ -214,7 +214,7 @@ const AboutPage = () => {
                         </p>
                         <div className="cta-wrapper" style={{ marginTop: '30px' }}>
                             <Link 
-                                to="/#contact" 
+                                to="/?nav=contact" 
                                 className="cta-btn-primary"
                                 onClick={() => window.sessionStorage.setItem('scroll_to_contact', 'true')}
                             >
