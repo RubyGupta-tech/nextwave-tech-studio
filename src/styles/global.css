@@ -4163,6 +4163,38 @@ body {
     background: rgba(0, 210, 255, 0.03);
 }
 
+/* Detailed Services Visibility Fix */
+.services-detailed {
+    margin-top: 80px;
+}
+
+.detailed-service {
+    padding: 60px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    margin-bottom: 40px;
+    color: #F8FAFC;
+}
+
+.detailed-service h2 {
+    color: #FFFFFF;
+    font-size: 32px;
+    margin-bottom: 20px;
+}
+
+.detailed-service p {
+    color: rgba(248, 250, 252, 0.8);
+    font-size: 18px;
+    line-height: 1.7;
+    margin-bottom: 20px;
+}
+
+.detailed-service .cta-link {
+    color: #1ABC9C;
+    font-weight: 700;
+}
+
 
 /* ===================== ABOUT PAGE ===================== */
 .about-page {
