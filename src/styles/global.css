@@ -3567,6 +3567,17 @@ nav a:hover::after {
 }
 
 /* ===================== CHAT WIDGET ===================== */
+/* Chat Overlay for closing on outside click */
+.chat-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: transparent;
+    z-index: 2999; /* Just below chat-widget-wrapper */
+}
+
 .chat-widget-wrapper {
     position: fixed;
     bottom: 30px;
