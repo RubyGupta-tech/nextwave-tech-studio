@@ -4124,19 +4124,37 @@ body {
 .about-section {
     position: relative;
     padding: 120px 0;
+    background: #F1F5F9; /* Light background to match services */
     overflow: hidden;
 }
 
 .about-value-card.glass-panel {
-    background: rgba(255, 255, 255, 0.02);
-    border-color: rgba(255, 255, 255, 0.05);
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
     padding: 40px;
+    border-radius: 20px;
     transition: all 0.4s ease;
-    color: #F8FAFC; /* Forced light color */
+    color: #475569;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
 }
 
 .about-value-card.glass-panel h3 {
-    color: #FFFFFF;
+    color: #0F172A !important;
+    margin-top: 15px;
+    font-size: 20px;
+}
+
+.about-value-card.glass-panel p {
+    color: #64748B !important;
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+.about-value-card.glass-panel:hover {
+    background: #FFFFFF;
+    border-color: #1ABC9C;
+    transform: translateY(-10px);
+    box-shadow: 0 0 25px rgba(26, 188, 156, 0.2);
 }
 
 .about-value-card.glass-panel p {
