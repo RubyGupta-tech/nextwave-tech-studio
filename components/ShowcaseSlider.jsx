@@ -91,11 +91,6 @@ const ShowcaseSlider = () => {
                                                     </div>
                                                     <div className="mockup-screen">
                                                         <img src={project.image} alt={project.title} className="parallax-img" />
-                                                        <div className="mockup-overlay">
-                                                            <a href={project.link} target="_blank" rel="noopener noreferrer" className="mockup-btn">
-                                                                Visit Live Site
-                                                            </a>
-                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
