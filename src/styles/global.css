@@ -4115,25 +4115,27 @@ body {
 }
 
 .about-value-card.glass-panel {
-    background: rgba(255, 255, 255, 0.02);
-    border-color: rgba(255, 255, 255, 0.05);
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
     padding: 40px;
     transition: all 0.4s ease;
-    color: #F8FAFC; /* Forced light color */
+    color: #475569; /* Slate for text */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
 .about-value-card.glass-panel h3 {
-    color: #FFFFFF;
+    color: #0F172A; /* Dark Blue Heading */
 }
 
 .about-value-card.glass-panel p {
-    color: rgba(255, 255, 255, 0.7);
+    color: #475569;
 }
 
 .about-value-card.glass-panel:hover {
-    background: rgba(255, 255, 255, 0.05);
+    background: #FFFFFF;
     border-color: #1ABC9C;
     transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
 }
 
 /* ===================== SERVICES SECTION REFINEMENTS ===================== */
@@ -4144,48 +4146,37 @@ body {
 }
 
 .service-block.glass-panel {
-    border-color: rgba(255, 255, 255, 0.05);
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
     padding: 50px 40px;
     text-align: center;
-    color: #F8FAFC; /* Forced light color */
+    color: #475569;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
 .service-block.glass-panel h3 {
-    color: #FFFFFF;
+    color: #0F172A; /* Dark Blue Heading */
 }
 
 .service-block.glass-panel p {
-    color: rgba(255, 255, 255, 0.7);
+    color: #475569;
+}
+
+.service-block.glass-panel .cta-link {
+    color: #1ABC9C;
+    font-weight: 800;
 }
 
 .service-block.glass-panel:hover {
     border-color: #00d2ff;
-    background: rgba(0, 210, 255, 0.03);
+    background: #FFFFFF;
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
 }
 
-/* Special ADA White Card */
+/* Remove special ADA class since all are white now */
 .service-block.ada-card-white {
     background: #FFFFFF !important;
-    border: 1px solid #E2E8F0 !important;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1) !important;
-}
-
-.service-block.ada-card-white h3 {
-    color: #0F172A !important;
-}
-
-.service-block.ada-card-white p {
-    color: #475569 !important;
-}
-
-.service-block.ada-card-white .cta-link {
-    color: #1ABC9C !important;
-    font-weight: 800;
-}
-
-.service-block.ada-card-white:hover {
-    transform: translateY(-8px) scale(1.02);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15) !important;
 }
 
 /* Detailed Services Visibility Fix */
@@ -4195,21 +4186,22 @@ body {
 
 .detailed-service {
     padding: 60px;
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
     border-radius: 20px;
     margin-bottom: 40px;
-    color: #F8FAFC;
+    color: #475569;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
 .detailed-service h2 {
-    color: #FFFFFF;
+    color: #0F172A; /* Dark Blue Heading */
     font-size: 32px;
     margin-bottom: 20px;
 }
 
 .detailed-service p {
-    color: rgba(248, 250, 252, 0.8);
+    color: #475569;
     font-size: 18px;
     line-height: 1.7;
     margin-bottom: 20px;
@@ -4217,7 +4209,7 @@ body {
 
 .detailed-service .cta-link {
     color: #1ABC9C;
-    font-weight: 700;
+    font-weight: 800;
 }
 
 
