@@ -10,30 +10,33 @@ const ChatWidget = () => {
     const widgetRef = useRef(null);
     const location = useLocation();
 
-    // 1. Close chat on Navigation (Route Change)
+    // 1. Close chat on ANY Navigation (Route, Search, or Hash Change)
     useEffect(() => {
         setIsOpen(false);
-    }, [location.pathname]);
+    }, [location.pathname, location.search, location.hash]);
 
-    // 2. High-Priority "Outside Click" using Capture phase
+    // 2. Hyper-Reliable "Outside Interaction" (Desktop & Mobile)
     useEffect(() => {
-        const handleClickOutside = (event) => {
-            // If the chat is open and the click target is NOT inside the widgetRef
+        const handleOutsideInteraction = (event) => {
+            // If the chat is open and the click/touch target is NOT inside the widgetRef
             if (isOpen && widgetRef.current && !widgetRef.current.contains(event.target)) {
                 setIsOpen(false);
             }
         };
 
-        // We use true as the third argument for "Capture Phase" detection
-        // This ensures our logic runs BEFORE other event handlers can stop propagation
+        // We use 'mousedown' and 'touchstart' for faster and more reliable detection than 'click'
+        // Using capture phase (true) ensures we catch it before other elements can block it
         if (isOpen) {
-            document.addEventListener('click', handleClickOutside, true);
+            window.addEventListener('mousedown', handleOutsideInteraction, true);
+            window.addEventListener('touchstart', handleOutsideInteraction, true);
         } else {
-            document.removeEventListener('click', handleClickOutside, true);
+            window.removeEventListener('mousedown', handleOutsideInteraction, true);
+            window.removeEventListener('touchstart', handleOutsideInteraction, true);
         }
 
         return () => {
-            document.removeEventListener('click', handleClickOutside, true);
+            window.removeEventListener('mousedown', handleOutsideInteraction, true);
+            window.removeEventListener('touchstart', handleOutsideInteraction, true);
         };
     }, [isOpen]);
 
