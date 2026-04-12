@@ -4101,6 +4101,15 @@ body {
     border-color: rgba(255, 255, 255, 0.05);
     padding: 40px;
     transition: all 0.4s ease;
+    color: #F8FAFC; /* Forced light color */
+}
+
+.about-value-card.glass-panel h3 {
+    color: #FFFFFF;
+}
+
+.about-value-card.glass-panel p {
+    color: rgba(255, 255, 255, 0.7);
 }
 
 .about-value-card.glass-panel:hover {
@@ -4120,6 +4129,15 @@ body {
     border-color: rgba(255, 255, 255, 0.05);
     padding: 50px 40px;
     text-align: center;
+    color: #F8FAFC; /* Forced light color */
+}
+
+.service-block.glass-panel h3 {
+    color: #FFFFFF;
+}
+
+.service-block.glass-panel p {
+    color: rgba(255, 255, 255, 0.7);
 }
 
 .service-block.glass-panel:hover {
@@ -4206,9 +4224,9 @@ body {
     line-height: 1.6;
 }
 
-/* Improve paragraph contrast on light backgrounds */
-.about-page .lead, 
-.about-page .subtitle {
+/* Improve paragraph contrast on light backgrounds (Excluding the dark hero) */
+.about-page .lead:not(.about-hero-content .lead), 
+.about-page .subtitle:not(.about-hero-content .subtitle) {
     color: #475569 !important; /* Darker slate for readability on white/light-gray */
 }
 
