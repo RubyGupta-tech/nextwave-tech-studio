@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 const ChatWidget = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -6,6 +6,26 @@ const ChatWidget = () => {
     const [formSubmitted, setFormSubmitted] = useState(false);
     const [isSending, setIsSending] = useState(false);
     const [error, setError] = useState(null);
+    const widgetRef = useRef(null);
+
+    // Close chat when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (widgetRef.current && !widgetRef.current.contains(event.target)) {
+                setIsOpen(false);
+            }
+        };
+
+        if (isOpen) {
+            document.addEventListener('mousedown', handleClickOutside);
+        } else {
+            document.removeEventListener('mousedown', handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [isOpen]);
 
     // Show the lead hook message after 3 seconds
     useEffect(() => {
@@ -59,7 +79,7 @@ const ChatWidget = () => {
     };
 
     return (
-        <div className={`chat-widget-wrapper ${isOpen ? 'active' : ''}`}>
+        <div className={`chat-widget-wrapper ${isOpen ? 'active' : ''}`} ref={widgetRef}>
             {/* Floating Bubble */}
             <button 
                 className="chat-bubble" 
