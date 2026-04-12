@@ -4139,55 +4139,62 @@ body {
 /* ===================== SERVICES SECTION REFINEMENTS ===================== */
 .services-section {
     position: relative;
-    padding: 120px 0;
+    padding: 60px 0; /* Reduced padding to fit 'one page' */
     background: #F8FAFC; /* Light Background */
     color: #1E293B;
     overflow: hidden;
 }
 
 .services-container {
-    max-width: 1200px;
+    max-width: 1400px; /* Increased length of the container row */
     margin: 0 auto;
     padding: 0 20px;
 }
 
 .services-grid-primary {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 30px;
-    margin-bottom: 60px;
+    grid-template-columns: repeat(6, 1fr); /* 6 in one row as requested */
+    gap: 15px; /* Tighter gap for one-row fit */
+    margin-bottom: 30px;
 }
 
+/* Detailed Services Compact Row */
 .services-detailed {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
-    gap: 40px;
-    margin-top: 60px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
 }
 
 .service-block.glass-panel {
     background: #FFFFFF;
     border: 1px solid #E2E8F0;
-    padding: 50px 40px;
+    padding: 35px 15px; /* More vertical breathing room */
     text-align: center;
     color: #475569;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-    transition: all 0.4s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+    transition: all 0.3s ease;
+    min-height: 220px; /* Increased vertical length of the box */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .service-block.glass-panel h3 {
-    color: #0F172A !important; /* Dark Blue Heading */
-    font-size: 22px;
-    line-height: 1.3;
-    margin-bottom: 15px;
-    overflow-wrap: break-word;
+    color: #0F172A !important;
+    font-size: 14px; /* Smaller font to fit 6 in a row */
+    margin-bottom: 6px;
+    letter-spacing: 0.5px;
 }
 
 .service-block.glass-panel p {
-    color: #475569;
+    font-size: 11px; /* Tiny description for compactness */
+    line-height: 1.3;
+    color: #64748B;
+    margin-bottom: 8px;
 }
 
 .service-block.glass-panel .cta-link {
+    font-size: 11px;
     color: #1ABC9C;
     font-weight: 800;
 }
@@ -4224,34 +4231,27 @@ body {
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15) !important;
 }
 
-/* Detailed Services Visibility Fix */
-.services-detailed {
-    margin-top: 80px;
-}
+/* Detailed Services Already Configured Above */
 
 .detailed-service {
-    padding: 60px;
+    padding: 50px; /* Increased padding for better breathing room */
     background: #FFFFFF;
     border: 1px solid #E2E8F0;
     border-radius: 20px;
-    margin-bottom: 40px;
     color: #475569;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-    transition: all 0.4s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
 }
 
 .detailed-service h2,
 .detailed-service h3 {
     color: #0F172A !important;
-    font-size: clamp(24px, 4vw, 32px);
-    line-height: 1.2;
+    font-size: 32px; /* Restored larger, readable heading */
     margin-bottom: 20px;
-    overflow-wrap: break-word;
 }
 
 .detailed-service p {
     color: #475569;
-    font-size: 18px;
+    font-size: 17px; /* Increased paragraph size for readability */
     line-height: 1.7;
     margin-bottom: 20px;
 }
