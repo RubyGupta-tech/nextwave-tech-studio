@@ -4247,6 +4247,7 @@ nav a:hover::after {
     }
     .about-hero {
         padding: 140px 0 80px;
+        background-attachment: scroll;
     }
     .about-cta-card h2 {
         font-size: 32px;
