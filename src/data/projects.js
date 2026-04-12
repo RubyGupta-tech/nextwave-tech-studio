@@ -55,4 +55,12 @@ export const projects = [
         link: "https://school-website-yt7m.vercel.app/",
         color: "#10B981",
     },
+    {
+        title: "TrainMaster",
+        description: "A high-performance training platform for Project Management professionals, featuring masterclasses, dynamic resource hubs, and streamlined career tracking.",
+        tags: ["Education", "PMP Training", "Enterprise"],
+        image: "/images/portfolio/trainmaster.png",
+        link: "https://train-master-beige.vercel.app/",
+        color: "#0D9488",
+    },
 ];
