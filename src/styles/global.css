@@ -4158,9 +4158,11 @@ body {
     margin-bottom: 60px;
 }
 
-/* Tone down light pools for light background */
-.services-section .light-pool {
-    opacity: 0.1;
+.services-detailed {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+    gap: 40px;
+    margin-top: 60px;
 }
 
 .service-block.glass-panel {
