@@ -1,8 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import '../../src/styles/global.css';
 
 const EnterpriseDevelopment = () => {
+    useEffect(() => {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('revealed');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        return () => observer.disconnect();
+    }, []);
+
     return (
         <div className="subpage">
             <section className="about-hero">
