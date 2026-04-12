@@ -143,8 +143,9 @@ const ChatWidget = () => {
                     <p>Powered by NextWave Studio</p>
                 </div>
             </div>
-        </>
-    );
+        </div>
+    </>
+);
 };
 
 export default ChatWidget;
