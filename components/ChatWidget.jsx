@@ -20,6 +20,10 @@ const ChatWidget = () => {
         setShowLeadHook(false);
     };
 
+    const closeChat = () => {
+        setIsOpen(false);
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsSending(true);
@@ -61,7 +65,7 @@ const ChatWidget = () => {
     return (
         <>
             {/* Background Overlay to close chat on outside click */}
-            {isOpen && <div className="chat-overlay" onClick={toggleChat}></div>}
+            {isOpen && <div className="chat-overlay" onClick={closeChat}></div>}
 
             <div className={`chat-widget-wrapper ${isOpen ? 'active' : ''}`}>
             {/* Floating Bubble */}

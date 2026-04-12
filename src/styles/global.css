@@ -3574,8 +3574,9 @@ nav a:hover::after {
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: transparent;
+    background: rgba(0, 0, 0, 0.02); /* Subtle debug tint */
     z-index: 2999; /* Just below chat-widget-wrapper */
+    cursor: pointer;
 }
 
 .chat-widget-wrapper {
