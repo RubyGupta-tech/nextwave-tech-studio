@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "../src/styles/global.css";
 
 const values = [
@@ -11,6 +11,19 @@ const values = [
 ];
 
 const About = () => {
+    useEffect(() => {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('revealed');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        return () => observer.disconnect();
+    }, []);
+
     return (
         <section id="about" className="about-section">
             <div className="light-pool" style={{ top: '20%', right: '-10%' }}></div>

@@ -94,8 +94,8 @@ const ChatWidget = () => {
     return (
         <div className={`chat-widget-wrapper ${isOpen ? 'active' : ''}`} ref={widgetRef}>
             {/* Floating Bubble */}
-            <button 
-                className="chat-bubble" 
+            <button
+                className="chat-bubble"
                 onClick={toggleChat}
                 aria-label="Toggle Chat"
             >
@@ -113,7 +113,10 @@ const ChatWidget = () => {
             {/* Lead Hook Tooltip */}
             {!isOpen && showLeadHook && (
                 <div className="lead-hook-tooltip">
-                    <p>Hi! Are you looking to get a website? 👋</p>
+                    <p>
+                        <span className="hook-text-desktop">Hi! Are you looking to get a website? 👋</span>
+                        <span className="hook-text-mobile">Hi! Want to connect?👋</span>
+                    </p>
                     <button onClick={() => setShowLeadHook(false)} className="close-hook">×</button>
                 </div>
             )}
@@ -165,7 +168,7 @@ const ChatWidget = () => {
                         </div>
                     )}
                 </div>
-                
+
                 <div className="chat-footer">
                     <p>Powered by NextWave Studio</p>
                 </div>

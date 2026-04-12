@@ -3756,6 +3756,10 @@ body {
     color: #0F172A;
 }
 
+.hook-text-mobile {
+    display: none;
+}
+
 .close-hook {
     background: none;
     border: none;
@@ -3962,8 +3966,17 @@ body {
         width: calc(100vw - 30px);
         bottom: 70px;
     }
+    /* Mobile Mini-Hook Optimization */
     .lead-hook-tooltip {
         bottom: 70px;
+        padding: 6px 12px;
+        border-radius: 50px; /* Pill shape */
+    }
+    .hook-text-desktop {
+        display: none;
+    }
+    .hook-text-mobile {
+        display: block;
     }
 }
 
