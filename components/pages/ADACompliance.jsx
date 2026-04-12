@@ -39,7 +39,7 @@ const ADACompliance = () => {
                 <div className="container">
                     <div className="about-hero-content reveal">
                         <span className="about-badge">Inclusive Digital</span>
-                        <h1>ADA Compliance & <span className="innovation-gradient">Accessibility</span></h1>
+                        <h1>ADA Compliance <span className="fancy-amp">&</span> <span className="innovation-gradient">Accessibility</span></h1>
                         <p className="lead">
                             Ensure your website is accessible to everyone. Meet the gold standard of digital inclusivity.
                         </p>

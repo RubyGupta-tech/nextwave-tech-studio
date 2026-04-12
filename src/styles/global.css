@@ -3864,6 +3864,16 @@ nav a:hover::after {
     display: inline-block;
 }
 
+.fancy-amp {
+    font-family: 'Playfair Display', serif !important;
+    font-style: italic;
+    font-weight: 500;
+    margin: 0 4px;
+    font-size: 1.15em;
+    vertical-align: baseline;
+    display: inline-block;
+}
+
 @keyframes shine {
     to {
         background-position: 200% center;

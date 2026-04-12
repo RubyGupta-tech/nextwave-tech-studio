@@ -39,7 +39,7 @@ const WebsiteFixes = () => {
                 <div className="container">
                     <div className="about-hero-content reveal">
                         <span className="about-badge">Crisis Response</span>
-                        <h1>Website Fixes & <span className="innovation-gradient">Repair</span></h1>
+                        <h1>Website Fixes <span className="fancy-amp">&</span> <span className="innovation-gradient">Repair</span></h1>
                         <p className="lead">
                             Website not working? Need it to load and run faster? We've got you covered.
                         </p>

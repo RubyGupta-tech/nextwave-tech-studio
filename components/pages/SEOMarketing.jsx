@@ -39,7 +39,7 @@ const SEOMarketing = () => {
                 <div className="container">
                     <div className="about-hero-content reveal">
                         <span className="about-badge">Search Excellence</span>
-                        <h1>SEO & <span className="innovation-gradient">Marketing</span></h1>
+                        <h1>SEO <span className="fancy-amp">&</span> <span className="innovation-gradient">Marketing</span></h1>
                         <p className="lead">
                             Helping businesses get found, chosen, and contacted.
                         </p>

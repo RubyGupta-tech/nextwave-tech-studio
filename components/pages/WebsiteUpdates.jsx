@@ -39,7 +39,7 @@ const WebsiteUpdates = () => {
                 <div className="container">
                     <div className="about-hero-content reveal">
                         <span className="about-badge">Optimization</span>
-                        <h1>Website Updates & <span className="innovation-gradient">Maintenance</span></h1>
+                        <h1>Website Updates <span className="fancy-amp">&</span> <span className="innovation-gradient">Maintenance</span></h1>
                         <p className="lead">
                             Keep your website secure, fresh, and running at peak performance.
                         </p>

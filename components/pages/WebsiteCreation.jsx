@@ -39,7 +39,7 @@ const WebsiteCreation = () => {
                 <div className="container">
                     <div className="about-hero-content reveal">
                         <span className="about-badge">Our Services</span>
-                        <h1>Website Creation & <span className="innovation-gradient">Design</span></h1>
+                        <h1>Website Creation <span className="fancy-amp">&</span> <span className="innovation-gradient">Design</span></h1>
                         <p className="lead">
                             Effective websites drive targeted visitors and increase business.
                         </p>
