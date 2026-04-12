@@ -59,7 +59,7 @@ const Hero = () => {
                         </Link>
                     </div>
 
-                    <div className="hero-asset-right animate-floating reveal hide-on-mobile">
+                    <div className="hero-asset-right animate-floating reveal">
                         <div className="asset-glow-aura"></div>
                         <img 
                             src="/images/hero_tech_showcase.png" 
