@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
 
 const ChatWidget = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -6,6 +7,35 @@ const ChatWidget = () => {
     const [formSubmitted, setFormSubmitted] = useState(false);
     const [isSending, setIsSending] = useState(false);
     const [error, setError] = useState(null);
+    const widgetRef = useRef(null);
+    const location = useLocation();
+
+    // 1. Close chat on Navigation (Route Change)
+    useEffect(() => {
+        setIsOpen(false);
+    }, [location.pathname]);
+
+    // 2. High-Priority "Outside Click" using Capture phase
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            // If the chat is open and the click target is NOT inside the widgetRef
+            if (isOpen && widgetRef.current && !widgetRef.current.contains(event.target)) {
+                setIsOpen(false);
+            }
+        };
+
+        // We use true as the third argument for "Capture Phase" detection
+        // This ensures our logic runs BEFORE other event handlers can stop propagation
+        if (isOpen) {
+            document.addEventListener('click', handleClickOutside, true);
+        } else {
+            document.removeEventListener('click', handleClickOutside, true);
+        }
+
+        return () => {
+            document.removeEventListener('click', handleClickOutside, true);
+        };
+    }, [isOpen]);
 
     // Show the lead hook message after 3 seconds
     useEffect(() => {
@@ -18,10 +48,6 @@ const ChatWidget = () => {
     const toggleChat = () => {
         setIsOpen(!isOpen);
         setShowLeadHook(false);
-    };
-
-    const closeChat = () => {
-        setIsOpen(false);
     };
 
     const handleSubmit = async (e) => {
@@ -63,11 +89,7 @@ const ChatWidget = () => {
     };
 
     return (
-        <>
-            {/* Background Overlay to close chat on outside click */}
-            {isOpen && <div className="chat-overlay" onClick={closeChat}></div>}
-
-            <div className={`chat-widget-wrapper ${isOpen ? 'active' : ''}`}>
+        <div className={`chat-widget-wrapper ${isOpen ? 'active' : ''}`} ref={widgetRef}>
             {/* Floating Bubble */}
             <button 
                 className="chat-bubble" 
@@ -144,8 +166,7 @@ const ChatWidget = () => {
                 </div>
             </div>
         </div>
-    </>
-);
+    );
 };
 
 export default ChatWidget;
