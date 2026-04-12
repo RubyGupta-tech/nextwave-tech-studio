@@ -29,7 +29,7 @@ export default async function handler(req, res) {
       console.error('Database Save Error:', dbError);
     }
 
-    // 1. Send lead notification to Admin
+    // 1. Send lead notification to Admin (NextWave Team)
     const { data: leadData, error: leadError } = await resend.emails.send({
       from: 'NextWave Tech Studio <notifications@dnextwave.com>',
       to: ['d.nextwavetech@gmail.com'],
