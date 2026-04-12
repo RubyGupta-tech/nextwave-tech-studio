@@ -104,9 +104,7 @@ const ChatWidget = () => {
                         <path d="M18 6L6 18M6 6l12 12" />
                     </svg>
                 ) : (
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                        <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
-                    </svg>
+                    <img src="/NextWave_logo1.web.jpeg" alt="Logo" className="chat-bubble-logo" />
                 )}
             </button>
 
@@ -122,7 +120,9 @@ const ChatWidget = () => {
             <div className="chat-window">
                 <div className="chat-header">
                     <div className="chat-header-info">
-                        <div className="bot-avatar">N</div>
+                        <div className="bot-avatar">
+                            <img src="/NextWave_logo1.web.jpeg" alt="Avatar" />
+                        </div>
                         <div>
                             <h4>NextWave Assistant</h4>
                             <p>Typically replies in minutes</p>
