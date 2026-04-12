@@ -43,8 +43,6 @@ const AdminDashboard = () => {
     const savedKey = sessionStorage.getItem('admin_key');
     if (savedKey) {
       setPassword(savedKey);
-      // We can't call handleLogin directly here because of state lifecycle, 
-      // but we can trigger it once password is set.
     }
   }, []);
 
@@ -78,7 +76,7 @@ const AdminDashboard = () => {
               {loading ? 'Verifying...' : 'Login ➔'}
             </button>
             <div style={{ marginTop: '15px', fontSize: '10px', color: 'rgba(255,255,255,0.3)' }}>
-              System Version: v2.0 (Bypass-Active)
+              System Version: v3.1 (NextWave-Restore)
             </div>
           </form>
         </div>
@@ -105,36 +103,42 @@ const AdminDashboard = () => {
           <div className="stats-badge">{leads.length} Total Leads</div>
         </header>
 
-        <div className="leads-table-container">
-          <table className="leads-table">
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Service</th>
-                <th>Source</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {leads.map(lead => (
-                <tr key={lead.id} onClick={() => setSelectedLead(lead)} className="lead-row">
-                  <td>{new Date(lead.created_at).toLocaleDateString()}</td>
-                  <td><strong>{lead.name}</strong></td>
-                  <td>{lead.email}</td>
-                  <td><span className="service-tag">{lead.service}</span></td>
-                  <td>
-                    <span className={`source-tag ${lead.source}`}>
-                      {lead.source === 'chat_widget' ? '💬 Chat' : '📄 Form'}
-                    </span>
-                  </td>
-                  <td><button className="view-btn">View Message</button></td>
+        {leads.length === 0 ? (
+          <div className="no-leads">
+            <p>No inquiries found in the database yet.</p>
+          </div>
+        ) : (
+          <div className="leads-table-container">
+            <table className="leads-table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Service</th>
+                  <th>Source</th>
+                  <th>Action</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                {leads.map(lead => (
+                  <tr key={lead.id} onClick={() => setSelectedLead(lead)} className="lead-row">
+                    <td>{new Date(lead.created_at).toLocaleDateString()}</td>
+                    <td><strong>{lead.name}</strong></td>
+                    <td>{lead.email}</td>
+                    <td><span className="service-tag">{lead.service}</span></td>
+                    <td>
+                      <span className={`source-tag ${lead.source || 'website_form'}`}>
+                        {lead.source === 'chat_widget' ? '💬 Chat' : '📄 Form'}
+                      </span>
+                    </td>
+                    <td><button className="view-btn">View Message</button></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </main>
 
       {/* Message Modal */}
@@ -172,6 +176,7 @@ const AdminDashboard = () => {
           align-items: center;
           justify-content: center;
           padding: 20px;
+          font-family: 'Inter', sans-serif;
         }
         .admin-login-card {
           background: rgba(255, 255, 255, 0.05);
@@ -183,7 +188,6 @@ const AdminDashboard = () => {
           text-align: center;
           border: 1px solid rgba(255, 255, 255, 0.1);
         }
-        .admin-login-card h2 { color: #fff; margin-bottom: 10px; }
         .admin-login-card p { color: #8892b0; margin-bottom: 30px; }
         .admin-login-card input {
           width: 100%;
@@ -213,6 +217,7 @@ const AdminDashboard = () => {
           min-height: 100vh;
           background: #f8fafc;
           color: #333;
+          font-family: 'Inter', sans-serif;
         }
         .admin-nav {
           background: #fff;
@@ -222,12 +227,15 @@ const AdminDashboard = () => {
           align-items: center;
           box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
-        .admin-nav-brand { display: flex; align-items: center; gap: 10px; font-weight: bold; }
-        .logout-btn { background: #eee; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; }
+        .admin-nav-brand { display: flex; align-items: center; gap: 10px; font-weight: 800; }
+        .portal-tag { font-size: 12px; background: #2c3e50; color: #fff; padding: 2px 8px; border-radius: 4px; }
+        .logout-btn { background: #fee2e2; color: #991b1b; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: 600; }
 
         .admin-content { padding: 40px; max-width: 1200px; margin: auto; }
         .content-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
         .stats-badge { background: #1ABC9C; color: #fff; padding: 5px 15px; border-radius: 20px; font-weight: bold; }
+
+        .no-leads { text-align: center; padding: 100px; color: #64748b; background: #fff; border-radius: 15px; }
 
         .leads-table-container { background: #fff; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
         .leads-table { width: 100%; border-collapse: collapse; }

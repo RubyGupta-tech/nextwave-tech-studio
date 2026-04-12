@@ -1,6 +1,12 @@
-import { sql } from '@vercel/postgres';
+import { neon } from '@neondatabase/serverless';
 
 export default async function handler(req, res) {
+  if (!process.env.DATABASE_URL) {
+    return res.status(500).json({ success: false, error: 'DATABASE_URL is not defined' });
+  }
+
+  const sql = neon(process.env.DATABASE_URL);
+
   try {
     // Create the leads table if it doesn't exist
     const result = await sql`
@@ -17,7 +23,7 @@ export default async function handler(req, res) {
     
     return res.status(200).json({ 
       success: true, 
-      message: 'Database table "leads" created or already exists.',
+      message: 'Database table "leads" created or already exists for NextWave Tech Studio.',
       result: result
     });
   } catch (error) {
