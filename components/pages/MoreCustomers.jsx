@@ -39,7 +39,7 @@ const MoreCustomers = () => {
                 <div className="container">
                     <div className="about-hero-content reveal">
                         <span className="about-badge">Growth & Strategy</span>
-                        <h1>More Customers & <span className="innovation-gradient">Revenue</span></h1>
+                        <h1>More Customers <span className="fancy-amp">&</span> <span className="innovation-gradient">Revenue</span></h1>
                         <p className="lead">
                             Turn your website into a powerful, automated lead generation machine.
                         </p>
