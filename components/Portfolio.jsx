@@ -24,11 +24,11 @@ const Portfolio = () => {
                                 </div>
                                 <div className="browser-body">
                                     <img src={project.image} alt={project.title} />
-                                    {/* <div className="portfolio-overlay">
+                                    <div className="portfolio-overlay">
                                         <a href={project.link} target="_blank" rel="noopener noreferrer" className="visit-site-btn">
                                             Visit Live Site ↗
                                         </a>
-                                    </div> */}
+                                    </div>
                                 </div>
                             </div>
                             <div className="portfolio-card-body">

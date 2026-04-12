@@ -26,6 +26,10 @@ const FloatingCTA = () => {
             if (contactSection) {
                 contactSection.scrollIntoView({ behavior: "smooth" });
             }
+        } else {
+            // If on subpage, navigate to home then scroll
+            // The Link component handles navigation, but we can ensure smoothness
+            window.sessionStorage.setItem('scroll_to_contact', 'true');
         }
     };
 

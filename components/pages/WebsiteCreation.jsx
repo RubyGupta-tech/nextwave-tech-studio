@@ -1,10 +1,9 @@
 import React, { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import '../../src/styles/global.css';
 
 const WebsiteCreation = () => {
     useEffect(() => {
-        window.scrollTo(0, 0);
-        
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -124,7 +123,13 @@ const WebsiteCreation = () => {
 
                     <div className="cta-section">
                         <h2>Looking for a better website?</h2>
-                        <a href="/#contact" className="primary-btn">Let's Talk</a>
+                        <Link 
+                            to="/#contact" 
+                            className="primary-btn"
+                            onClick={() => window.sessionStorage.setItem('scroll_to_contact', 'true')}
+                        >
+                            Let's Talk
+                        </Link>
                     </div>
                 </div>
             </div>

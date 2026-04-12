@@ -49,7 +49,14 @@ const Hero = () => {
                     <span className="highlight-pill">Enterprise Apps</span>
                 </div>
 
-                <a href="/#contact" className="hero-cta animate-fade-in-up" style={{ animationDelay: "0.7s" }}>Get Your Free Consultation</a>
+                <Link 
+                    to="/#contact" 
+                    className="hero-cta animate-fade-in-up" 
+                    style={{ animationDelay: "0.7s" }}
+                    onClick={() => window.sessionStorage.setItem('scroll_to_contact', 'true')}
+                >
+                    Get Your Free Consultation
+                </Link>
             </div>
         </section>
     );

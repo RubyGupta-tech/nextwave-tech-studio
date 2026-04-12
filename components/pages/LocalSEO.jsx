@@ -1,10 +1,9 @@
 import React, { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import '../../src/styles/global.css';
 
 const LocalSEO = () => {
     useEffect(() => {
-        window.scrollTo(0, 0);
-
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -50,7 +49,13 @@ const LocalSEO = () => {
 
                     <div className="cta-section">
                         <h2>Ready to get more local customers?</h2>
-                        <a href="/#contact" className="primary-btn">Start Local Growth Today</a>
+                        <Link 
+                            to="/#contact" 
+                            className="primary-btn"
+                            onClick={() => window.sessionStorage.setItem('scroll_to_contact', 'true')}
+                        >
+                            Start Local Growth Today
+                        </Link>
                     </div>
                 </div>
             </div>

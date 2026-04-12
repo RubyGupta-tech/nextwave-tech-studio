@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import '../../src/styles/global.css';
 
 const EnterpriseDevelopment = () => {
@@ -39,7 +40,13 @@ const EnterpriseDevelopment = () => {
 
                     <div className="cta-section">
                         <h2>Have a complex software problem?</h2>
-                        <a href="/#contact" className="primary-btn">Consult an Engineer</a>
+                        <Link 
+                            to="/#contact" 
+                            className="primary-btn"
+                            onClick={() => window.sessionStorage.setItem('scroll_to_contact', 'true')}
+                        >
+                            Consult an Engineer
+                        </Link>
                     </div>
                 </div>
             </div>

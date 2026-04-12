@@ -11,8 +11,6 @@ import passionImg from '../../images/passionprecision_pic.png';
 
 const AboutPage = () => {
     useEffect(() => {
-        window.scrollTo(0, 0);
-        
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -53,7 +51,13 @@ const AboutPage = () => {
                         <p className="lead">
                             I help businesses transcend the ordinary. Every line of code I write and every pixel I place is driven by a single mission: to turn your vision into a high-performance digital asset.
                         </p>
-                        <Link to="/#contact" className="about-cta-btn">Start Your Project</Link>
+                        <Link 
+                            to={{ pathname: "/", hash: "#contact" }}
+                            className="about-cta-btn"
+                            onClick={() => window.sessionStorage.setItem('scroll_to_contact', 'true')}
+                        >
+                            Start Your Project
+                        </Link>
                     </div>
                 </div>
             </section>
@@ -209,7 +213,13 @@ const AboutPage = () => {
                             Ready to transform your vision into a high-performance digital asset? Let's sit down for a quick strategy call and map out your next wave of growth.
                         </p>
                         <div className="cta-wrapper" style={{ marginTop: '30px' }}>
-                            <Link to="/#contact" className="cta-btn-primary">Book Your Strategy Call</Link>
+                            <Link 
+                                to="/#contact" 
+                                className="cta-btn-primary"
+                                onClick={() => window.sessionStorage.setItem('scroll_to_contact', 'true')}
+                            >
+                                Book Your Strategy Call
+                            </Link>
                         </div>
                     </div>
                 </div>

@@ -40,9 +40,24 @@ const Footer = () => {
                 <div className="footer-col">
                     <h4 className="footer-col-heading">Company</h4>
                     <ul className="footer-links">
-                        <li><a href="#about">About Us</a></li>
-                        <li><a href="#portfolio">Portfolio</a></li>
-                        <li><a href="#contact">Contact</a></li>
+                        <li>
+                            <Link to="/about">
+                                About Us
+                            </Link>
+                        </li>
+                        <li>
+                            <Link to="/portfolio">
+                                Portfolio
+                            </Link>
+                        </li>
+                        <li>
+                            <Link 
+                                to="/#contact" 
+                                onClick={() => window.sessionStorage.setItem('scroll_to_contact', 'true')}
+                            >
+                                Contact
+                            </Link>
+                        </li>
                     </ul>
                 </div>
 

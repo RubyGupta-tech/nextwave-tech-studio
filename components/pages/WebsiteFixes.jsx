@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import '../../src/styles/global.css';
 
 const WebsiteFixes = () => {
@@ -37,7 +38,13 @@ const WebsiteFixes = () => {
 
                     <div className="cta-section">
                         <h2>Is your website down or underperforming?</h2>
-                        <a href="/#contact" className="primary-btn">Get Help Now</a>
+                        <Link 
+                            to="/#contact" 
+                            className="primary-btn"
+                            onClick={() => window.sessionStorage.setItem('scroll_to_contact', 'true')}
+                        >
+                            Get Help Now
+                        </Link>
                     </div>
                 </div>
             </div>

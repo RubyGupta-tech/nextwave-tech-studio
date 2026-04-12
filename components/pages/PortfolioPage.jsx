@@ -1,11 +1,10 @@
 import React, { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import Portfolio from '../Portfolio';
 import ShowcaseSlider from '../ShowcaseSlider';
 
 const PortfolioPage = () => {
     useEffect(() => {
-        window.scrollTo(0, 0);
-        
         // Scroll Reveal Observer
         const observerOptions = {
             threshold: 0.1,
@@ -51,7 +50,13 @@ const PortfolioPage = () => {
                         Explore a curated collection of high-performance digital solutions crafted for ambitious brands.
                     </p>
                     <div className="hero-cta-group">
-                        <a href="/#contact" className="portfolio-hero-btn">Work With Me</a>
+                        <Link 
+                            to="/#contact" 
+                            className="portfolio-hero-btn"
+                            onClick={() => window.sessionStorage.setItem('scroll_to_contact', 'true')}
+                        >
+                            Work With Me
+                        </Link>
                     </div>
                 </div>
 
@@ -71,7 +76,13 @@ const PortfolioPage = () => {
                     <p className="portfolio-cta-desc">
                         We specialize in high-performance websites that look great and deliver results. Let's build something amazing together.
                     </p>
-                    <a href="/#contact" className="portfolio-cta-btn">Get in Touch</a>
+                    <Link 
+                        to="/#contact" 
+                        className="portfolio-cta-btn"
+                        onClick={() => window.sessionStorage.setItem('scroll_to_contact', 'true')}
+                    >
+                        Get in Touch
+                    </Link>
                 </div>
             </section>
         </main>

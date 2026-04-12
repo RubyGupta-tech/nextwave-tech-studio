@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import '../../src/styles/global.css';
 
 const WebsiteUpdates = () => {
@@ -38,7 +39,13 @@ const WebsiteUpdates = () => {
 
                     <div className="cta-section">
                         <h2>Need help maintaining your site?</h2>
-                        <a href="/#contact" className="primary-btn">Secure Your Site Today</a>
+                        <Link 
+                            to="/#contact" 
+                            className="primary-btn"
+                            onClick={() => window.sessionStorage.setItem('scroll_to_contact', 'true')}
+                        >
+                            Secure Your Site Today
+                        </Link>
                     </div>
                 </div>
             </div>

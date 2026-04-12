@@ -15,10 +15,7 @@ const Navbar = () => {
             <Link 
                 to="/" 
                 className="navbar-brand" 
-                onClick={() => {
-                    closeMenu();
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                }}
+                onClick={closeMenu}
             >
                 <img src="/NextWave_logo1.web.jpeg" alt="NextWave Tech Logo" className="navbar-logo" />
                 <div className="brand-title">
@@ -55,7 +52,16 @@ const Navbar = () => {
                 </div>
                 <NavLink to="/portfolio" onClick={closeMenu}>Portfolio</NavLink>
                 <NavLink to="/about" onClick={closeMenu}>About</NavLink>
-                <a href="/#contact" className={isActive("#contact") ? "active" : ""} onClick={closeMenu}>Contact</a>
+                <Link 
+                    to="/#contact" 
+                    className={isActive("#contact") ? "active" : ""} 
+                    onClick={() => {
+                        closeMenu();
+                        window.sessionStorage.setItem('scroll_to_contact', 'true');
+                    }}
+                >
+                    Contact
+                </Link>
             </nav>
         </header>
     );

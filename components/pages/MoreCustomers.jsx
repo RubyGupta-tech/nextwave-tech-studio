@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import '../../src/styles/global.css';
 
 const MoreCustomers = () => {
@@ -38,7 +39,13 @@ const MoreCustomers = () => {
 
                     <div className="cta-section">
                         <h2>Ready to scale your business?</h2>
-                        <a href="/#contact" className="primary-btn">Start Growing Today</a>
+                        <Link 
+                            to="/#contact" 
+                            className="primary-btn"
+                            onClick={() => window.sessionStorage.setItem('scroll_to_contact', 'true')}
+                        >
+                            Start Growing Today
+                        </Link>
                     </div>
                 </div>
             </div>

@@ -1,5 +1,5 @@
-import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import React, { useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Hero from "../components/Hero";
 import StatsBar from "../components/StatsBar";
@@ -14,6 +14,7 @@ import Process from "../components/Process";
 import FloatingCTA from "../components/FloatingCTA";
 import ShowcaseSlider from "../components/ShowcaseSlider";
 import ChatWidget from "../components/ChatWidget";
+import FinalCTA from "../components/FinalCTA";
 
 // Sub-pages
 import WebsiteCreation from "../components/pages/WebsiteCreation";
@@ -32,8 +33,47 @@ import AdminDashboard from "../components/AdminDashboard";
 
 import "./styles/global.css";
 
+// --- Global Scroll Handler ---
+const ScrollToHash = () => {
+    const { pathname, hash } = useLocation();
+
+    useEffect(() => {
+        const checkScroll = () => {
+            const isRedirectionActive = window.sessionStorage.getItem('scroll_to_contact') === 'true';
+            const hasContactHash = hash === '#contact';
+            const shouldScrollToContact = hasContactHash || isRedirectionActive;
+            
+            if (shouldScrollToContact && pathname === '/') {
+                // REDIRECTION SHIELD: Don't allow scroll-to-top if we're headed to contact
+                setTimeout(() => {
+                    let attempts = 0;
+                    const scrollInterval = setInterval(() => {
+                        const contactSection = document.getElementById('contact');
+                        if (contactSection) {
+                            window.sessionStorage.removeItem('scroll_to_contact');
+                            contactSection.scrollIntoView({ behavior: 'smooth' });
+                            clearInterval(scrollInterval);
+                        }
+                        attempts++;
+                        if (attempts > 50) clearInterval(scrollInterval);
+                    }, 100);
+                }, 300);
+            } else if (!hash && !isRedirectionActive) {
+                // Only reset scroll to top if we're NOT headed to contact
+                window.scrollTo({ top: 0, behavior: 'auto' });
+            }
+        };
+
+        checkScroll();
+    }, [pathname, hash]);
+
+    return null;
+};
+
+
 const Home = () => {
-    React.useEffect(() => {
+    useEffect(() => {
+        // Reveal animation logic
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -43,6 +83,7 @@ const Home = () => {
         }, { threshold: 0.1 });
 
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
         return () => observer.disconnect();
     }, []);
 
@@ -56,7 +97,8 @@ const Home = () => {
             <div className="reveal"><ShowcaseSlider /></div>
             <div className="reveal"><About /></div>
             <div className="reveal"><Testimonials /></div>
-            <div className="reveal"><Contact /></div>
+            <div className="reveal"><FinalCTA /></div>
+            <Contact />
             <FloatingCTA />
         </>
     );
@@ -67,6 +109,7 @@ function AppContent() {
     
     return (
         <div className="App">
+            <ScrollToHash />
             {!isAdmin && <Navbar />}
             <Routes>
                 <Route path="/" element={<Home />} />

@@ -1,10 +1,9 @@
 import React, { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import '../../src/styles/global.css';
 
 const ADACompliance = () => {
     useEffect(() => {
-        window.scrollTo(0, 0);
-        
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -50,7 +49,13 @@ const ADACompliance = () => {
 
                     <div className="cta-section">
                         <h2>Is your site compliant?</h2>
-                        <a href="/#contact" className="primary-btn">Get an Accessibility Audit</a>
+                        <Link 
+                            to="/#contact" 
+                            className="primary-btn"
+                            onClick={() => window.sessionStorage.setItem('scroll_to_contact', 'true')}
+                        >
+                            Get an Accessibility Audit
+                        </Link>
                     </div>
                 </div>
             </div>
