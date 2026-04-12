@@ -4155,7 +4155,7 @@ body {
 }
 
 .service-block.glass-panel h3 {
-    color: #0F172A; /* Dark Blue Heading */
+    color: #0F172A !important; /* Dark Blue Heading */
 }
 
 .service-block.glass-panel p {
@@ -4195,7 +4195,7 @@ body {
 }
 
 .detailed-service h2 {
-    color: #0F172A; /* Dark Blue Heading */
+    color: #0F172A !important; /* Dark Blue Heading */
     font-size: 32px;
     margin-bottom: 20px;
 }

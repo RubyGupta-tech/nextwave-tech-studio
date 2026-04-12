@@ -1,8 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import "../src/styles/global.css";
 
 const Services = () => {
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('revealed');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <section id="services" className="services-section">
       <div className="light-pool light-pool-magenta" style={{ top: '10%', left: '-10%' }}></div>
@@ -43,7 +56,7 @@ const Services = () => {
 
         {/* Detailed Services */}
         <div className="services-detailed">
-          <div className="detailed-service">
+          <div className="detailed-service reveal">
             <h2>Internet Marketing</h2>
             <p>
               Through modern internet marketing techniques, we help clients increase traffic, improve conversion rates, and get more customers.
@@ -54,7 +67,7 @@ const Services = () => {
             <Link to="/services/internet-marketing" className="cta-link">Learn More &rarr;</Link>
           </div>
 
-          <div className="detailed-service">
+          <div className="detailed-service reveal">
             <h2>Enterprise Web App Development</h2>
             <p>
               Our programmers focus on solving complex business problems. We build Enterprise-level web applications using modern, scalable programming methodology.
