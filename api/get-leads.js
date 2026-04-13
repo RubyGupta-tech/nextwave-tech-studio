@@ -29,24 +29,44 @@ export default async function handler(req, res) {
     
     // 3. Handle Filtering Logic
     const filter = req.query.filter || 'all';
-    let query;
+    const search = req.query.search || '';
+    const serviceFilter = req.query.service || 'all';
+    
+    let queryConditions = [];
+    const params = [];
 
+    // Time-based filtering
     if (filter === 'today') {
-      query = sql`SELECT * FROM leads WHERE created_at >= NOW() - INTERVAL '1 day' ORDER BY created_at DESC LIMIT 500`;
+      queryConditions.push("created_at >= NOW() - INTERVAL '1 day'");
     } else if (filter === 'week') {
-      query = sql`SELECT * FROM leads WHERE created_at >= NOW() - INTERVAL '7 days' ORDER BY created_at DESC LIMIT 500`;
+      queryConditions.push("created_at >= NOW() - INTERVAL '7 days'");
     } else if (filter === 'month') {
-      query = sql`SELECT * FROM leads WHERE created_at >= NOW() - INTERVAL '30 days' ORDER BY created_at DESC LIMIT 500`;
-    } else {
-      query = sql`SELECT * FROM leads ORDER BY created_at DESC LIMIT 500`;
+      queryConditions.push("created_at >= NOW() - INTERVAL '30 days'");
     }
 
-    const rows = await query;
+    // Search filtering (name or email)
+    if (search) {
+      queryConditions.push(`(name ILIKE '%${search}%' OR email ILIKE '%${search}%')`);
+    }
+
+    // Service filtering
+    if (serviceFilter !== 'all') {
+      queryConditions.push(`service = '${serviceFilter}'`);
+    }
+
+    const whereClause = queryConditions.length > 0 ? `WHERE ${queryConditions.join(' AND ')}` : '';
+    
+    const rows = await sql.query(`
+      SELECT * FROM leads 
+      ${whereClause}
+      ORDER BY created_at DESC 
+      LIMIT 1000
+    `);
 
     return res.status(200).json({ 
       success: true, 
-      leads: rows,
-      total: rows.length 
+      leads: rows.rows,
+      total: rows.rowCount 
     });
   } catch (error) {
     console.error('Database Fetch Error:', error);

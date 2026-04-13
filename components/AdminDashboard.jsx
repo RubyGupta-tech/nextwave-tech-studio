@@ -9,6 +9,9 @@ const AdminDashboard = () => {
   const [error, setError] = useState(null);
   const [selectedLead, setSelectedLead] = useState(null);
   const [timeFilter, setTimeFilter] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [serviceFilter, setServiceFilter] = useState('all');
+  const [isUpdating, setIsUpdating] = useState(false);
 
   const handleLogin = async (e) => {
     if (e) e.preventDefault();
@@ -16,7 +19,14 @@ const AdminDashboard = () => {
     setError(null);
 
     try {
-      const response = await fetch(`/api/get-leads?filter=${timeFilter}`, {
+      // Build query string
+      const params = new URLSearchParams({
+        filter: timeFilter,
+        search: searchQuery,
+        service: serviceFilter
+      });
+
+      const response = await fetch(`/api/get-leads?${params.toString()}`, {
         headers: {
           'x-nextwave-auth': password
         }
@@ -53,12 +63,85 @@ const AdminDashboard = () => {
     }
   }, [password]);
 
-  // Re-fetch when filter changes
+  // Re-fetch when filter, search, or service changes
   useEffect(() => {
     if (isLoggedIn) {
-      handleLogin();
+      const delayDebounceFn = setTimeout(() => {
+        handleLogin();
+      }, 300);
+      return () => clearTimeout(delayDebounceFn);
     }
-  }, [timeFilter]);
+  }, [timeFilter, searchQuery, serviceFilter]);
+
+  const handleUpdateLead = async (id, status, notes) => {
+    setIsUpdating(true);
+    try {
+      const resp = await fetch('/api/update-lead', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-nextwave-auth': password
+        },
+        body: JSON.stringify({ id, status, notes })
+      });
+      if (resp.ok) {
+        setLeads(leads.map(l => l.id === id ? { ...l, status, notes } : l));
+        if (selectedLead && selectedLead.id === id) {
+          setSelectedLead({ ...selectedLead, status, notes });
+        }
+      }
+    } catch (err) {
+      console.error("Update failed:", err);
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
+  const handleDeleteLead = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this lead permanently?")) return;
+    try {
+      const resp = await fetch('/api/delete-lead', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-nextwave-auth': password
+        },
+        body: JSON.stringify({ id })
+      });
+      if (resp.ok) {
+        setLeads(leads.filter(l => l.id !== id));
+        setSelectedLead(null);
+      }
+    } catch (err) {
+      console.error("Delete failed:", err);
+    }
+  };
+
+  const exportToCSV = () => {
+    if (leads.length === 0) return;
+    const headers = ["ID", "Date", "Name", "Email", "Service", "Source", "Status", "Message", "Notes"];
+    const rows = leads.map(l => [
+      l.id,
+      new Date(l.created_at).toLocaleString(),
+      l.name,
+      l.email,
+      l.service,
+      l.source,
+      l.status,
+      `"${l.message?.replace(/"/g, '""')}"`,
+      `"${l.notes?.replace(/"/g, '""')}"`
+    ]);
+    const csvContent = [headers, ...rows].map(e => e.join(",")).join("\n");
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement("a");
+    const url = URL.createObjectURL(blob);
+    link.setAttribute("href", url);
+    link.setAttribute("download", `nextwave_leads_${new Date().toISOString().split('T')[0]}.csv`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   if (!isLoggedIn) {
     return (
@@ -109,26 +192,44 @@ const AdminDashboard = () => {
         <header className="content-header">
           <div className="header-main">
             <h1>Customer Inquiries</h1>
-            <div className="stats-badge">{leads.length} Total Leads</div>
+            <div className="analytics-summary">
+              <div className="ans-item"><span className="ans-label">Total Leads:</span> <span className="ans-val">{leads.length}</span></div>
+              <div className="ans-item"><span className="ans-label">Converted:</span> <span className="ans-val">{leads.filter(l => l.status === 'Converted').length}</span></div>
+              <div className="ans-item"><span className="ans-label">New:</span> <span className="ans-val">{leads.filter(l => l.status === 'New').length}</span></div>
+            </div>
           </div>
           
-          <div className="filter-controls">
-            <button 
-              className={`filter-btn ${timeFilter === 'all' ? 'active' : ''}`}
-              onClick={() => setTimeFilter('all')}
-            >All Time</button>
-            <button 
-              className={`filter-btn ${timeFilter === 'month' ? 'active' : ''}`}
-              onClick={() => setTimeFilter('month')}
-            >This Month</button>
-            <button 
-              className={`filter-btn ${timeFilter === 'week' ? 'active' : ''}`}
-              onClick={() => setTimeFilter('week')}
-            >This Week</button>
-            <button 
-              className={`filter-btn ${timeFilter === 'today' ? 'active' : ''}`}
-              onClick={() => setTimeFilter('today')}
-            >Today</button>
+          <div className="crm-master-controls">
+            <div className="search-box">
+              <input 
+                type="text" 
+                placeholder="Search name or email..." 
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
+            
+            <div className="filter-group">
+              <select value={serviceFilter} onChange={(e) => setServiceFilter(e.target.value)} className="service-filter-select">
+                <option value="all">All Services</option>
+                <option>Website Creation</option>
+                <option>Website Updates &amp; Fixes</option>
+                <option>SEO &amp; Internet Marketing</option>
+                <option>Partnership / Sponsorship</option>
+                <option>Enterprise Web App</option>
+              </select>
+
+              <div className="time-filters">
+                <button className={`filter-btn ${timeFilter === 'all' ? 'active' : ''}`} onClick={() => setTimeFilter('all')}>All</button>
+                <button className={`filter-btn ${timeFilter === 'month' ? 'active' : ''}`} onClick={() => setTimeFilter('month')}>Month</button>
+                <button className={`filter-btn ${timeFilter === 'week' ? 'active' : ''}`} onClick={() => setTimeFilter('week')}>Week</button>
+                <button className={`filter-btn ${timeFilter === 'today' ? 'active' : ''}`} onClick={() => setTimeFilter('today')}>Today</button>
+              </div>
+            </div>
+
+            <button onClick={exportToCSV} className="export-btn" title="Download Excel List">
+              📊 Export CSV
+            </button>
           </div>
         </header>
 
@@ -144,7 +245,7 @@ const AdminDashboard = () => {
                   <th>Date</th>
                   <th>Name</th>
                   <th>Email</th>
-                  <th>Service</th>
+                  <th>Status</th>
                   <th>Source</th>
                   <th>Action</th>
                 </tr>
@@ -155,13 +256,17 @@ const AdminDashboard = () => {
                     <td>{new Date(lead.created_at).toLocaleDateString()}</td>
                     <td><strong>{lead.name}</strong></td>
                     <td>{lead.email}</td>
-                    <td><span className="service-tag">{lead.service}</span></td>
+                    <td>
+                      <span className={`status-badge ${lead.status?.toLowerCase().replace(' ', '-') || 'new'}`}>
+                        {lead.status || 'New'}
+                      </span>
+                    </td>
                     <td>
                       <span className={`source-tag ${lead.source || 'website_form'}`}>
                         {lead.source === 'chat_widget' ? '💬 Chat' : '📄 Form'}
                       </span>
                     </td>
-                    <td><button className="view-btn">View Message</button></td>
+                    <td><button className="view-btn">View &amp; Edit</button></td>
                   </tr>
                 ))}
               </tbody>
@@ -175,32 +280,72 @@ const AdminDashboard = () => {
         <div className="modal-overlay" onClick={() => setSelectedLead(null)}>
           <div className="lead-modal" onClick={e => e.stopPropagation()}>
             <header className="modal-header">
-              <h3>Inquiry from {selectedLead.name}</h3>
+              <div className="modal-id">Lead #{selectedLead.id}</div>
+              <h3>{selectedLead.name}</h3>
               <button className="close-modal" onClick={() => setSelectedLead(null)}>×</button>
             </header>
+            
             <div className="modal-body">
-              <div className="meta-info">
-                <p><strong>Email:</strong> {selectedLead.email}</p>
-                <p><strong>Service:</strong> {selectedLead.service}</p>
-                <p><strong>Date:</strong> {new Date(selectedLead.created_at).toLocaleString()}</p>
+              <div className="modal-grid">
+                <div className="modal-main-info">
+                  <div className="info-row"><strong>Service:</strong> <span className="service-tag">{selectedLead.service}</span></div>
+                  <div className="info-row"><strong>Email:</strong> <a href={`mailto:${selectedLead.email}`} className="email-link">{selectedLead.email}</a></div>
+                  <div className="info-row"><strong>Date:</strong> {new Date(selectedLead.created_at).toLocaleString()}</div>
+                  
+                  <div className="status-management">
+                    <label>Inquiry Status:</label>
+                    <select 
+                      value={selectedLead.status || 'New'} 
+                      onChange={(e) => handleUpdateLead(selectedLead.id, e.target.value, selectedLead.notes)}
+                      className="status-select"
+                      disabled={isUpdating}
+                    >
+                      <option>New</option>
+                      <option>In Discussion</option>
+                      <option>Proposal Sent</option>
+                      <option>Converted</option>
+                      <option>Lost / Closed</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="modal-message-section">
+                  <h4>Customer Message:</h4>
+                  <div className="message-text">
+                    {selectedLead.message}
+                  </div>
+                </div>
               </div>
-              <hr />
-              <div className="message-content">
-                <h4>Message:</h4>
-                <p>{selectedLead.message}</p>
+
+              <div className="crm-notes-section">
+                <h4>Private Studio Notes</h4>
+                <textarea 
+                  placeholder="Add private notes about this client (budget, deadlines, internal thoughts)..."
+                  defaultValue={selectedLead.notes || ''}
+                  onBlur={(e) => handleUpdateLead(selectedLead.id, selectedLead.status, e.target.value)}
+                  disabled={isUpdating}
+                ></textarea>
+                <div className="notes-tip">Notes are saved automatically when you click away.</div>
               </div>
-              <div className="modal-actions">
+
+              <div className="modal-footer-actions">
                 <a 
                   href={`https://mail.google.com/mail/?view=cm&fs=1&to=${selectedLead.email}&su=Project Follow-up: ${selectedLead.service} - NextWave Tech Studio`} 
                   target="_blank" 
                   rel="noreferrer" 
                   className="reply-btn"
                 >Reply via Gmail ✉️</a>
+                
+                <button 
+                  onClick={() => handleDeleteLead(selectedLead.id)} 
+                  className="delete-lead-btn"
+                >Delete Record</button>
               </div>
             </div>
           </div>
         </div>
       )}
+
 
       <style dangerouslySetInnerHTML={{ __html: `
         .admin-login-container {
@@ -265,30 +410,168 @@ const AdminDashboard = () => {
         .portal-tag { font-size: 12px; background: #2c3e50; color: #fff; padding: 2px 8px; border-radius: 4px; }
         .logout-btn { background: #fee2e2; color: #991b1b; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: 600; }
 
-        .admin-content { padding: 40px; max-width: 1200px; margin: auto; }
-        .content-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 30px; border-bottom: 1px solid #e2e8f0; padding-bottom: 20px; }
-        .header-main h1 { margin-bottom: 5px; font-size: 28px; }
-        .stats-badge { display: inline-block; background: #1ABC9C; color: #fff; padding: 5px 15px; border-radius: 20px; font-weight: bold; font-size: 13px; }
+        .admin-content { padding: 40px; max-width: 1400px; margin: auto; }
+        .content-header { margin-bottom: 40px; border-bottom: 1px solid #e2e8f0; padding-bottom: 30px; display: flex; flex-direction: column; gap: 25px; }
+        
+        .header-main { display: flex; justify-content: space-between; align-items: flex-start; }
+        .header-main h1 { font-size: 32px; font-weight: 800; color: #0B1F3A; margin: 0; }
+        
+        .analytics-summary { display: flex; gap: 20px; }
+        .ans-item { background: #fff; padding: 10px 20px; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+        .ans-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #64748b; font-weight: bold; margin-right: 8px; }
+        .ans-val { font-size: 18px; font-weight: 800; color: #1ABC9C; }
 
-        .filter-controls { display: flex; gap: 10px; }
-        .filter-btn {
+        .crm-master-controls { display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; }
+        .search-box { flex: 1; min-width: 300px; }
+        .search-box input {
+          width: 100%;
+          padding: 12px 20px;
+          border-radius: 10px;
+          border: 1px solid #cbd5e1;
+          font-size: 14px;
+          transition: 0.3s;
           background: #fff;
-          border: 1px solid #e2e8f0;
-          padding: 8px 16px;
+        }
+        .search-box input:focus { outline: none; border-color: #1ABC9C; box-shadow: 0 0 0 3px rgba(26, 188, 156, 0.1); }
+
+        .filter-group { display: flex; gap: 15px; align-items: center; }
+        .service-filter-select {
+          padding: 10px 15px;
           border-radius: 8px;
+          border: 1px solid #cbd5e1;
           font-size: 13px;
           font-weight: 600;
+          color: #334155;
+          background: #fff;
+        }
+
+        .time-filters { display: flex; background: #e2e8f0; padding: 4px; border-radius: 10px; }
+        .filter-btn {
+          background: transparent;
+          border: none;
+          padding: 6px 15px;
+          border-radius: 7px;
+          font-size: 12px;
+          font-weight: 700;
           color: #64748b;
           cursor: pointer;
-          transition: all 0.3s ease;
+          transition: all 0.2s;
         }
-        .filter-btn:hover { background: #f8fafc; border-color: #1ABC9C; color: #1ABC9C; }
-        .filter-btn.active {
-          background: #1ABC9C;
-          border-color: #1ABC9C;
+        .filter-btn.active { background: #fff; color: #0B1F3A; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+
+        .export-btn {
+          background: #0B1F3A;
           color: #fff;
-          box-shadow: 0 4px 12px rgba(26, 188, 156, 0.2);
+          border: none;
+          padding: 12px 20px;
+          border-radius: 10px;
+          font-weight: bold;
+          font-size: 13px;
+          cursor: pointer;
+          transition: 0.3s;
         }
+        .export-btn:hover { background: #1a3a5f; transform: translateY(-2px); }
+
+        .no-leads { text-align: center; padding: 100px; color: #64748b; background: #fff; border-radius: 15px; }
+
+        .leads-table-container { background: #fff; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; }
+        .leads-table { width: 100%; border-collapse: collapse; }
+        .leads-table th { background: #f8fafc; text-align: left; padding: 18px 20px; color: #64748b; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; border-bottom: 2px solid #f1f5f9; }
+        .leads-table td { padding: 18px 20px; border-bottom: 1px solid #f1f5f9; font-size: 14px; vertical-align: middle; }
+        .lead-row { cursor: pointer; transition: 0.2s; }
+        .lead-row:hover { background: #fcfdfe; }
+        
+        .status-badge {
+          display: inline-block;
+          padding: 4px 10px;
+          border-radius: 6px;
+          font-size: 11px;
+          font-weight: 800;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+        }
+        .status-badge.new { background: #eff6ff; color: #3b82f6; }
+        .status-badge.in-discussion { background: #fff7ed; color: #f97316; }
+        .status-badge.proposal-sent { background: #f5f3ff; color: #8b5cf6; }
+        .status-badge.converted { background: #f0fdf4; color: #22c55e; }
+        .status-badge.lost-/-closed { background: #fef2f2; color: #ef4444; }
+
+        .service-tag { background: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #475569; font-weight: 600; }
+        .source-tag { font-size: 12px; font-weight: bold; }
+        .source-tag.chat_widget { color: #1ABC9C; }
+        .source-tag.website_form { color: #3b82f6; }
+        .view-btn { border: 1px solid #e2e8f0; background: #fff; padding: 6px 12px; border-radius: 8px; font-size: 12px; cursor: pointer; color: #64748b; font-weight: 600; }
+        .view-btn:hover { border-color: #1ABC9C; color: #1ABC9C; }
+
+        .modal-overlay {
+          position: fixed;
+          top: 0; left: 0; right: 0; bottom: 0;
+          background: rgba(11, 31, 58, 0.7);
+          backdrop-filter: blur(5px);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 20px;
+          z-index: 2000;
+        }
+        .lead-modal {
+          background: #fff;
+          width: 100%;
+          max-width: 900px;
+          border-radius: 24px;
+          overflow: hidden;
+          box-shadow: 0 30px 60px rgba(0,0,0,0.2);
+        }
+        .modal-header { background: #0B1F3A; color: #fff; padding: 30px; display: flex; justify-content: space-between; align-items: center; }
+        .modal-id { font-size: 12px; opacity: 0.6; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+        .modal-header h3 { font-size: 24px; margin: 0; font-weight: 800; }
+        .close-modal { background: rgba(255,255,255,0.1); border: none; color: #fff; font-size: 20px; cursor: pointer; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        
+        .modal-body { padding: 40px; }
+        
+        .modal-grid { display: grid; grid-template-columns: 1fr 1.5fr; gap: 40px; margin-bottom: 40px; }
+        
+        .info-row { margin-bottom: 12px; font-size: 14px; color: #475569; }
+        .info-row strong { color: #0B1F3A; }
+        .email-link { color: #1ABC9C; text-decoration: none; font-weight: 600; }
+        
+        .status-management { margin-top: 25px; background: #f8fafc; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0; }
+        .status-management label { display: block; font-size: 12px; text-transform: uppercase; font-weight: 800; color: #64748b; margin-bottom: 10px; }
+        .status-select { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #cbd5e1; font-weight: 600; color: #0B1F3A; }
+
+        .modal-message-section h4, .crm-notes-section h4 { font-size: 13px; text-transform: uppercase; letter-spacing: 1px; color: #64748b; margin-bottom: 15px; }
+        .message-text { background: #f1f5f9; padding: 25px; border-radius: 12px; font-size: 15px; line-height: 1.6; color: #334155; min-height: 150px; white-space: pre-wrap; }
+
+        .crm-notes-section { margin-top: 20px; border-top: 1px solid #e2e8f0; padding-top: 30px; }
+        .crm-notes-section textarea {
+          width: 100%;
+          min-height: 120px;
+          padding: 20px;
+          border-radius: 12px;
+          border: 1px solid #cbd5e1;
+          font-family: inherit;
+          font-size: 14px;
+          line-height: 1.6;
+          transition: 0.3s;
+        }
+        .crm-notes-section textarea:focus { outline: none; border-color: #1ABC9C; box-shadow: 0 0 0 3px rgba(26, 188, 156, 0.1); }
+        .notes-tip { font-size: 11px; color: #94a3b8; margin-top: 8px; font-style: italic; }
+
+        .modal-footer-actions { margin-top: 40px; padding-top: 30px; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; }
+        .reply-btn {
+          background: #1ABC9C;
+          color: #fff;
+          padding: 14px 28px;
+          border-radius: 12px;
+          text-decoration: none;
+          font-weight: 800;
+          font-size: 15px;
+          transition: 0.3s;
+          box-shadow: 0 4px 15px rgba(26, 188, 156, 0.3);
+        }
+        .reply-btn:hover { background: #16a085; transform: translateY(-2px); }
+        .delete-lead-btn { background: #fee2e2; color: #ef4444; border: none; padding: 10px 20px; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; }
+        .delete-lead-btn:hover { background: #fecaca; }
 
         .no-leads { text-align: center; padding: 100px; color: #64748b; background: #fff; border-radius: 15px; }
 
