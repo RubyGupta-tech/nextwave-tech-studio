@@ -190,7 +190,12 @@ const AdminDashboard = () => {
                 <p>{selectedLead.message}</p>
               </div>
               <div className="modal-actions">
-                <a href={`mailto:${selectedLead.email}`} className="reply-btn">Reply via Email ✉️</a>
+                <a 
+                  href={`https://mail.google.com/mail/?view=cm&fs=1&to=${selectedLead.email}&su=Project Follow-up: ${selectedLead.service} - NextWave Tech Studio`} 
+                  target="_blank" 
+                  rel="noreferrer" 
+                  className="reply-btn"
+                >Reply via Gmail ✉️</a>
               </div>
             </div>
           </div>
