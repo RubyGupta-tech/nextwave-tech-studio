@@ -4,10 +4,15 @@ import react from '@vitejs/plugin-react'
 // https://vite.dev/config/
 export default defineConfig({
     plugins: [react()],
-    // Prevent Vite from trying to process serverless functions in /api
     server: {
-        watch: {
-            ignored: ['**/api/**'],
-        },
-    },
+        proxy: {
+            // This redirects local /api calls to your live site, 
+            // bypassing the local file analysis errors.
+            '/api': {
+                target: 'https://dnextwave.com',
+                changeOrigin: true,
+                secure: true,
+            }
+        }
+    }
 })
