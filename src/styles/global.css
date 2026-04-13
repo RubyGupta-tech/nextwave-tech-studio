@@ -5175,6 +5175,85 @@ body {
     }
 }
 
+/* ===================== STRATEGIC PARTNER BAR ===================== */
+.partner-bar {
+    padding: 60px 0;
+    background: #FFFFFF;
+    border-top: 1px solid #E2E8F0;
+    border-bottom: 1px solid #E2E8F0;
+}
+
+.partner-content {
+    text-align: center;
+}
+
+.partner-label {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    color: #94A3B8;
+    margin-bottom: 30px;
+}
+
+.partner-logos {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 40px;
+    opacity: 0.6;
+    transition: opacity 0.3s ease;
+}
+
+.partner-logos:hover {
+    opacity: 1;
+}
+
+.partner-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: 12px;
+    background: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    cursor: default;
+    transition: all 0.3s ease;
+}
+
+.partner-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: #475569;
+}
+
+.partner-status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #1ABC9C;
+    box-shadow: 0 0 5px #1ABC9C;
+}
+
+.partner-item:hover {
+    background: #FFFFFF;
+    border-color: #1ABC9C;
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+}
+
+.partner-item:hover .partner-name {
+    color: #0F172A;
+}
+
+@media (max-width: 768px) {
+    .partner-logos {
+        gap: 20px;
+    }
+    .partner-item {
+        padding: 8px 15px;
+    }
+}
+
 /* ===================== RESOURCES PAGE STYLES ===================== */
 .resources-page {
     background: #F8FAFC;

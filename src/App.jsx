@@ -15,6 +15,7 @@ import FloatingCTA from "../components/FloatingCTA";
 import ShowcaseSlider from "../components/ShowcaseSlider";
 import ChatWidget from "../components/ChatWidget";
 import FinalCTA from "../components/FinalCTA";
+import PartnerBar from "../components/PartnerBar";
 
 // Sub-pages
 import WebsiteCreation from "../components/pages/WebsiteCreation";
@@ -102,6 +103,7 @@ const Home = () => {
             <div className="reveal"><Process /></div>
             <div className="reveal"><ShowcaseSlider /></div>
             <div className="reveal"><About /></div>
+            {/* <div className="reveal"><PartnerBar /></div> */}
             <div className="reveal"><Testimonials /></div>
             <div className="reveal"><FinalCTA /></div>
             <Contact />
