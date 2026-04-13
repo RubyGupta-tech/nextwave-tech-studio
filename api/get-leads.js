@@ -26,12 +26,22 @@ export default async function handler(req, res) {
 
   try {
     const sql = neon(process.env.DATABASE_URL);
-    // 3. Fetch leads from the database, newest first
-    const rows = await sql`
-      SELECT * FROM leads 
-      ORDER BY created_at DESC 
-      LIMIT 500;
-    `;
+    
+    // 3. Handle Filtering Logic
+    const filter = req.query.filter || 'all';
+    let query;
+
+    if (filter === 'today') {
+      query = sql`SELECT * FROM leads WHERE created_at >= NOW() - INTERVAL '1 day' ORDER BY created_at DESC LIMIT 500`;
+    } else if (filter === 'week') {
+      query = sql`SELECT * FROM leads WHERE created_at >= NOW() - INTERVAL '7 days' ORDER BY created_at DESC LIMIT 500`;
+    } else if (filter === 'month') {
+      query = sql`SELECT * FROM leads WHERE created_at >= NOW() - INTERVAL '30 days' ORDER BY created_at DESC LIMIT 500`;
+    } else {
+      query = sql`SELECT * FROM leads ORDER BY created_at DESC LIMIT 500`;
+    }
+
+    const rows = await query;
 
     return res.status(200).json({ 
       success: true, 

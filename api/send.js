@@ -91,7 +91,7 @@ export default async function handler(req, res) {
           <p style="font-size: 16px; line-height: 1.6;">We look forward to potentially working together to build your digital impact.</p>
           
           <div style="margin-top: 40px; padding-top: 25px; border-top: 1px solid #eee;">
-            <table border="0" cellpadding="0" cellspacing="0">
+            <table border="0" cellpadding="0" cellspacing="0" style="width: 100%;">
               <tr>
                 <td style="padding-right: 15px;">
                   <img src="https://dnextwave.com/NextWave_logo1.web.jpeg" alt="Logo" style="width: 50px; height: auto; border-radius: 5px;" />
@@ -101,14 +101,15 @@ export default async function handler(req, res) {
                   <div style="font-size: 14px; color: #64748B; margin-top: 4px;">
                     <a href="https://www.dnextwave.com" style="color: #1ABC9C; text-decoration: none; font-weight: 600;">www.dnextwave.com</a>
                   </div>
-                  <div style="font-size: 14px; color: #64748B; margin-top: 2px;">
-                    <a href="mailto:d.nextwavetech@gmail.com" style="color: #475569; text-decoration: none;">d.nextwavetech@gmail.com</a>
-                    <span style="margin: 0 8px; color: #CBD5E1;">|</span>
-                    <span>925-318-1134</span>
+                  <div style="font-size: 14px; color: #475569; margin-top: 2px;">
+                    d.nextwavetech@gmail.com <span style="margin: 0 8px; color: #CBD5E1;">|</span> 925-318-1134
                   </div>
                 </td>
               </tr>
             </table>
+            <div style="margin-top: 25px; padding: 15px; background: #f1f5f9; border-radius: 8px; font-size: 12px; color: #64748B; text-align: center; border: 1px dashed #cbd5e1;">
+              <strong>Note:</strong> This is an automated notification. Please <strong>do not reply</strong> directly to this email. We will reach out to you from our official studio address shortly.
+            </div>
           </div>
         </div>
       `,

@@ -8,6 +8,7 @@ const AdminDashboard = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [selectedLead, setSelectedLead] = useState(null);
+  const [timeFilter, setTimeFilter] = useState('all');
 
   const handleLogin = async (e) => {
     if (e) e.preventDefault();
@@ -15,7 +16,7 @@ const AdminDashboard = () => {
     setError(null);
 
     try {
-      const response = await fetch('/api/get-leads', {
+      const response = await fetch(`/api/get-leads?filter=${timeFilter}`, {
         headers: {
           'x-nextwave-auth': password
         }
@@ -51,6 +52,13 @@ const AdminDashboard = () => {
       handleLogin();
     }
   }, [password]);
+
+  // Re-fetch when filter changes
+  useEffect(() => {
+    if (isLoggedIn) {
+      handleLogin();
+    }
+  }, [timeFilter]);
 
   if (!isLoggedIn) {
     return (
@@ -99,8 +107,29 @@ const AdminDashboard = () => {
 
       <main className="admin-content">
         <header className="content-header">
-          <h1>Customer Inquiries</h1>
-          <div className="stats-badge">{leads.length} Total Leads</div>
+          <div className="header-main">
+            <h1>Customer Inquiries</h1>
+            <div className="stats-badge">{leads.length} Total Leads</div>
+          </div>
+          
+          <div className="filter-controls">
+            <button 
+              className={`filter-btn ${timeFilter === 'all' ? 'active' : ''}`}
+              onClick={() => setTimeFilter('all')}
+            >All Time</button>
+            <button 
+              className={`filter-btn ${timeFilter === 'month' ? 'active' : ''}`}
+              onClick={() => setTimeFilter('month')}
+            >This Month</button>
+            <button 
+              className={`filter-btn ${timeFilter === 'week' ? 'active' : ''}`}
+              onClick={() => setTimeFilter('week')}
+            >This Week</button>
+            <button 
+              className={`filter-btn ${timeFilter === 'today' ? 'active' : ''}`}
+              onClick={() => setTimeFilter('today')}
+            >Today</button>
+          </div>
         </header>
 
         {leads.length === 0 ? (
@@ -232,8 +261,29 @@ const AdminDashboard = () => {
         .logout-btn { background: #fee2e2; color: #991b1b; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: 600; }
 
         .admin-content { padding: 40px; max-width: 1200px; margin: auto; }
-        .content-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
-        .stats-badge { background: #1ABC9C; color: #fff; padding: 5px 15px; border-radius: 20px; font-weight: bold; }
+        .content-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 30px; border-bottom: 1px solid #e2e8f0; padding-bottom: 20px; }
+        .header-main h1 { margin-bottom: 5px; font-size: 28px; }
+        .stats-badge { display: inline-block; background: #1ABC9C; color: #fff; padding: 5px 15px; border-radius: 20px; font-weight: bold; font-size: 13px; }
+
+        .filter-controls { display: flex; gap: 10px; }
+        .filter-btn {
+          background: #fff;
+          border: 1px solid #e2e8f0;
+          padding: 8px 16px;
+          border-radius: 8px;
+          font-size: 13px;
+          font-weight: 600;
+          color: #64748b;
+          cursor: pointer;
+          transition: all 0.3s ease;
+        }
+        .filter-btn:hover { background: #f8fafc; border-color: #1ABC9C; color: #1ABC9C; }
+        .filter-btn.active {
+          background: #1ABC9C;
+          border-color: #1ABC9C;
+          color: #fff;
+          box-shadow: 0 4px 12px rgba(26, 188, 156, 0.2);
+        }
 
         .no-leads { text-align: center; padding: 100px; color: #64748b; background: #fff; border-radius: 15px; }
 
