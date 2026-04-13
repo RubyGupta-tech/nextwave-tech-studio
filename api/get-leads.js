@@ -54,19 +54,21 @@ export default async function handler(req, res) {
       queryConditions.push(`service = '${serviceFilter}'`);
     }
 
-    const whereClause = queryConditions.length > 0 ? `WHERE ${queryConditions.join(' AND ')}` : '';
-    
-    const rows = await sql.query(`
-      SELECT * FROM leads 
-      ${whereClause}
-      ORDER BY created_at DESC 
-      LIMIT 1000
-    `);
+    // Build the query and fetch the results
+    let rows;
+    if (queryConditions.length > 0) {
+      // For dynamic queries with conditions, we'll use a safer string building approach
+      // since the simple 'neon' client is best for fixed templates
+      const finalQuery = `SELECT * FROM leads WHERE ${queryConditions.join(' AND ')} ORDER BY created_at DESC LIMIT 1000`;
+      rows = await sql(finalQuery);
+    } else {
+      rows = await sql`SELECT * FROM leads ORDER BY created_at DESC LIMIT 1000`;
+    }
 
     return res.status(200).json({ 
       success: true, 
-      leads: rows.rows,
-      total: rows.rowCount 
+      leads: rows,
+      total: rows.length 
     });
   } catch (error) {
     console.error('Database Fetch Error:', error);
