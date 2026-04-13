@@ -1,7 +1,7 @@
 import React from "react";
 import "../src/styles/global.css";
 
-import { projects } from "../src/data/projects";
+import { sampleProjects } from "../src/data/projects";
 
 const Portfolio = () => {
     return (
@@ -13,7 +13,7 @@ const Portfolio = () => {
                     A multi-disciplinary portfolio focused on helping businesses grow through high-performance web solutions.
                 </p>
                 <div className="portfolio-grid-new">
-                    {projects.map((project, index) => (
+                    {sampleProjects.map((project, index) => (
                         <div key={index} className="portfolio-card">
                             <div className="browser-mockup">
                                 <div className="browser-header">

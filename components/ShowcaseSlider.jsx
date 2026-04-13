@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { projects } from '../src/data/projects';
+import { clientProjects } from '../src/data/projects';
 
 const ShowcaseSlider = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -12,7 +12,7 @@ const ShowcaseSlider = () => {
         let timer;
         if (isAutoPlaying) {
             timer = setInterval(() => {
-                setCurrentIndex((prev) => (prev + 1) % projects.length);
+                setCurrentIndex((prev) => (prev + 1) % clientProjects.length);
             }, 6000);
         }
         return () => clearInterval(timer);
@@ -40,12 +40,12 @@ const ShowcaseSlider = () => {
     };
 
     const nextSlide = () => {
-        setCurrentIndex((prev) => (prev + 1) % projects.length);
+        setCurrentIndex((prev) => (prev + 1) % clientProjects.length);
         setIsAutoPlaying(false);
     };
 
     const prevSlide = () => {
-        setCurrentIndex((prev) => (prev - 1 + projects.length) % projects.length);
+        setCurrentIndex((prev) => (prev - 1 + clientProjects.length) % clientProjects.length);
         setIsAutoPlaying(false);
     };
 
@@ -78,7 +78,7 @@ const ShowcaseSlider = () => {
                             onMouseLeave={() => setIsAutoPlaying(true)}
                         >
                             <div className="slider-track" style={{ transform: `translateX(-${currentIndex * 100}%)` }}>
-                                {projects.map((project, index) => (
+                                {clientProjects.map((project, index) => (
                                     <div key={index} className={`slider-slide ${index === currentIndex ? 'active' : ''}`}>
                                         <div className="slide-content">
                                             <div className="slide-visual">
@@ -87,7 +87,7 @@ const ShowcaseSlider = () => {
                                                         <div className="mockup-dots">
                                                             <span></span><span></span><span></span>
                                                         </div>
-                                                        <div className="mockup-url">{project.title.toLowerCase().replace(/\s+/g, '')}.com</div>
+                                                        <div className="mockup-url">[ Private Client Project ]</div>
                                                     </div>
                                                     <div className="mockup-screen">
                                                         <img src={project.image} alt={project.title} className="parallax-img" />
@@ -98,7 +98,7 @@ const ShowcaseSlider = () => {
                                                 <h3 className="slide-title" style={{ color: project.color }}>{project.title}</h3>
                                                 <p className="slide-desc">{project.description}</p>
                                                 <div className="slide-footer">
-                                                    <div className="slide-index">0{index + 1} / 0{projects.length}</div>
+                                                    <div className="slide-index">0{index + 1} / 0{clientProjects.length}</div>
                                                 </div>
                                             </div>
                                         </div>
@@ -113,15 +113,15 @@ const ShowcaseSlider = () => {
                     </button>
                 </div>
                 
-                <div className="slider-pagination">
-                    {projects.map((_, index) => (
-                        <span 
-                            key={index} 
-                            className={`pager-dot ${index === currentIndex ? 'active' : ''}`}
-                            onClick={() => goToSlide(index)}
-                        ></span>
-                    ))}
-                </div>
+                    <div className="slider-pagination">
+                        {clientProjects.map((_, index) => (
+                            <span 
+                                key={index} 
+                                className={`pager-dot ${index === currentIndex ? 'active' : ''}`}
+                                onClick={() => goToSlide(index)}
+                            ></span>
+                        ))}
+                    </div>
             </div>
         </section>
     );

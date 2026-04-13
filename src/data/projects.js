@@ -1,27 +1,19 @@
-export const projects = [
+export const sampleProjects = [
     {
-        title: "FGB Consulting",
-        description: "Leadership development and coaching for senior leaders and teams navigating complexity.",
-        tags: ["Leadership", "Consulting", "Enterprise"],
-        image: "/images/portfolio/fgb.png",
-        link: "https://www.fgbconsultingllc.com/",
-        color: "#EAB308",
+        title: "Local Services Business",
+        description: "A high-performance landing page for local service providers, optimized for lead generation and mobile responsiveness.",
+        tags: ["Local Business", "Lead Gen", "Modern UI"],
+        image: "/images/portfolio/local-services.png",
+        link: "https://local-servies-business.vercel.app/",
+        color: "#1ABC9C",
     },
     {
-        title: "Quantum Leap Wealth",
-        description: "Integrated Financial & Real Estate Solutions — personalized strategies to protect and grow wealth.",
-        tags: ["Finance", "Wealth Management", "Real Estate"],
-        image: "/images/portfolio/quantum.png",
-        link: "https://quantumleapwealth.vercel.app/",
-        color: "#D4AF37",
-    },
-    {
-        title: "PG Photography",
-        description: "Professional newborn, maternity & family photography capturing timeless memories.",
-        tags: ["Photography", "Portfolio", "Creative"],
-        image: "/images/portfolio/photography.png",
-        link: "https://photography-website-khaki-eta.vercel.app/",
-        color: "#F43F5E",
+        title: "TrainMaster",
+        description: "A high-performance training platform for Project Management professionals, featuring masterclasses and dynamic resource hubs.",
+        tags: ["Education", "PMP Training", "Enterprise"],
+        image: "/images/portfolio/trainmaster.png",
+        link: "https://train-master-beige.vercel.app/",
+        color: "#0D9488",
     },
     {
         title: "Desi Bites",
@@ -31,12 +23,42 @@ export const projects = [
         link: "https://desibitesruby.github.io/desibites-site/index.html",
         color: "#991B1B",
     },
+];
+
+export const clientProjects = [
+    {
+        title: "Kid's Campus Zone",
+        description: "A comprehensive school management portal featuring student enrollment and intuitive administrative dashboards.",
+        tags: ["Education", "Management Portal", "Full Stack"],
+        image: "/images/portfolio/kidscampus.png",
+        color: "#10B981",
+    },
+    {
+        title: "FGB Consulting",
+        description: "Leadership development and coaching for senior leaders navigating complexity.",
+        tags: ["Leadership", "Consulting", "Enterprise"],
+        image: "/images/portfolio/fgb.png",
+        color: "#EAB308",
+    },
+    {
+        title: "Quantum Leap Wealth",
+        description: "Integrated Financial & Real Estate Solutions — personalized strategies to protect and grow wealth.",
+        tags: ["Finance", "Wealth Management", "Real Estate"],
+        image: "/images/portfolio/quantum.png",
+        color: "#D4AF37",
+    },
+    {
+        title: "PG Photography",
+        description: "Professional newborn, maternity & family photography capturing timeless memories.",
+        tags: ["Photography", "Portfolio", "Creative"],
+        image: "/images/portfolio/photography.png",
+        color: "#F43F5E",
+    },
     {
         title: "Open Space STL",
         description: "Empowering communities through participation with My Giving Circle grants and donations.",
         tags: ["Non-Profit", "Volunteer Project", "Donations"],
         image: "/images/portfolio/openspace.png",
-        link: "https://www.openspacestl.org/my-giving-circle",
         color: "#0EA5E9",
     },
     {
@@ -44,23 +66,9 @@ export const projects = [
         description: "Empowering girls to fly, lead, and innovate through a vibrant community of drone pilots.",
         tags: ["Education", "Volunteer Project", "Innovation"],
         image: "/images/portfolio/dronegirlz.png",
-        link: "https://dronegirlz.org/",
         color: "#8B5CF6",
     },
-    {
-        title: "Kid's Campus Zone",
-        description: "A comprehensive school management portal featuring student enrollment, fee tracking, and intuitive administrative dashboards.",
-        tags: ["Education", "Management Portal", "Full Stack"],
-        image: "/images/portfolio/kidscampus.png",
-        link: "https://school-website-yt7m.vercel.app/",
-        color: "#10B981",
-    },
-    {
-        title: "TrainMaster",
-        description: "A high-performance training platform for Project Management professionals, featuring masterclasses, dynamic resource hubs, and streamlined career tracking.",
-        tags: ["Education", "PMP Training", "Enterprise"],
-        image: "/images/portfolio/trainmaster.png",
-        link: "https://train-master-beige.vercel.app/",
-        color: "#0D9488",
-    },
 ];
+
+// Fallback for any components still using the old export
+export const projects = [...sampleProjects, ...clientProjects];
