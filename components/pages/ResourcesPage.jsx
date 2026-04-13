@@ -62,26 +62,35 @@ const ResourcesPage = () => {
                     <div className="tools-grid">
                         <div className="tool-category reveal">
                             <h3>Development & Hosting</h3>
-                            <div className="tool-card glass-panel">
-                                <h4>Premium Hosting</h4>
-                                <p>We recommend industry-standard speed and security for all client projects.</p>
-                                <span className="coming-soon">Recommended Tool</span>
+                            <div className="tool-card toolbox-card glass-panel">
+                                <div className="tool-header">
+                                    <div className="tool-logo-placeholder" style={{ background: '#673DE6' }}>H</div>
+                                    <h4>Hostinger</h4>
+                                </div>
+                                <p>Our choice for high-speed, secure hosting. Optimized for WordPress and React applications with 99.9% uptime.</p>
+                                <a href="#" className="tool-link-btn" onClick={(e) => e.preventDefault()}>Get Started &rarr;</a>
                             </div>
                         </div>
                         <div className="tool-category reveal" style={{ transitionDelay: '0.2s' }}>
                             <h3>Design & Branding</h3>
-                            <div className="tool-card glass-panel">
-                                <h4>Creative Assets</h4>
-                                <p>Master your brand's visual identity with our favorite creative platforms.</p>
-                                <span className="coming-soon">Recommended Tool</span>
+                            <div className="tool-card toolbox-card glass-panel">
+                                <div className="tool-header">
+                                    <div className="tool-logo-placeholder" style={{ background: '#00C4CC' }}>C</div>
+                                    <h4>Canva Pro</h4>
+                                </div>
+                                <p>Empower your brand with professional design tools. We use Canva for rapid social media and brand asset creation.</p>
+                                <a href="#" className="tool-link-btn" onClick={(e) => e.preventDefault()}>Try For Free &rarr;</a>
                             </div>
                         </div>
                         <div className="tool-category reveal" style={{ transitionDelay: '0.4s' }}>
                             <h3>SEO & Marketing</h3>
-                            <div className="tool-card glass-panel">
-                                <h4>Growth Analytics</h4>
-                                <p>Dominate search rankings with powerful analytical and SEO research tools.</p>
-                                <span className="coming-soon">Recommended Tool</span>
+                            <div className="tool-card toolbox-card glass-panel">
+                                <div className="tool-header">
+                                    <div className="tool-logo-placeholder" style={{ background: '#4285F4' }}>G</div>
+                                    <h4>Google Analytics</h4>
+                                </div>
+                                <p>Master your traffic data. We integrate GA4 into every project to ensure our clients make data-driven decisions.</p>
+                                <a href="#" className="tool-link-btn" onClick={(e) => e.preventDefault()}>Learn More &rarr;</a>
                             </div>
                         </div>
                     </div>
