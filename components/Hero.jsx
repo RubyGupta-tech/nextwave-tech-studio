@@ -27,10 +27,10 @@ const Hero = () => {
                         <div className="hero-badge-glass animate-floating">Freelance Web Developer</div>
                         
                         <h1>
-                            Powerful websites for{' '}
+                            We build Powerful websites for{' '}
                             <span className="typing-text">
                                 <Typewriter
-                                    words={['Non-Profits.', 'Small Businesses.', 'Big Businesses.']}
+                                    words={['Small Businesses.', 'Non-Profits.', 'Brands.']}
                                     loop={0}
                                     cursor
                                     cursorStyle='_'

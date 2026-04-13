@@ -31,6 +31,14 @@ export const sampleProjects = [
         link: "https://desibitesruby.github.io/desibites-site/index.html",
         color: "#991B1B",
     },
+    {
+        title: "A2Z Photography",
+        description: "A premium photography showcase featuring high-end portraits and artistic visual storytelling.",
+        tags: ["Photography", "Portfolio", "Creative"],
+        image: "/images/portfolio/photography.png",
+        link: "https://a2z-photography-ktd6-9w31j719b-ruby-guptas-projects-9279bf25.vercel.app/",
+        color: "#F43F5E",
+    },
 ];
 
 export const clientProjects = [
