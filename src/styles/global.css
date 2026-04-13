@@ -249,9 +249,13 @@ nav a:hover::after {
     justify-content: center;
     align-items: center;
     text-align: center;
-    min-height: 54vh; /* Fine-tuned for exact edge anchoring */
-    padding: 80px 20px 40px; 
-    background: radial-gradient(ellipse at center, #0B1F3A 0%, #08111e 100%);
+    min-height: 85vh; /* Increased for a more cinematic impact */
+    padding: 100px 20px 60px; 
+    background-image: linear-gradient(to bottom, rgba(15, 23, 42, 0.85), rgba(8, 17, 30, 0.9)), url('/images/hero_bg.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed; /* For a premium parallax effect */
     position: relative;
     overflow: hidden;
 }
@@ -5263,9 +5267,13 @@ body {
 }
 
 .resource-hero {
-    padding: 100px 0 60px;
+    padding: 120px 0 80px; /* Slightly more padding for the BG impact */
     text-align: center;
-    background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+    background-image: linear-gradient(to bottom, rgba(15, 23, 42, 0.88), rgba(8, 17, 30, 0.92)), url('/images/resources_bg.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
     color: #FFFFFF;
     margin-top: -20px;
     border-radius: 0 0 50px 50px;
