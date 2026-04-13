@@ -5,17 +5,22 @@ const Contact = () => {
     const [submitted, setSubmitted] = useState(false);
     const [isSending, setIsSending] = useState(false);
     const [error, setError] = useState(null);
+    const [selectedService, setSelectedService] = useState("");
 
-    const checkPreFill = () => {
+    // Use a ref or simple effect to check for pre-fills on mount
+    React.useEffect(() => {
         const subject = window.sessionStorage.getItem('contact_subject');
         if (subject) {
             window.sessionStorage.removeItem('contact_subject');
-            return subject;
+            // Check if it's a partnership inquiry
+            if (subject.toLowerCase().includes('partnership')) {
+                setSelectedService("Partnership / Sponsorship");
+            }
+            // We can also append the subject to the message text area easily
+            const msgArea = document.querySelector('textarea[name="message"]');
+            if (msgArea) msgArea.value = subject;
         }
-        return '';
-    };
-
-    const initialMessage = checkPreFill();
+    }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -120,11 +125,16 @@ const Contact = () => {
                             </div>
 
                             <div className="crf-field">
-                                <select defaultValue="">
+                                <select 
+                                    value={selectedService} 
+                                    onChange={(e) => setSelectedService(e.target.value)}
+                                    required
+                                >
                                     <option value="" disabled>Service you need...</option>
                                     <option>Website Creation</option>
                                     <option>Website Updates &amp; Fixes</option>
                                     <option>SEO &amp; Internet Marketing</option>
+                                    <option>Partnership / Sponsorship</option>
                                     <option>Enterprise Web App</option>
                                     <option>Not Sure Yet</option>
                                 </select>
