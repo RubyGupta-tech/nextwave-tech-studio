@@ -5174,4 +5174,220 @@ body {
         grid-template-columns: 1fr;
     }
 }
+
+/* ===================== RESOURCES PAGE STYLES ===================== */
+.resources-page {
+    background: #F8FAFC;
+    color: #1E293B;
+    min-height: 100vh;
+    padding-top: 100px;
+}
+
+.resource-hero {
+    padding: 100px 0 60px;
+    text-align: center;
+    background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+    color: #FFFFFF;
+    margin-top: -20px;
+    border-radius: 0 0 50px 50px;
+}
+
+.resource-title {
+    font-size: 48px;
+    font-weight: 800;
+    margin-bottom: 20px;
+    letter-spacing: -1px;
+}
+
+.resource-subtitle {
+    font-size: 18px;
+    color: rgba(255, 255, 255, 0.7);
+    max-width: 800px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+.tools-section {
+    padding: 80px 0;
+}
+
+.tools-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+}
+
+.tool-category h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #0F172A;
+    border-left: 4px solid #1ABC9C;
+    padding-left: 15px;
+}
+
+.tool-card {
+    padding: 30px;
+    border-radius: 20px;
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    transition: all 0.3s ease;
+}
+
+.tool-card h4 {
+    font-size: 20px;
+    margin-bottom: 10px;
+    color: #0F172A;
+}
+
+.tool-card p {
+    font-size: 14px;
+    color: #64748B;
+    line-height: 1.5;
+    margin-bottom: 20px;
+}
+
+.coming-soon {
+    display: inline-block;
+    padding: 8px 16px;
+    background: #F1F5F9;
+    color: #94A3B8;
+    border-radius: 50px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.partnership-section {
+    padding: 100px 0;
+    background: #FFFFFF;
+    text-align: center;
+}
+
+.partnership-heading {
+    font-size: 40px;
+    font-weight: 800;
+    color: #0F172A;
+    margin-bottom: 20px;
+}
+
+.partnership-subheading {
+    font-size: 18px;
+    color: #64748B;
+    max-width: 800px;
+    margin: 0 auto 60px;
+    line-height: 1.6;
+}
+
+.partnership-tiers-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    padding-top: 20px;
+}
+
+.tier-card {
+    padding: 50px 30px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #F8FAFC;
+    border: 1px solid transparent;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.tier-badge {
+    padding: 6px 15px;
+    border-radius: 50px;
+    color: #FFF;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 25px;
+}
+
+.tier-price {
+    font-size: 32px;
+    font-weight: 800;
+    color: #0F172A;
+    margin-bottom: 15px;
+}
+
+.tier-desc {
+    font-size: 15px;
+    color: #64748B;
+    margin-bottom: 30px;
+    min-height: 45px;
+}
+
+.tier-features {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 40px;
+    text-align: left;
+    width: 100%;
+}
+
+.tier-features li {
+    font-size: 14px;
+    color: #475569;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.tier-features li span {
+    color: #1ABC9C;
+    font-weight: 800;
+}
+
+.tier-cta {
+    margin-top: auto;
+    width: 100%;
+    padding: 14px;
+    border-radius: 12px;
+    background: #0F172A;
+    color: #FFF;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.tier-card:hover {
+    transform: translateY(-15px) scale(1.02);
+    border-color: #1ABC9C;
+    background: #FFF;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.08);
+}
+
+.tier-cta:hover {
+    background: #1ABC9C;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(26, 188, 156, 0.3);
+}
+
+.resource-legal {
+    padding: 60px 0;
+    background: #F8FAFC;
+    border-top: 1px solid #E2E8F0;
+    color: #94A3B8;
+    text-align: center;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.resource-legal strong {
+    color: #64748B;
+}
+
+@media (max-width: 992px) {
+    .tools-grid, .partnership-tiers-grid {
+        grid-template-columns: 1fr;
+    }
+    .resource-title {
+        font-size: 32px;
+    }
+}
 

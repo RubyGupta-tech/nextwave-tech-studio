@@ -58,6 +58,11 @@ const Footer = () => {
                                 Contact
                             </Link>
                         </li>
+                        <li>
+                            <Link to="/resources">
+                                Resources
+                            </Link>
+                        </li>
                     </ul>
                 </div>
 

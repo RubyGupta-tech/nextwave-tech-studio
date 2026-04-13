@@ -6,6 +6,17 @@ const Contact = () => {
     const [isSending, setIsSending] = useState(false);
     const [error, setError] = useState(null);
 
+    const checkPreFill = () => {
+        const subject = window.sessionStorage.getItem('contact_subject');
+        if (subject) {
+            window.sessionStorage.removeItem('contact_subject');
+            return subject;
+        }
+        return '';
+    };
+
+    const initialMessage = checkPreFill();
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsSending(true);
