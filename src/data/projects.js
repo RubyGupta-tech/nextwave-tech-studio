@@ -4,8 +4,16 @@ export const sampleProjects = [
         description: "A high-performance landing page for local service providers, optimized for lead generation and mobile responsiveness.",
         tags: ["Local Business", "Lead Gen", "Modern UI"],
         image: "/images/portfolio/local-services.png",
-        link: "https://local-servies-business-m9yw.vercel.app/",
+        link: "https://local-servies-business.vercel.app/",
         color: "#1ABC9C",
+    },
+    {
+        title: "Urban Eats Restaurant",
+        description: "A premium, sophisticated digital experience for high-end dining, featuring elegant reservations and gourmet showcase.",
+        tags: ["Food & Beverage", "Luxury UI", "Responsive"],
+        image: "/images/portfolio/restaurant.png",
+        link: "https://local-servies-business-m9yw.vercel.app/",
+        color: "#D97706",
     },
     {
         title: "TrainMaster",
