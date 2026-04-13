@@ -8,7 +8,7 @@ export const sampleProjects = [
         color: "#1ABC9C",
     },
     {
-        title: "Urban Eats Restaurant",
+        title: "Spice Garden Restaurant",
         description: "A premium, sophisticated digital experience for high-end dining, featuring elegant reservations and gourmet showcase.",
         tags: ["Food & Beverage", "Luxury UI", "Responsive"],
         image: "/images/portfolio/restaurant.png",
