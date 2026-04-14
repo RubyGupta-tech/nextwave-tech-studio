@@ -17,8 +17,8 @@ const AdminDashboard = () => {
   const [toast, setToast] = useState({ message: '', type: 'success', visible: false });
   const [deletingLeadId, setDeletingLeadId] = useState(null);
   const [viewTab, setViewTab] = useState('active'); // 'active' or 'archived'
-  const [sysVersion] = useState('v6.0');
-  // Deployment Heartbeat: 2026-04-13T23:15:00Z
+  const [sysVersion] = useState('v6.1');
+  // Deployment Heartbeat: 2026-04-13T23:30:00Z
 
   const showToast = (message, type = 'success') => {
     setToast({ message, type, visible: true });
@@ -31,33 +31,37 @@ const AdminDashboard = () => {
     setError(null);
 
     try {
-      // Build query string - Trim the search query here too
+      // Build query string
       const params = new URLSearchParams({
         filter: timeFilter,
         search: searchQuery.trim(),
-        service: serviceFilter
+        service: serviceFilter,
+        tab: viewTab,
+        _t: Date.now()
       });
 
-      const response = await fetch(`/api/get-leads-v6?${params.toString()}&tab=${viewTab}&_t=${Date.now()}`, {
-        headers: {
-          'x-nextwave-auth': password
-        }
-      });
+      // RESILIENT FETCH: Try v6 first, then fallback to original if 404
+      let response = await fetch(`/api/get-leads-v6?${params.toString()}`);
+      
+      if (response.status === 404) {
+        console.log("v6 endpoint not ready, falling back to legacy...");
+        response = await fetch(`/api/get-leads?${params.toString()}`);
+      }
 
       const data = await response.json();
 
       if (response.ok) {
         setLeads(data.leads);
         setIsLoggedIn(true);
-        // Store password in session storage for refreshing
         sessionStorage.setItem('admin_key', password);
-        showToast('Login successful!');
+        showToast('Connected to Database');
       } else {
-        setError(data.error || 'Invalid password');
-        showToast(data.error || 'Invalid password', 'error');
+        setError(data.error || 'Invalid credentials');
+        showToast(data.error || 'Connection failed', 'error');
       }
     } catch (err) {
-      setError('Connection failed. Are you online?');
+      console.error("Login Error:", err);
+      setError('System Syncing... Please wait 30s and try again.');
     } finally {
       setLoading(false);
     }
@@ -251,10 +255,10 @@ const AdminDashboard = () => {
             />
             {error && <div className="error-text">{error}</div>}
             <button type="submit" disabled={loading}>
-              {loading ? 'Verifying...' : 'Login ➔'}
+              {loading ? 'Verifying Connection...' : 'Login ➔'}
             </button>
             <div style={{ marginTop: '15px', fontSize: '10px', color: 'rgba(255,255,255,0.3)' }}>
-              System Version: v6.0 (Global Sync Active)
+              System Version: v6.1 (Resilient Sync Active)
             </div>
           </form>
         </div>
@@ -267,7 +271,7 @@ const AdminDashboard = () => {
       <nav className="admin-nav">
         <div className="admin-nav-brand">
           <img src="/NextWave_logo1.web.jpeg" alt="NextWave" style={{ height: '30px' }} />
-          <div className="version-badge" style={{background: '#0B1F3A'}}>v6.0</div>
+          <div className="version-badge" style={{background: '#6366f1'}}>v6.1</div>
           <span>Admin Portal</span>
         </div>
         <div className="nav-actions">
