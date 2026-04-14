@@ -31,6 +31,8 @@ export default async function handler(req, res) {
     const filter = req.query.filter || 'all';
     const searchQuery = (req.query.search || '').trim();
     const serviceFilter = req.query.service || 'all';
+    const tab = req.query.tab || 'active';
+    const isArchived = (tab === 'archived');
     
     // We'll use a single robust query with flexible WHERE clauses.
     // This is safer and prevents complex string building.
@@ -39,7 +41,8 @@ export default async function handler(req, res) {
     const rows = await sql`
       SELECT * FROM leads 
       WHERE 
-        (${searchPattern} = '' OR name ILIKE ${searchPattern} OR email ILIKE ${searchPattern})
+        is_archived = ${isArchived}
+        AND (${searchPattern} = '' OR name ILIKE ${searchPattern} OR email ILIKE ${searchPattern})
         AND (${serviceFilter} = 'all' OR service = ${serviceFilter})
         AND (
           ${filter} = 'all' 

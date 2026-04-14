@@ -5,7 +5,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { id, status, notes } = req.body;
+  const { id, status, notes, phone, is_archived } = req.body;
   const authHeader = req.headers['x-nextwave-auth']?.trim();
   const correctPassword = process.env.ADMIN_PASSWORD?.trim();
 
@@ -18,12 +18,15 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { id, status, notes, phone } = req.body;
     const sql = neon(process.env.DATABASE_URL);
 
     await sql`
       UPDATE leads 
-      SET status = ${status}, notes = ${notes}, phone = ${phone || ''}
+      SET 
+        status = ${status}, 
+        notes = ${notes}, 
+        phone = ${phone || ''}, 
+        is_archived = ${is_archived === true}
       WHERE id = ${id}
     `;
 

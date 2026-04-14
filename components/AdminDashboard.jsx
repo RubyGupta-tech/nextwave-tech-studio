@@ -16,6 +16,7 @@ const AdminDashboard = () => {
   const [newLead, setNewLead] = useState({ name: '', email: '', phone: '', service: 'Website Creation', notes: '' });
   const [toast, setToast] = useState({ message: '', type: 'success', visible: false });
   const [deletingLeadId, setDeletingLeadId] = useState(null);
+  const [viewTab, setViewTab] = useState('active'); // 'active' or 'archived'
 
   const showToast = (message, type = 'success') => {
     setToast({ message, type, visible: true });
@@ -35,7 +36,7 @@ const AdminDashboard = () => {
         service: serviceFilter
       });
 
-      const response = await fetch(`/api/get-leads?${params.toString()}`, {
+      const response = await fetch(`/api/get-leads?${params.toString()}&tab=${viewTab}`, {
         headers: {
           'x-nextwave-auth': password
         }
@@ -85,9 +86,9 @@ const AdminDashboard = () => {
       }, 300);
       return () => clearTimeout(delayDebounceFn);
     }
-  }, [timeFilter, searchQuery, serviceFilter]);
+  }, [timeFilter, searchQuery, serviceFilter, viewTab]);
 
-  const handleUpdateLead = async (id, status, notes, phone) => {
+  const handleUpdateLead = async (id, status, notes, phone, is_archived) => {
     setIsUpdating(true);
     try {
       const resp = await fetch('/api/update-lead', {
@@ -96,15 +97,23 @@ const AdminDashboard = () => {
           'Content-Type': 'application/json',
           'x-nextwave-auth': password
         },
-        body: JSON.stringify({ id, status, notes, phone })
+        body: JSON.stringify({ id, status, notes, phone, is_archived })
       });
       if (resp.ok) {
-        // Find and update the lead in the main list
-        setLeads(prev => prev.map(l => l.id === id ? { ...l, status, notes, phone } : l));
+        // If the lead was archived/restored, it should move out of the current view
+        if (typeof is_archived !== 'undefined' && is_archived !== (viewTab === 'archived')) {
+          setLeads(prev => prev.filter(l => l.id !== id));
+          setSelectedLead(null);
+          showToast(is_archived ? 'Lead moved to Archives' : 'Lead restored to Inbox');
+          return;
+        }
+
+        // Otherwise find and update the lead in the main list
+        setLeads(prev => prev.map(l => l.id === id ? { ...l, status, notes, phone, is_archived } : l));
         
         // Force update the selectedLead state to ensure modal reflects changes
         if (selectedLead && selectedLead.id === id) {
-          setSelectedLead(prev => ({ ...prev, status, notes, phone }));
+          setSelectedLead(prev => ({ ...prev, status, notes, phone, is_archived }));
         }
         showToast('Lead updated successfully');
       }
@@ -265,6 +274,17 @@ const AdminDashboard = () => {
       </nav>
 
       <main className="admin-content">
+        <div className="tab-control">
+          <button className={`tab-btn ${viewTab === 'active' ? 'active' : ''}`} onClick={() => setViewTab('active')}>
+            📥 Main Inbox
+            <span className="tab-count">{viewTab === 'active' ? leads.length : ''}</span>
+          </button>
+          <button className={`tab-btn ${viewTab === 'archived' ? 'active' : ''}`} onClick={() => setViewTab('archived')}>
+            📦 Archives
+            <span className="tab-count">{viewTab === 'archived' ? leads.length : ''}</span>
+          </button>
+        </div>
+
         <header className="content-header">
           <div className="header-main">
             <h1>Customer Inquiries</h1>
@@ -448,7 +468,7 @@ const AdminDashboard = () => {
                     <label>Lifecycle Status:</label>
                     <select 
                       value={selectedLead.status || 'New'} 
-                      onChange={(e) => handleUpdateLead(selectedLead.id, e.target.value, selectedLead.notes, selectedLead.phone)}
+                      onChange={(e) => handleUpdateLead(selectedLead.id, e.target.value, selectedLead.notes, selectedLead.phone, selectedLead.is_archived)}
                       className="status-select"
                       disabled={isUpdating}
                     >
@@ -477,24 +497,25 @@ const AdminDashboard = () => {
                 <textarea 
                   placeholder="Type real-time notes during your call (budget, deadlines, project scope, internal thoughts)..."
                   defaultValue={selectedLead.notes || ''}
-                  onBlur={(e) => handleUpdateLead(selectedLead.id, selectedLead.status, e.target.value, selectedLead.phone)}
+                  onBlur={(e) => handleUpdateLead(selectedLead.id, selectedLead.status, e.target.value, selectedLead.phone, selectedLead.is_archived)}
                   disabled={isUpdating}
                 ></textarea>
                 <div className="notes-tip">Changes are saved automatically when you click outside the box.</div>
               </div>
 
               <div className="modal-footer-actions">
-                <a 
-                  href={`https://mail.google.com/mail/?view=cm&fs=1&to=${selectedLead.email}&su=Project Follow-up: ${selectedLead.service} - NextWave Tech Studio`} 
-                  target="_blank" 
-                  rel="noreferrer" 
-                  className="reply-btn"
-                >Reply via Gmail ✉️</a>
-                
-                <button 
-                  onClick={() => setDeletingLeadId(selectedLead.id)} 
-                  className="delete-lead-btn"
-                >Delete Record</button>
+                <div className="secondary-actions">
+                  {selectedLead.is_archived ? (
+                    <button onClick={() => handleUpdateLead(selectedLead.id, selectedLead.status, selectedLead.notes, selectedLead.phone, false)} className="archive-btn restore">📤 Restore to Inbox</button>
+                  ) : (
+                    <button onClick={() => handleUpdateLead(selectedLead.id, selectedLead.status, selectedLead.notes, selectedLead.phone, true)} className="archive-btn">📦 Archive Lead</button>
+                  )}
+                  
+                  <button 
+                    onClick={() => setDeletingLeadId(selectedLead.id)} 
+                    className="delete-lead-btn"
+                  >Permanent Delete</button>
+                </div>
               </div>
             </div>
           </div>
@@ -578,6 +599,12 @@ const AdminDashboard = () => {
         .admin-nav-brand { display: flex; align-items: center; gap: 10px; font-weight: 800; }
         .portal-tag { font-size: 12px; background: #2c3e50; color: #fff; padding: 2px 8px; border-radius: 4px; }
         .logout-btn { background: #fee2e2; color: #991b1b; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: 600; }
+
+        .tab-control { display: flex; gap: 5px; margin-bottom: 30px; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; }
+        .tab-btn { background: transparent; border: none; padding: 10px 20px; font-weight: 800; color: #64748b; cursor: pointer; border-radius: 8px; transition: 0.3s; display: flex; align-items: center; gap: 8px; }
+        .tab-btn.active { background: #0B1F3A; color: #fff; }
+        .tab-count { background: rgba(0,0,0,0.1); padding: 2px 6px; border-radius: 4px; font-size: 10px; }
+        .tab-btn.active .tab-count { background: rgba(255,255,255,0.2); }
 
         .admin-content { padding: 40px; max-width: 1400px; margin: auto; }
         .content-header { margin-bottom: 40px; border-bottom: 1px solid #e2e8f0; padding-bottom: 30px; display: flex; flex-direction: column; gap: 25px; }
@@ -768,8 +795,15 @@ const AdminDashboard = () => {
           box-shadow: 0 4px 15px rgba(26, 188, 156, 0.3);
         }
         .reply-btn:hover { background: #16a085; transform: translateY(-2px); }
-        .delete-lead-btn { background: #fee2e2; color: #ef4444; border: none; padding: 10px 20px; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; }
-        .delete-lead-btn:hover { background: #fecaca; }
+        .delete-lead-btn { background: #fee2e2; color: #ef4444; border: none; padding: 10px 20px; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; opacity: 0.7; }
+        .delete-lead-btn:hover { background: #fecaca; opacity: 1; }
+        
+        .archive-btn { background: #fef9c3; color: #854d0e; border: none; padding: 10px 20px; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; }
+        .archive-btn:hover { background: #fef08a; }
+        .archive-btn.restore { background: #dcfce7; color: #166534; }
+        .archive-btn.restore:hover { background: #bbf7d0; }
+
+        .secondary-actions { display: flex; gap: 10px; align-items: center; }
 
         .no-leads { text-align: center; padding: 100px; color: #64748b; background: #fff; border-radius: 15px; }
 
