@@ -19,6 +19,7 @@ export default async function handler(req, res) {
     await sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS status VARCHAR(50) DEFAULT 'New';`;
     await sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS notes TEXT DEFAULT '';`;
     await sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS phone VARCHAR(20) DEFAULT '';`;
+    await sql`ALTER TABLE leads ALTER COLUMN email DROP NOT NULL;`;
     await sql`UPDATE leads SET status = 'New' WHERE status IS NULL;`;
 
     return res.status(200).send(`

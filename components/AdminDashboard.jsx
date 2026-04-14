@@ -118,9 +118,13 @@ const AdminDashboard = () => {
   const handleManualAddLead = async (e) => {
     if (e) e.preventDefault();
     
-    // 1. Validation
+    // 1. Better Validation
     if (!newLead.name || !newLead.name.trim()) {
       showToast("Client Name is required!", "error");
+      return;
+    }
+    if (!newLead.email && !newLead.phone) {
+      showToast("Please provide either an Email or Phone!", "error");
       return;
     }
 
@@ -134,18 +138,33 @@ const AdminDashboard = () => {
         },
         body: JSON.stringify(newLead)
       });
+
+      // Handle cases where the endpoint is not ready yet (404 during deployment)
+      if (resp.status === 404) {
+        showToast("System is updating... please try again in 30 seconds.", "error");
+        return;
+      }
+
+      const contentType = resp.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        const text = await resp.text();
+        console.error("Non-JSON response:", text);
+        showToast("Server error. Please refresh and try again.", "error");
+        return;
+      }
+
       const data = await resp.json();
       if (resp.ok) {
         setLeads(prev => [data.lead, ...prev]);
         setShowAddModal(false);
         setNewLead({ name: '', email: '', phone: '', service: 'Website Creation', notes: '' });
-        showToast('Manual lead saved!');
+        showToast('Manual lead saved successfully!');
       } else {
         showToast(data.details || data.error || "Failed to add lead", 'error');
       }
     } catch (err) {
       console.error("Add failed:", err);
-      showToast('Connection error', 'error');
+      showToast('Network error. Check your connection.', 'error');
     } finally {
       setIsUpdating(false);
     }

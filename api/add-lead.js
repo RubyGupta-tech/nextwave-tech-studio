@@ -24,7 +24,7 @@ export default async function handler(req, res) {
     // 2. Insert the lead manually
     const result = await sql`
       INSERT INTO leads (name, email, phone, service, notes, source, status)
-      VALUES (${name}, ${email}, ${phone || ''}, ${service}, ${notes || ''}, ${source}, 'New')
+      VALUES (${name || 'Manual Entry'}, ${email || null}, ${phone || ''}, ${service || 'General Inquiry'}, ${notes || ''}, ${source}, 'New')
       RETURNING *
     `;
 
