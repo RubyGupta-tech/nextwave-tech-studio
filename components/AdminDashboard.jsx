@@ -116,7 +116,14 @@ const AdminDashboard = () => {
   };
 
   const handleManualAddLead = async (e) => {
-    e.preventDefault();
+    if (e) e.preventDefault();
+    
+    // 1. Validation
+    if (!newLead.name || !newLead.name.trim()) {
+      showToast("Client Name is required!", "error");
+      return;
+    }
+
     setIsUpdating(true);
     try {
       const resp = await fetch('/api/add-lead', {
@@ -129,7 +136,7 @@ const AdminDashboard = () => {
       });
       const data = await resp.json();
       if (resp.ok) {
-        setLeads([data.lead, ...leads]);
+        setLeads(prev => [data.lead, ...prev]);
         setShowAddModal(false);
         setNewLead({ name: '', email: '', phone: '', service: 'Website Creation', notes: '' });
         showToast('Manual lead saved!');
@@ -357,19 +364,19 @@ const AdminDashboard = () => {
               <h3>Add New Manual Lead</h3>
               <button className="close-modal" onClick={() => setShowAddModal(false)}>×</button>
             </header>
-            <form className="modal-body" onSubmit={handleManualAddLead}>
+            <div className="modal-body">
               <div className="modal-grid">
                 <div className="crf-field">
                   <label>Client Name</label>
-                  <input type="text" placeholder="John Doe" required onChange={e => setNewLead({...newLead, name: e.target.value})} />
+                  <input type="text" placeholder="John Doe" value={newLead.name} onChange={e => setNewLead({...newLead, name: e.target.value})} />
                 </div>
                 <div className="crf-field">
                   <label>Email Address</label>
-                  <input type="email" placeholder="john@example.com" onChange={e => setNewLead({...newLead, email: e.target.value})} />
+                  <input type="email" placeholder="john@example.com" value={newLead.email} onChange={e => setNewLead({...newLead, email: e.target.value})} />
                 </div>
                 <div className="crf-field">
                   <label>Phone Number</label>
-                  <input type="text" placeholder="925-XXX-XXXX" onChange={e => setNewLead({...newLead, phone: e.target.value})} />
+                  <input type="text" placeholder="925-XXX-XXXX" value={newLead.phone} onChange={e => setNewLead({...newLead, phone: e.target.value})} />
                 </div>
                 <div className="crf-field">
                   <label>Service Interested In</label>
@@ -391,9 +398,11 @@ const AdminDashboard = () => {
                 ></textarea>
               </div>
               <div className="modal-footer-actions">
-                <button type="submit" className="reply-btn" disabled={isUpdating}>Save New Lead ➔</button>
+                <button type="button" onClick={handleManualAddLead} className="reply-btn" disabled={isUpdating}>
+                  {isUpdating ? 'Saving...' : 'Save New Lead ➔'}
+                </button>
               </div>
-            </form>
+            </div>
           </div>
         </div>
       )}
