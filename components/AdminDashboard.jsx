@@ -36,7 +36,7 @@ const AdminDashboard = () => {
         service: serviceFilter
       });
 
-      const response = await fetch(`/api/get-leads?${params.toString()}&tab=${viewTab}`, {
+      const response = await fetch(`/api/get-leads?${params.toString()}&tab=${viewTab}&_t=${Date.now()}`, {
         headers: {
           'x-nextwave-auth': password
         }
@@ -252,7 +252,7 @@ const AdminDashboard = () => {
               {loading ? 'Verifying...' : 'Login ➔'}
             </button>
             <div style={{ marginTop: '15px', fontSize: '10px', color: 'rgba(255,255,255,0.3)' }}>
-              System Version: v3.1 (NextWave-Restore)
+              System Version: v4.0 (Archives Live)
             </div>
           </form>
         </div>
@@ -265,12 +265,19 @@ const AdminDashboard = () => {
       <nav className="admin-nav">
         <div className="admin-nav-brand">
           <img src="/NextWave_logo1.web.jpeg" alt="NextWave" style={{ height: '30px' }} />
+          <div className="version-badge">v4.0</div>
           <span>Admin Portal</span>
         </div>
-        <button type="button" onClick={() => {
-          sessionStorage.removeItem('admin_key');
-          window.location.reload();
-        }} className="logout-btn">Logout</button>
+        <div className="nav-actions">
+          <div className="api-status">
+            <span className="status-dot"></span> 
+            {viewTab === 'active' ? 'Viewing Inbox' : 'Viewing Archives'}
+          </div>
+          <button type="button" onClick={() => {
+            sessionStorage.removeItem('admin_key');
+            window.location.reload();
+          }} className="logout-btn">Logout</button>
+        </div>
       </nav>
 
       <main className="admin-content">
@@ -596,7 +603,12 @@ const AdminDashboard = () => {
           align-items: center;
           box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
-        .admin-nav-brand { display: flex; align-items: center; gap: 10px; font-weight: 800; }
+        .admin-nav-brand { display: flex; align-items: center; gap: 15px; font-weight: 800; }
+        .version-badge { background: #f59e0b; color: #fff; font-size: 10px; font-weight: 900; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; }
+        .nav-actions { display: flex; align-items: center; gap: 20px; }
+        .api-status { color: #64748b; font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+        .status-dot { width: 8px; height: 8px; background: #1ABC9C; border-radius: 50%; box-shadow: 0 0 10px #1ABC9C; animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
         .portal-tag { font-size: 12px; background: #2c3e50; color: #fff; padding: 2px 8px; border-radius: 4px; }
         .logout-btn { background: #fee2e2; color: #991b1b; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: 600; }
 
