@@ -17,8 +17,8 @@ const AdminDashboard = () => {
   const [toast, setToast] = useState({ message: '', type: 'success', visible: false });
   const [deletingLeadId, setDeletingLeadId] = useState(null);
   const [viewTab, setViewTab] = useState('active'); // 'active' or 'archived'
-  const [sysVersion] = useState('v5.1');
-  // Deployment Heartbeat: 2026-04-13T23:08:00Z
+  const [sysVersion] = useState('v6.0');
+  // Deployment Heartbeat: 2026-04-13T23:15:00Z
 
   const showToast = (message, type = 'success') => {
     setToast({ message, type, visible: true });
@@ -38,7 +38,7 @@ const AdminDashboard = () => {
         service: serviceFilter
       });
 
-      const response = await fetch(`/api/get-leads?${params.toString()}&tab=${viewTab}&_t=${Date.now()}`, {
+      const response = await fetch(`/api/get-leads-v6?${params.toString()}&tab=${viewTab}&_t=${Date.now()}`, {
         headers: {
           'x-nextwave-auth': password
         }
@@ -93,7 +93,7 @@ const AdminDashboard = () => {
   const handleUpdateLead = async (id, status, notes, phone, is_archived) => {
     setIsUpdating(true);
     try {
-      const resp = await fetch('/api/update-lead', {
+      const resp = await fetch('/api/update-lead-v6', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -254,7 +254,7 @@ const AdminDashboard = () => {
               {loading ? 'Verifying...' : 'Login ➔'}
             </button>
             <div style={{ marginTop: '15px', fontSize: '10px', color: 'rgba(255,255,255,0.3)' }}>
-              System Version: v5.1 (Force Rebuild Active)
+              System Version: v6.0 (Global Sync Active)
             </div>
           </form>
         </div>
@@ -267,7 +267,7 @@ const AdminDashboard = () => {
       <nav className="admin-nav">
         <div className="admin-nav-brand">
           <img src="/NextWave_logo1.web.jpeg" alt="NextWave" style={{ height: '30px' }} />
-          <div className="version-badge" style={{background: '#f59e0b'}}>v5.1</div>
+          <div className="version-badge" style={{background: '#0B1F3A'}}>v6.0</div>
           <span>Admin Portal</span>
         </div>
         <div className="nav-actions">
