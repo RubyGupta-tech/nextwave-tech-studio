@@ -14,6 +14,12 @@ const AdminDashboard = () => {
   const [isUpdating, setIsUpdating] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
   const [newLead, setNewLead] = useState({ name: '', email: '', phone: '', service: 'Website Creation', notes: '' });
+  const [toast, setToast] = useState({ message: '', type: 'success', visible: false });
+
+  const showToast = (message, type = 'success') => {
+    setToast({ message, type, visible: true });
+    setTimeout(() => setToast(prev => ({ ...prev, visible: false })), 4000);
+  };
 
   const handleLogin = async (e) => {
     if (e) e.preventDefault();
@@ -41,8 +47,10 @@ const AdminDashboard = () => {
         setIsLoggedIn(true);
         // Store password in session storage for refreshing
         sessionStorage.setItem('admin_key', password);
+        showToast('Login successful!');
       } else {
         setError(data.error || 'Invalid password');
+        showToast(data.error || 'Invalid password', 'error');
       }
     } catch (err) {
       setError('Connection failed. Are you online?');
@@ -97,9 +105,11 @@ const AdminDashboard = () => {
         if (selectedLead && selectedLead.id === id) {
           setSelectedLead(prev => ({ ...prev, status, notes, phone }));
         }
+        showToast('Lead updated successfully');
       }
     } catch (err) {
       console.error("Update failed:", err);
+      showToast('Update failed!', 'error');
     } finally {
       setIsUpdating(false);
     }
@@ -122,11 +132,13 @@ const AdminDashboard = () => {
         setLeads([data.lead, ...leads]);
         setShowAddModal(false);
         setNewLead({ name: '', email: '', phone: '', service: 'Website Creation', notes: '' });
+        showToast('Manual lead saved!');
       } else {
-        alert(data.error || "Failed to add lead");
+        showToast(data.details || data.error || "Failed to add lead", 'error');
       }
     } catch (err) {
       console.error("Add failed:", err);
+      showToast('Connection error', 'error');
     } finally {
       setIsUpdating(false);
     }
@@ -146,9 +158,11 @@ const AdminDashboard = () => {
       if (resp.ok) {
         setLeads(leads.filter(l => l.id !== id));
         setSelectedLead(null);
+        showToast('Lead deleted', 'error');
       }
     } catch (err) {
       console.error("Delete failed:", err);
+      showToast('Delete failed', 'error');
     }
   };
 
@@ -759,6 +773,33 @@ const AdminDashboard = () => {
           text-decoration: none;
           font-weight: bold;
         }
+
+        /* Toast Styles */
+        .toast-container {
+          position: fixed;
+          bottom: 30px;
+          left: 50%;
+          transform: translateX(-50%) translateY(100px);
+          background: #fff;
+          padding: 12px 24px;
+          border-radius: 50px;
+          box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          z-index: 9999;
+          transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+          opacity: 0;
+          border: 1px solid #eee;
+        }
+        .toast-container.visible {
+          transform: translateX(-50%) translateY(0);
+          opacity: 1;
+        }
+        .toast-container.success { border-left: 5px solid #1ABC9C; }
+        .toast-container.error { border-left: 5px solid #ef4444; }
+        .toast-icon { font-size: 18px; }
+        .toast-message { font-size: 14px; font-weight: 600; color: #0B1F3A; }
       `}} />
     </div>
   );

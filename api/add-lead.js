@@ -35,6 +35,10 @@ export default async function handler(req, res) {
     });
   } catch (error) {
     console.error('Add Lead Error:', error);
-    return res.status(500).json({ success: false, error: 'Failed to add lead to database' });
+    return res.status(500).json({ 
+      success: false, 
+      error: 'Failed to add lead to database',
+      details: error.message 
+    });
   }
 }
