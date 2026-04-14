@@ -9,8 +9,8 @@ const AdminDashboard = () => {
   const [error, setError] = useState(null);
   const [selectedLead, setSelectedLead] = useState(null);
   const [timeFilter, setTimeFilter] = useState('all');
-  const [searchQuery, setSearchQuery] = useState('');
-  const [serviceFilter, setServiceFilter] = useState('all');
+  const [searchQuery, setSearchQuery] = useState(sessionStorage.getItem('last_search') || '');
+  const [serviceFilter, setServiceFilter] = useState(sessionStorage.getItem('last_service') || 'all');
   const [isUpdating, setIsUpdating] = useState(false);
 
   const handleLogin = async (e) => {
@@ -19,10 +19,10 @@ const AdminDashboard = () => {
     setError(null);
 
     try {
-      // Build query string
+      // Build query string - Trim the search query here too
       const params = new URLSearchParams({
         filter: timeFilter,
-        search: searchQuery,
+        search: searchQuery.trim(),
         service: serviceFilter
       });
 
@@ -67,6 +67,9 @@ const AdminDashboard = () => {
   useEffect(() => {
     if (isLoggedIn) {
       const delayDebounceFn = setTimeout(() => {
+        // Persist filters so they survive refresh
+        sessionStorage.setItem('last_search', searchQuery);
+        sessionStorage.setItem('last_service', serviceFilter);
         handleLogin();
       }, 300);
       return () => clearTimeout(delayDebounceFn);
@@ -182,7 +185,7 @@ const AdminDashboard = () => {
           <img src="/NextWave_logo1.web.jpeg" alt="NextWave" style={{ height: '30px' }} />
           <span>Admin Portal</span>
         </div>
-        <button onClick={() => {
+        <button type="button" onClick={() => {
           sessionStorage.removeItem('admin_key');
           window.location.reload();
         }} className="logout-btn">Logout</button>
@@ -200,14 +203,30 @@ const AdminDashboard = () => {
           </div>
           
           <div className="crm-master-controls">
-            <div className="search-box">
+            <form className="search-box" onSubmit={(e) => { 
+                e.preventDefault(); 
+                e.stopPropagation(); 
+                handleLogin(); 
+              }}>
               <input 
                 type="text" 
                 placeholder="Search name or email..." 
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  setSearchQuery(val);
+                  // Save immediately so it survives a reload even if debounce hasn't fired
+                  sessionStorage.setItem('last_search', val);
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    // Enter will trigger the form's onSubmit
+                  }
+                }}
               />
-            </div>
+              {searchQuery && <button type="button" className="clear-search" onClick={() => { setSearchQuery(''); sessionStorage.removeItem('last_search'); }}>×</button>}
+              <button type="submit" className="search-trigger-btn">🔍</button>
+            </form>
             
             <div className="filter-group">
               <select value={serviceFilter} onChange={(e) => setServiceFilter(e.target.value)} className="service-filter-select">
@@ -220,22 +239,28 @@ const AdminDashboard = () => {
               </select>
 
               <div className="time-filters">
-                <button className={`filter-btn ${timeFilter === 'all' ? 'active' : ''}`} onClick={() => setTimeFilter('all')}>All</button>
-                <button className={`filter-btn ${timeFilter === 'month' ? 'active' : ''}`} onClick={() => setTimeFilter('month')}>Month</button>
-                <button className={`filter-btn ${timeFilter === 'week' ? 'active' : ''}`} onClick={() => setTimeFilter('week')}>Week</button>
-                <button className={`filter-btn ${timeFilter === 'today' ? 'active' : ''}`} onClick={() => setTimeFilter('today')}>Today</button>
+                <button type="button" className={`filter-btn ${timeFilter === 'all' ? 'active' : ''}`} onClick={() => setTimeFilter('all')}>All</button>
+                <button type="button" className={`filter-btn ${timeFilter === 'month' ? 'active' : ''}`} onClick={() => setTimeFilter('month')}>Month</button>
+                <button type="button" className={`filter-btn ${timeFilter === 'week' ? 'active' : ''}`} onClick={() => setTimeFilter('week')}>Week</button>
+                <button type="button" className={`filter-btn ${timeFilter === 'today' ? 'active' : ''}`} onClick={() => setTimeFilter('today')}>Today</button>
               </div>
             </div>
 
-            <button onClick={exportToCSV} className="export-btn" title="Download Excel List">
+            <button type="button" onClick={exportToCSV} className="export-btn" title="Download Excel List">
               📊 Export CSV
             </button>
           </div>
         </header>
 
-        {leads.length === 0 ? (
+        {loading ? (
+          <div className="leads-loading">
+            <div className="loader"></div>
+            <p>Filtering Lead Database...</p>
+          </div>
+        ) : leads.length === 0 ? (
           <div className="no-leads">
-            <p>No inquiries found in the database yet.</p>
+            <p>{searchQuery ? `No results found for "${searchQuery}"` : "No inquiries found in the database yet."}</p>
+            {searchQuery && <button onClick={() => {setSearchQuery(''); setServiceFilter('all'); setTimeFilter('all');}} className="reset-filters-btn">Clear all filters</button>}
           </div>
         ) : (
           <div className="leads-table-container">
@@ -266,7 +291,7 @@ const AdminDashboard = () => {
                         {lead.source === 'chat_widget' ? '💬 Chat' : '📄 Form'}
                       </span>
                     </td>
-                    <td><button className="view-btn">View &amp; Edit</button></td>
+                    <td><button type="button" className="view-btn">View &amp; Edit</button></td>
                   </tr>
                 ))}
               </tbody>
@@ -472,7 +497,20 @@ const AdminDashboard = () => {
         }
         .export-btn:hover { background: #1a3a5f; transform: translateY(-2px); }
 
-        .no-leads { text-align: center; padding: 100px; color: #64748b; background: #fff; border-radius: 15px; }
+        .no-leads { text-align: center; padding: 100px; color: #64748b; background: #fff; border-radius: 15px; border: 1px dashed #cbd5e1; }
+        .reset-filters-btn { margin-top: 15px; background: #f1f5f9; border: none; padding: 8px 16px; border-radius: 6px; color: #1ABC9C; font-weight: bold; cursor: pointer; }
+        
+        .leads-loading { text-align: center; padding: 100px; background: #fff; border-radius: 15px; border: 1px solid #e2e8f0; }
+        .loader { width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid #1ABC9C; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 20px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        .search-box { position: relative; flex: 1; min-width: 300px; display: flex; gap: 5px; }
+        .search-box input { flex: 1; }
+        .search-trigger-btn { background: #1ABC9C; color: white; border: none; padding: 0 15px; border-radius: 10px; cursor: pointer; height: 44px; display: flex; align-items: center; justify-content: center; }
+        .search-trigger-btn:hover { background: #16a085; }
+
+        .clear-search { position: absolute; right: 55px; top: 50%; transform: translateY(-50%); background: none; border: none; color: #94a3b8; font-size: 20px; cursor: pointer; }
+        .clear-search:hover { color: #64748b; }
 
         .leads-table-container { background: #fff; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; }
         .leads-table { width: 100%; border-collapse: collapse; }

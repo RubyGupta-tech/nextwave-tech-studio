@@ -29,41 +29,27 @@ export default async function handler(req, res) {
     
     // 3. Handle Filtering Logic
     const filter = req.query.filter || 'all';
-    const search = req.query.search || '';
+    const searchQuery = (req.query.search || '').trim();
     const serviceFilter = req.query.service || 'all';
     
-    let queryConditions = [];
-    const params = [];
+    // We'll use a single robust query with flexible WHERE clauses.
+    // This is safer and prevents complex string building.
+    const searchPattern = searchQuery ? `%${searchQuery}%` : '';
 
-    // Time-based filtering
-    if (filter === 'today') {
-      queryConditions.push("created_at >= NOW() - INTERVAL '1 day'");
-    } else if (filter === 'week') {
-      queryConditions.push("created_at >= NOW() - INTERVAL '7 days'");
-    } else if (filter === 'month') {
-      queryConditions.push("created_at >= NOW() - INTERVAL '30 days'");
-    }
-
-    // Search filtering (name or email)
-    if (search) {
-      queryConditions.push(`(name ILIKE '%${search}%' OR email ILIKE '%${search}%')`);
-    }
-
-    // Service filtering
-    if (serviceFilter !== 'all') {
-      queryConditions.push(`service = '${serviceFilter}'`);
-    }
-
-    // Build the query and fetch the results
-    let rows;
-    if (queryConditions.length > 0) {
-      // For dynamic queries with conditions, we'll use a safer string building approach
-      // since the simple 'neon' client is best for fixed templates
-      const finalQuery = `SELECT * FROM leads WHERE ${queryConditions.join(' AND ')} ORDER BY created_at DESC LIMIT 1000`;
-      rows = await sql(finalQuery);
-    } else {
-      rows = await sql`SELECT * FROM leads ORDER BY created_at DESC LIMIT 1000`;
-    }
+    const rows = await sql`
+      SELECT * FROM leads 
+      WHERE 
+        (${searchPattern} = '' OR name ILIKE ${searchPattern} OR email ILIKE ${searchPattern})
+        AND (${serviceFilter} = 'all' OR service = ${serviceFilter})
+        AND (
+          ${filter} = 'all' 
+          OR (${filter} = 'today' AND created_at >= NOW() - INTERVAL '1 day')
+          OR (${filter} = 'week' AND created_at >= NOW() - INTERVAL '7 days')
+          OR (${filter} = 'month' AND created_at >= NOW() - INTERVAL '30 days')
+        )
+      ORDER BY created_at DESC 
+      LIMIT 1000
+    `;
 
     return res.status(200).json({ 
       success: true, 
