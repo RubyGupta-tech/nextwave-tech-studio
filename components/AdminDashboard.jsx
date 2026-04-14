@@ -15,6 +15,7 @@ const AdminDashboard = () => {
   const [showAddModal, setShowAddModal] = useState(false);
   const [newLead, setNewLead] = useState({ name: '', email: '', phone: '', service: 'Website Creation', notes: '' });
   const [toast, setToast] = useState({ message: '', type: 'success', visible: false });
+  const [deletingLeadId, setDeletingLeadId] = useState(null);
 
   const showToast = (message, type = 'success') => {
     setToast({ message, type, visible: true });
@@ -171,7 +172,6 @@ const AdminDashboard = () => {
   };
 
   const handleDeleteLead = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this lead permanently?")) return;
     try {
       const resp = await fetch('/api/delete-lead', {
         method: 'POST',
@@ -184,7 +184,8 @@ const AdminDashboard = () => {
       if (resp.ok) {
         setLeads(leads.filter(l => l.id !== id));
         setSelectedLead(null);
-        showToast('Lead deleted', 'error');
+        setDeletingLeadId(null);
+        showToast('Lead deleted permanently', 'error');
       }
     } catch (err) {
       console.error("Delete failed:", err);
@@ -491,7 +492,7 @@ const AdminDashboard = () => {
                 >Reply via Gmail ✉️</a>
                 
                 <button 
-                  onClick={() => handleDeleteLead(selectedLead.id)} 
+                  onClick={() => setDeletingLeadId(selectedLead.id)} 
                   className="delete-lead-btn"
                 >Delete Record</button>
               </div>
@@ -500,6 +501,20 @@ const AdminDashboard = () => {
         </div>
       )}
 
+      {/* Delete Confirmation Modal */}
+      {deletingLeadId && (
+        <div className="modal-overlay" style={{zIndex: 3000}} onClick={() => setDeletingLeadId(null)}>
+          <div className="lead-modal confirm-box" onClick={e => e.stopPropagation()}>
+            <div className="confirm-icon">⚠️</div>
+            <h3>Delete Record permanently?</h3>
+            <p>Are you sure you want to remove this lead? This action cannot be undone and all consultation notes will be lost.</p>
+            <div className="confirm-actions">
+              <button className="cancel-btn" onClick={() => setDeletingLeadId(null)}>No, Keep it</button>
+              <button className="confirm-btn" onClick={() => handleDeleteLead(deletingLeadId)}>Yes, Delete permanently</button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <style dangerouslySetInnerHTML={{ __html: `
         .admin-login-container {
@@ -828,6 +843,17 @@ const AdminDashboard = () => {
         .toast-container.error { border-left: 5px solid #ef4444; }
         .toast-icon { font-size: 18px; }
         .toast-message { font-size: 14px; font-weight: 600; color: #0B1F3A; }
+
+        /* Delete Confirm Box */
+        .confirm-box { max-width: 400px; text-align: center; padding: 40px; border-radius: 30px; }
+        .confirm-icon { font-size: 40px; margin-bottom: 20px; }
+        .confirm-box h3 { color: #0B1F3A; margin-bottom: 15px; font-size: 20px; }
+        .confirm-box p { color: #64748b; font-size: 14px; line-height: 1.6; margin-bottom: 30px; }
+        .confirm-actions { display: flex; gap: 15px; }
+        .cancel-btn { flex: 1; padding: 12px; border-radius: 12px; border: 1px solid #e2e8f0; background: #f8fafc; color: #64748b; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .confirm-btn { flex: 1.5; padding: 12px; border-radius: 12px; border: none; background: #ef4444; color: #fff; font-weight: bold; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2); }
+        .confirm-btn:hover { background: #dc2626; transform: translateY(-2px); }
+        .cancel-btn:hover { background: #fff; border-color: #cbd5e1; }
       `}} />
     </div>
   );
