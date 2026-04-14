@@ -12,6 +12,8 @@ const AdminDashboard = () => {
   const [searchQuery, setSearchQuery] = useState(sessionStorage.getItem('last_search') || '');
   const [serviceFilter, setServiceFilter] = useState(sessionStorage.getItem('last_service') || 'all');
   const [isUpdating, setIsUpdating] = useState(false);
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [newLead, setNewLead] = useState({ name: '', email: '', phone: '', service: 'Website Creation', notes: '' });
 
   const handleLogin = async (e) => {
     if (e) e.preventDefault();
@@ -76,7 +78,7 @@ const AdminDashboard = () => {
     }
   }, [timeFilter, searchQuery, serviceFilter]);
 
-  const handleUpdateLead = async (id, status, notes) => {
+  const handleUpdateLead = async (id, status, notes, phone) => {
     setIsUpdating(true);
     try {
       const resp = await fetch('/api/update-lead', {
@@ -85,16 +87,46 @@ const AdminDashboard = () => {
           'Content-Type': 'application/json',
           'x-nextwave-auth': password
         },
-        body: JSON.stringify({ id, status, notes })
+        body: JSON.stringify({ id, status, notes, phone })
       });
       if (resp.ok) {
-        setLeads(leads.map(l => l.id === id ? { ...l, status, notes } : l));
+        // Find and update the lead in the main list
+        setLeads(prev => prev.map(l => l.id === id ? { ...l, status, notes, phone } : l));
+        
+        // Force update the selectedLead state to ensure modal reflects changes
         if (selectedLead && selectedLead.id === id) {
-          setSelectedLead({ ...selectedLead, status, notes });
+          setSelectedLead(prev => ({ ...prev, status, notes, phone }));
         }
       }
     } catch (err) {
       console.error("Update failed:", err);
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
+  const handleManualAddLead = async (e) => {
+    e.preventDefault();
+    setIsUpdating(true);
+    try {
+      const resp = await fetch('/api/add-lead', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-nextwave-auth': password
+        },
+        body: JSON.stringify(newLead)
+      });
+      const data = await resp.json();
+      if (resp.ok) {
+        setLeads([data.lead, ...leads]);
+        setShowAddModal(false);
+        setNewLead({ name: '', email: '', phone: '', service: 'Website Creation', notes: '' });
+      } else {
+        alert(data.error || "Failed to add lead");
+      }
+    } catch (err) {
+      console.error("Add failed:", err);
     } finally {
       setIsUpdating(false);
     }
@@ -246,6 +278,9 @@ const AdminDashboard = () => {
               </div>
             </div>
 
+            <button onClick={() => setShowAddModal(true)} className="add-manual-btn">
+              ➕ New Manual Lead
+            </button>
             <button type="button" onClick={exportToCSV} className="export-btn" title="Download Excel List">
               📊 Export CSV
             </button>
@@ -279,7 +314,7 @@ const AdminDashboard = () => {
                 {leads.map(lead => (
                   <tr key={lead.id} onClick={() => setSelectedLead(lead)} className="lead-row">
                     <td>{new Date(lead.created_at).toLocaleDateString()}</td>
-                    <td><strong>{lead.name}</strong></td>
+                    <td><strong>{lead.name}</strong><div style={{fontSize: '11px', color: '#64748b'}}>{lead.phone}</div></td>
                     <td>{lead.email}</td>
                     <td>
                       <span className={`status-badge ${lead.status?.toLowerCase().replace(' ', '-') || 'new'}`}>
@@ -291,7 +326,7 @@ const AdminDashboard = () => {
                         {lead.source === 'chat_widget' ? '💬 Chat' : '📄 Form'}
                       </span>
                     </td>
-                    <td><button type="button" className="view-btn">View &amp; Edit</button></td>
+                    <td><button type="button" className="view-btn">Consult / Edit</button></td>
                   </tr>
                 ))}
               </tbody>
@@ -300,7 +335,54 @@ const AdminDashboard = () => {
         )}
       </main>
 
-      {/* Message Modal */}
+      {/* Add Lead Modal */}
+      {showAddModal && (
+        <div className="modal-overlay" onClick={() => setShowAddModal(false)}>
+          <div className="lead-modal" onClick={e => e.stopPropagation()}>
+            <header className="modal-header">
+              <h3>Add New Manual Lead</h3>
+              <button className="close-modal" onClick={() => setShowAddModal(false)}>×</button>
+            </header>
+            <form className="modal-body" onSubmit={handleManualAddLead}>
+              <div className="modal-grid">
+                <div className="crf-field">
+                  <label>Client Name</label>
+                  <input type="text" placeholder="John Doe" required onChange={e => setNewLead({...newLead, name: e.target.value})} />
+                </div>
+                <div className="crf-field">
+                  <label>Email Address</label>
+                  <input type="email" placeholder="john@example.com" onChange={e => setNewLead({...newLead, email: e.target.value})} />
+                </div>
+                <div className="crf-field">
+                  <label>Phone Number</label>
+                  <input type="text" placeholder="925-XXX-XXXX" onChange={e => setNewLead({...newLead, phone: e.target.value})} />
+                </div>
+                <div className="crf-field">
+                  <label>Service Interested In</label>
+                  <select onChange={e => setNewLead({...newLead, service: e.target.value})}>
+                    <option>Website Creation</option>
+                    <option>Website Updates &amp; Fixes</option>
+                    <option>SEO &amp; Internet Marketing</option>
+                    <option>Partnership / Sponsorship</option>
+                    <option>Enterprise Web App</option>
+                  </select>
+                </div>
+              </div>
+              <div className="crm-notes-section" style={{borderTop: 'none', paddingTop: 0}}>
+                <label style={{fontSize: '13px', fontWeight: 'bold', color: '#64748b', display: 'block', marginBottom: '8px'}}>Initial Consultation Notes</label>
+                <textarea 
+                  placeholder="Quick summary of the phone call or inquiry..."
+                  onChange={e => setNewLead({...newLead, notes: e.target.value})}
+                  style={{minHeight: '100px'}}
+                ></textarea>
+              </div>
+              <div className="modal-footer-actions">
+                <button type="submit" className="reply-btn" disabled={isUpdating}>Save New Lead ➔</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
       {selectedLead && (
         <div className="modal-overlay" onClick={() => setSelectedLead(null)}>
           <div className="lead-modal" onClick={e => e.stopPropagation()}>
@@ -313,15 +395,17 @@ const AdminDashboard = () => {
             <div className="modal-body">
               <div className="modal-grid">
                 <div className="modal-main-info">
+                  <div className="info-row"><strong>Phone:</strong> <input type="text" className="inline-edit-input" defaultValue={selectedLead.phone} onBlur={(e) => handleUpdateLead(selectedLead.id, selectedLead.status, selectedLead.notes, e.target.value)} /></div>
                   <div className="info-row"><strong>Service:</strong> <span className="service-tag">{selectedLead.service}</span></div>
                   <div className="info-row"><strong>Email:</strong> <a href={`mailto:${selectedLead.email}`} className="email-link">{selectedLead.email}</a></div>
                   <div className="info-row"><strong>Date:</strong> {new Date(selectedLead.created_at).toLocaleString()}</div>
+                  <div className="info-row"><strong>Source:</strong> <span className="source-tag">{selectedLead.source?.replace('_', ' ')}</span></div>
                   
                   <div className="status-management">
-                    <label>Inquiry Status:</label>
+                    <label>Lifecycle Status:</label>
                     <select 
                       value={selectedLead.status || 'New'} 
-                      onChange={(e) => handleUpdateLead(selectedLead.id, e.target.value, selectedLead.notes)}
+                      onChange={(e) => handleUpdateLead(selectedLead.id, e.target.value, selectedLead.notes, selectedLead.phone)}
                       className="status-select"
                       disabled={isUpdating}
                     >
@@ -343,14 +427,17 @@ const AdminDashboard = () => {
               </div>
 
               <div className="crm-notes-section">
-                <h4>Private Studio Notes</h4>
+                <div className="notes-header">
+                  <h4>Consultation Workspace</h4>
+                  <span className="live-tag">Live Notes</span>
+                </div>
                 <textarea 
-                  placeholder="Add private notes about this client (budget, deadlines, internal thoughts)..."
+                  placeholder="Type real-time notes during your call (budget, deadlines, project scope, internal thoughts)..."
                   defaultValue={selectedLead.notes || ''}
-                  onBlur={(e) => handleUpdateLead(selectedLead.id, selectedLead.status, e.target.value)}
+                  onBlur={(e) => handleUpdateLead(selectedLead.id, selectedLead.status, e.target.value, selectedLead.phone)}
                   disabled={isUpdating}
                 ></textarea>
-                <div className="notes-tip">Notes are saved automatically when you click away.</div>
+                <div className="notes-tip">Changes are saved automatically when you click outside the box.</div>
               </div>
 
               <div className="modal-footer-actions">
@@ -484,6 +571,19 @@ const AdminDashboard = () => {
         }
         .filter-btn.active { background: #fff; color: #0B1F3A; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
 
+        .add-manual-btn {
+          background: #1ABC9C;
+          color: #fff;
+          border: none;
+          padding: 12px 20px;
+          border-radius: 10px;
+          font-weight: bold;
+          font-size: 13px;
+          cursor: pointer;
+          transition: 0.3s;
+        }
+        .add-manual-btn:hover { background: #16a085; transform: translateY(-2px); }
+
         .export-btn {
           background: #0B1F3A;
           color: #fff;
@@ -567,20 +667,22 @@ const AdminDashboard = () => {
         
         .modal-body { padding: 40px; }
         
-        .modal-grid { display: grid; grid-template-columns: 1fr 1.5fr; gap: 40px; margin-bottom: 40px; }
-        
-        .info-row { margin-bottom: 12px; font-size: 14px; color: #475569; }
-        .info-row strong { color: #0B1F3A; }
-        .email-link { color: #1ABC9C; text-decoration: none; font-weight: 600; }
-        
-        .status-management { margin-top: 25px; background: #f8fafc; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0; }
-        .status-management label { display: block; font-size: 12px; text-transform: uppercase; font-weight: 800; color: #64748b; margin-bottom: 10px; }
-        .status-select { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #cbd5e1; font-weight: 600; color: #0B1F3A; }
+        .modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px; }
+        .crf-field { margin-bottom: 20px; }
+        .crf-field label { display: block; font-size: 12px; font-weight: 800; color: #64748b; margin-bottom: 8px; text-transform: uppercase; }
+        .crf-field input, .crf-field select { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; color: #0B1F3A; }
+        .crf-field input:focus, .crf-field select:focus { outline: none; border-color: #1ABC9C; box-shadow: 0 0 0 3px rgba(26, 188, 156, 0.1); }
 
         .modal-message-section h4, .crm-notes-section h4 { font-size: 13px; text-transform: uppercase; letter-spacing: 1px; color: #64748b; margin-bottom: 15px; }
         .message-text { background: #f1f5f9; padding: 25px; border-radius: 12px; font-size: 15px; line-height: 1.6; color: #334155; min-height: 150px; white-space: pre-wrap; }
 
-        .crm-notes-section { margin-top: 20px; border-top: 1px solid #e2e8f0; padding-top: 30px; }
+        .inline-edit-input { border: 1px dashed #cbd5e1; background: transparent; padding: 2px 5px; border-radius: 4px; font-weight: 600; color: #1ABC9C; font-size: 14px; width: 150px; }
+        .inline-edit-input:focus { outline: none; border-color: #1ABC9C; background: #fff; }
+
+        .notes-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .live-tag { font-size: 10px; color: #ef4444; border: 1px solid #fee2e2; padding: 2px 6px; border-radius: 4px; font-weight: 800; text-transform: uppercase; animation: blink 2s infinite; }
+        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+
         .crm-notes-section textarea {
           width: 100%;
           min-height: 120px;
@@ -591,6 +693,7 @@ const AdminDashboard = () => {
           font-size: 14px;
           line-height: 1.6;
           transition: 0.3s;
+          resize: vertical;
         }
         .crm-notes-section textarea:focus { outline: none; border-color: #1ABC9C; box-shadow: 0 0 0 3px rgba(26, 188, 156, 0.1); }
         .notes-tip { font-size: 11px; color: #94a3b8; margin-top: 8px; font-style: italic; }

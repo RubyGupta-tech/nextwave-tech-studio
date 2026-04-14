@@ -18,11 +18,12 @@ export default async function handler(req, res) {
   }
 
   try {
+    const { id, status, notes, phone } = req.body;
     const sql = neon(process.env.DATABASE_URL);
 
     await sql`
       UPDATE leads 
-      SET status = ${status}, notes = ${notes}
+      SET status = ${status}, notes = ${notes}, phone = ${phone || ''}
       WHERE id = ${id}
     `;
 
