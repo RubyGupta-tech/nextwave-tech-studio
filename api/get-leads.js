@@ -1,4 +1,5 @@
 import { neon } from '@neondatabase/serverless';
+// Heartbeat: 2026-04-13T23:08:00Z
 
 export default async function handler(req, res) {
   // 1. Only allow GET requests
