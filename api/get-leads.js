@@ -54,10 +54,16 @@ export default async function handler(req, res) {
       LIMIT 1000
     `;
 
+    // Force fresh data (No Cache)
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+
     return res.status(200).json({ 
       success: true, 
       leads: rows,
-      total: rows.length 
+      total: rows.length,
+      debug: { tab, isArchived }
     });
   } catch (error) {
     console.error('Database Fetch Error:', error);

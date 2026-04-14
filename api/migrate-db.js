@@ -21,15 +21,17 @@ export default async function handler(req, res) {
     await sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS phone VARCHAR(20) DEFAULT '';`;
     await sql`ALTER TABLE leads ALTER COLUMN email DROP NOT NULL;`;
     await sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS is_archived BOOLEAN DEFAULT false;`;
+    await sql`UPDATE leads SET is_archived = false WHERE is_archived IS NULL;`;
     await sql`UPDATE leads SET status = 'New' WHERE status IS NULL;`;
 
     return res.status(200).send(`
       <div style="font-family: sans-serif; padding: 40px; text-align: center; background: #f0fdf4; border-radius: 20px; border: 2px solid #22c55e; max-width: 600px; margin: 40px auto;">
-        <h2 style="color: #16a34a;">✅ Migration Successful!</h2>
-        <p style="font-size: 18px; color: #166534;">Your NextWave CRM is now fully activated.</p>
-        <p style="color: #374151;">The 'Status' and 'Notes' columns have been added to your database.</p>
-        <hr style="border: 0; border-top: 1px solid #bbf7d0; margin: 20px 0;" />
-        <a href="https://www.dnextwave.com/admin" style="display: inline-block; background: #16a34a; color: white; padding: 12px 24px; border-radius: 10px; text-decoration: none; font-weight: bold;">Go to Admin Dashboard ➔</a>
+        <h1>CRM Database Sync v5.0 (Cloud Sync Enabled)</h1>
+        <p style="color: green; font-weight: bold;">✔ Archive system correctly initialized.</p>
+        <p style="color: green; font-weight: bold;">✔ Email field correctly set to optional.</p>
+        <p style="color: green; font-weight: bold;">✔ Records synchronized for Inbox/Archives filtering.</p>
+        <br/>
+        <a href="/admin" style="padding: 10px 20px; background: #0B1F3A; color: #fff; text-decoration: none; border-radius: 5px;">Back to Dashboard</a>
       </div>
     `);
   } catch (error) {

@@ -17,6 +17,7 @@ const AdminDashboard = () => {
   const [toast, setToast] = useState({ message: '', type: 'success', visible: false });
   const [deletingLeadId, setDeletingLeadId] = useState(null);
   const [viewTab, setViewTab] = useState('active'); // 'active' or 'archived'
+  const [sysVersion] = useState('v5.0');
 
   const showToast = (message, type = 'success') => {
     setToast({ message, type, visible: true });
@@ -252,7 +253,7 @@ const AdminDashboard = () => {
               {loading ? 'Verifying...' : 'Login ➔'}
             </button>
             <div style={{ marginTop: '15px', fontSize: '10px', color: 'rgba(255,255,255,0.3)' }}>
-              System Version: v4.0 (Archives Live)
+              System Version: v5.0 (Cloud Sync Enabled)
             </div>
           </form>
         </div>
@@ -265,7 +266,7 @@ const AdminDashboard = () => {
       <nav className="admin-nav">
         <div className="admin-nav-brand">
           <img src="/NextWave_logo1.web.jpeg" alt="NextWave" style={{ height: '30px' }} />
-          <div className="version-badge">v4.0</div>
+          <div className="version-badge" style={{background: '#1ABC9C'}}>v5.0</div>
           <span>Admin Portal</span>
         </div>
         <div className="nav-actions">
