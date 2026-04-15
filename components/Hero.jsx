@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Typewriter } from "react-simple-typewriter";
 import "../src/styles/global.css";
+import heroShowcaseImg from "../images/hero_tech_showcase.png";
 
 const Hero = () => {
     return (
@@ -58,7 +59,7 @@ const Hero = () => {
                     <div className="hero-asset-right animate-floating reveal">
                         <div className="asset-glow-aura"></div>
                         <img 
-                            src="/images/hero_tech_showcase.png" 
+                            src={heroShowcaseImg} 
                             alt="NextWave Tech Showcase" 
                             className="hero-3d-asset"
                         />

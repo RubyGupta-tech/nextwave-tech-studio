@@ -8,24 +8,6 @@ const testimonialsData = [
         title: "Ex-Accenture | Cross Cultural Expertise",
         avatar: "FG",
     },
-    {
-        quote: "NextWave completely transformed our online presence. Within 3 months of launching our new site, our leads doubled. Truly professional from start to finish.",
-        name: "Sarah M.",
-        title: "Owner, Bloom & Co. Floral Studio",
-        avatar: "SM",
-    },
-    {
-        quote: "We needed a complex web application and they delivered beyond expectations. Their communication was excellent and the product works flawlessly.",
-        name: "James T.",
-        title: "CTO, Apex Logistics Inc.",
-        avatar: "JT",
-    },
-    {
-        quote: "As a non-profit, budget matters. NextWave gave us a stunning, professional website at a price we could afford. Our donations increased by 40% since launch.",
-        name: "Linda R.",
-        title: "Director, Hope Forward Foundation",
-        avatar: "LR",
-    },
 ];
 
 const Testimonials = () => {
@@ -84,9 +66,11 @@ const Testimonials = () => {
                 </p>
                 
                 <div className="testimonials-display-wrapper">
-                    <button className="slider-nav-btn prev" onClick={prevSlide} aria-label="Previous testimonial">
-                        <svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
-                    </button>
+                    {numPages > 1 && (
+                        <button className="slider-nav-btn prev" onClick={prevSlide} aria-label="Previous testimonial">
+                            <svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+                        </button>
+                    )}
 
                     <div className="testimonials-viewport">
                         <div 
@@ -126,21 +110,25 @@ const Testimonials = () => {
                         </div>
                     </div>
 
-                    <button className="slider-nav-btn next" onClick={nextSlide} aria-label="Next testimonial">
-                        <svg viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
-                    </button>
+                    {numPages > 1 && (
+                        <button className="slider-nav-btn next" onClick={nextSlide} aria-label="Next testimonial">
+                            <svg viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+                        </button>
+                    )}
                 </div>
 
-                <div className="testimonials-dots">
-                    {[...Array(numPages)].map((_, index) => (
-                        <button
-                            key={index}
-                            className={`dot ${index === activeIndex ? 'active' : ''}`}
-                            onClick={() => goToSlide(index)}
-                            aria-label={`Go to slide ${index + 1}`}
-                        />
-                    ))}
-                </div>
+                {numPages > 1 && (
+                    <div className="testimonials-dots">
+                        {[...Array(numPages)].map((_, index) => (
+                            <button
+                                key={index}
+                                className={`dot ${index === activeIndex ? 'active' : ''}`}
+                                onClick={() => goToSlide(index)}
+                                aria-label={`Go to slide ${index + 1}`}
+                            />
+                        ))}
+                    </div>
+                )}
             </div>
 
             <div className="testimonials-wave bottom">

@@ -18,7 +18,7 @@ const Footer = () => {
                     <div className="footer-socials">
                         <a href="https://www.linkedin.com/in/ruby-gupta-08a1a25b" target="_blank" rel="noreferrer" className="social-link" aria-label="LinkedIn">in</a>
                         <a href="https://twitter.com/RubyGupta27" target="_blank" rel="noreferrer" className="social-link" aria-label="Twitter">𝕏</a>
-                        <a href="https://facebook.com" target="_blank" rel="noreferrer" className="social-link" aria-label="Facebook">f</a>
+                        <a href="https://www.facebook.com/profile.php?id=61586406731241" target="_blank" rel="noreferrer" className="social-link" aria-label="Facebook">f</a>
                     </div>
                 </div>
 
@@ -51,8 +51,8 @@ const Footer = () => {
                             </Link>
                         </li>
                         <li>
-                            <Link 
-                                to="/?nav=contact" 
+                            <Link
+                                to="/?nav=contact"
                                 onClick={() => window.sessionStorage.setItem('scroll_to_contact', 'true')}
                             >
                                 Contact
