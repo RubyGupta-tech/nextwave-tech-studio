@@ -2906,13 +2906,13 @@ body {
 }
 
 .trust-label {
-    font-size: 11px;
+    font-size: 13px;
     font-weight: 700;
-    color: #64748B;
+    color: #1ABC9C;
     text-transform: uppercase;
     letter-spacing: 3px;
     margin-bottom: 28px;
-    opacity: 0.8;
+    opacity: 1;
 }
 
 .logo-container {
