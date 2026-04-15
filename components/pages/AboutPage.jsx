@@ -216,7 +216,7 @@ const AboutPage = () => {
                                 <p>As the Creative Director of NextWave Tech Studio, I lead the mission to transform your vision into high-performance digital excellence.</p>
                                 <p>My journey into web development started with a simple curiosity to learn how websites work. Over time, that curiosity turned into passion and then into real projects.</p>
                                 <p>I’ve worked on multiple websites, learning through real challenges, improving my skills in design, structure, and functionality. Every project helped me understand not just coding, but how to create websites that actually help businesses grow.</p>
-                                <p>dNextWave is my step towards building something meaningful-helping businesses create modern, clean, and scalable digital presence.</p>
+                                <p>NextWave Tech Studio represents my mission to help businesses establish a modern, clean, and scalable digital presence.</p>
                                 <p>This is just the beginning, and I’m excited to keep learning and building.</p>
                             </div>
                             <div className="founder-signature">Ruby</div>
