@@ -30,6 +30,7 @@ import EnterpriseDevelopment from "../components/pages/EnterpriseDevelopment";
 import PortfolioPage from "../components/pages/PortfolioPage";
 import AboutPage from "../components/pages/AboutPage";
 import ResourcesPage from "../components/pages/ResourcesPage";
+import NotFoundPage from "../components/pages/NotFoundPage";
 
 import AdminDashboard from "../components/AdminDashboard";
 
@@ -133,6 +134,7 @@ function AppContent() {
                 <Route path="/services/seo-marketing" element={<SEOMarketing />} />
                 <Route path="/services/ada-compliance" element={<ADACompliance />} />
                 <Route path="/resources" element={<ResourcesPage />} />
+                <Route path="*" element={<NotFoundPage />} />
             </Routes>
             {!isAdmin && <Footer />}
             {!isAdmin && <ChatWidget />}
