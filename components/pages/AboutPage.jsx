@@ -52,7 +52,7 @@ const AboutPage = () => {
                         <p className="lead">
                             I help businesses transcend the ordinary. Every line of code I write and every pixel I place is driven by a single mission: to turn your vision into a high-performance digital asset.
                         </p>
-                        <Link 
+                        <Link
                             to="/?nav=contact"
                             className="about-cta-btn"
                             onClick={() => window.sessionStorage.setItem('scroll_to_contact', 'true')}
@@ -71,7 +71,7 @@ const AboutPage = () => {
                         <p className="lead" style={{ fontSize: '18px', color: '#94A3B8', marginBottom: '30px' }}>
                             Hi, I'm the founder of NextWave Tech Studio. For the past 3 years, I've dedicated myself to the freelance digital landscape, delivering live projects that move beyond static templates. My journey began long ago with a passion for web development, evolving into a professional practice where I build functional, production-ready solutions.
                         </p>
-                        
+
                         <div className="story-mini-grid">
                             <div className="story-pill">
                                 <h4>Bespoke Design</h4>
@@ -214,9 +214,9 @@ const AboutPage = () => {
                             <h2 className="founder-name">Hi, I’m <span className="innovation-gradient">Ruby</span> 👋</h2>
                             <div className="founder-bio">
                                 <p>I’m the person behind dNextWave.</p>
-                                <p>My journey into web development started with a simple curiosity to learn how websites work. Over time, that curiosity turned into passion—and then into real projects.</p>
+                                <p>My journey into web development started with a simple curiosity to learn how websites work. Over time, that curiosity turned into passion and then into real projects.</p>
                                 <p>I’ve worked on multiple websites, learning through real challenges, improving my skills in design, structure, and functionality. Every project helped me understand not just coding, but how to create websites that actually help businesses grow.</p>
-                                <p>dNextWave is my step towards building something meaningful—helping businesses create modern, clean, and scalable digital presence.</p>
+                                <p>dNextWave is my step towards building something meaningful-helping businesses create modern, clean, and scalable digital presence.</p>
                                 <p>This is just the beginning, and I’m excited to keep learning and building.</p>
                             </div>
                             <div className="founder-signature">Ruby</div>
@@ -239,8 +239,8 @@ const AboutPage = () => {
                             Ready to transform your vision into a high-performance digital asset? Let's sit down for a quick strategy call and map out your next wave of growth.
                         </p>
                         <div className="cta-wrapper" style={{ marginTop: '30px' }}>
-                            <Link 
-                                to="/?nav=contact" 
+                            <Link
+                                to="/?nav=contact"
                                 className="cta-btn-primary"
                                 onClick={() => window.sessionStorage.setItem('scroll_to_contact', 'true')}
                             >
