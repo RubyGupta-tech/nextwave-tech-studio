@@ -5535,4 +5535,102 @@ body {
         font-size: 32px;
     }
 }
-
+
+/* Meet the Founder Section */
+.meet-founder {
+    width: 100%;
+}
+
+.founder-grid {
+    display: flex;
+    align-items: center;
+    gap: 60px;
+}
+
+.founder-image-wrapper {
+    flex: 0 0 350px;
+    position: relative;
+    z-index: 1;
+}
+
+.founder-image-circle {
+    width: 350px;
+    height: 350px;
+    border-radius: 50%;
+    overflow: hidden;
+    position: relative;
+    border: 4px solid var(--primary-color);
+    box-shadow: 0 0 30px rgba(26, 188, 156, 0.4);
+    transform: translateZ(0);
+}
+
+.founder-image-circle img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.founder-image-circle:hover img {
+    transform: scale(1.05);
+}
+
+.founder-info {
+    flex: 1;
+}
+
+.founder-badge {
+    background: rgba(26, 188, 156, 0.1);
+    color: var(--primary-color);
+    padding: 6px 16px;
+    border-radius: 50px;
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    display: inline-block;
+    margin-bottom: 20px;
+}
+
+.founder-name {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.5rem, 5vw, 3.5rem);
+    margin-bottom: 24px;
+    color: #0B1F3A;
+    line-height: 1.1;
+}
+
+.founder-bio {
+    font-size: 18px;
+    line-height: 1.8;
+    color: #475569;
+}
+
+.founder-bio p {
+    margin-bottom: 20px;
+}
+
+.founder-signature {
+    margin-top: 30px;
+    font-family: 'Alex Brush', cursive;
+    font-size: 42px;
+    color: var(--primary-color);
+}
+
+@media (max-width: 992px) {
+    .founder-grid {
+        flex-direction: column;
+        text-align: center;
+        gap: 40px;
+    }
+    
+    .founder-image-wrapper {
+        flex: 0 0 auto;
+    }
+    
+    .founder-image-circle {
+        width: 250px;
+        height: 250px;
+        margin: 0 auto;
+    }
+}

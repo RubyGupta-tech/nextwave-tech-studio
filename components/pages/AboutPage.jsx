@@ -8,6 +8,7 @@ import codeImg from '../../images/code_pics.jpg';
 import growthImg from '../../images/GrowthLaunch_pics.webp';
 import personalImg from '../../images/personaldedication_pic.avif';
 import passionImg from '../../images/passionprecision_pic.png';
+import rubyPic from '../../images/ruby-nextwave-pic.jpeg';
 
 const AboutPage = () => {
     useEffect(() => {
@@ -194,6 +195,31 @@ const AboutPage = () => {
                                     <img src={growthImg} alt="Growth Launch" className="crop-bottom" />
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* Meet the Founder Section */}
+            <section className="meet-founder section-padding gray-bg">
+                <div className="container">
+                    <div className="founder-grid">
+                        <div className="founder-image-wrapper reveal">
+                            <div className="founder-image-circle">
+                                <img src={rubyPic} alt="Ruby - Founder of NextWave" />
+                            </div>
+                        </div>
+                        <div className="founder-info reveal">
+                            <span className="founder-badge">Founder & Lead Developer</span>
+                            <h2 className="founder-name">Hi, I’m <span className="innovation-gradient">Ruby</span> 👋</h2>
+                            <div className="founder-bio">
+                                <p>I’m the person behind dNextWave.</p>
+                                <p>My journey into web development started with a simple curiosity to learn how websites work. Over time, that curiosity turned into passion—and then into real projects.</p>
+                                <p>I’ve worked on multiple websites, learning through real challenges, improving my skills in design, structure, and functionality. Every project helped me understand not just coding, but how to create websites that actually help businesses grow.</p>
+                                <p>dNextWave is my step towards building something meaningful—helping businesses create modern, clean, and scalable digital presence.</p>
+                                <p>This is just the beginning, and I’m excited to keep learning and building.</p>
+                            </div>
+                            <div className="founder-signature">Ruby</div>
                         </div>
                     </div>
                 </div>
