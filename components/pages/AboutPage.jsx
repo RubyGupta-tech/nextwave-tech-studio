@@ -213,7 +213,7 @@ const AboutPage = () => {
                             <span className="founder-badge">Founder & Lead Developer</span>
                             <h2 className="founder-name">Hi, I’m <span className="innovation-gradient">Ruby</span> 👋</h2>
                             <div className="founder-bio">
-                                <p>I’m the person behind dNextWave.</p>
+                                <p>As the Creative Director of NextWave Tech Studio, I lead the mission to transform your vision into high-performance digital excellence.</p>
                                 <p>My journey into web development started with a simple curiosity to learn how websites work. Over time, that curiosity turned into passion and then into real projects.</p>
                                 <p>I’ve worked on multiple websites, learning through real challenges, improving my skills in design, structure, and functionality. Every project helped me understand not just coding, but how to create websites that actually help businesses grow.</p>
                                 <p>dNextWave is my step towards building something meaningful-helping businesses create modern, clean, and scalable digital presence.</p>
