@@ -8,7 +8,7 @@ import codeImg from '../../images/code_pics.jpg';
 import growthImg from '../../images/GrowthLaunch_pics.webp';
 import personalImg from '../../images/personaldedication_pic.avif';
 import passionImg from '../../images/passionprecision_pic.png';
-import rubyPic from '../../images/ruby-pic01.jpeg';
+import rubyPic from '../../images/ruby-pic-02.jpeg';
 
 const AboutPage = () => {
     useEffect(() => {
