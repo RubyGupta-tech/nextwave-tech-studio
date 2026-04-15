@@ -6,8 +6,7 @@ export default defineConfig({
     plugins: [react()],
     server: {
         proxy: {
-            // This redirects local /api calls to your live site, 
-            // bypassing the local file analysis errors.
+            // Points to the LIVE Vercel deployment for real database access
             '/api': {
                 target: 'https://dnextwave.com',
                 changeOrigin: true,

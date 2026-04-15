@@ -18,6 +18,7 @@ const AdminDashboard = () => {
   const [deletingLeadId, setDeletingLeadId] = useState(null);
   const [viewTab, setViewTab] = useState('active'); // 'active' or 'archived'
   const [sysVersion] = useState('v6.1');
+  const [apiStatus, setApiStatus] = useState('checking'); // 'online', 'offline', 'checking'
   // Deployment Heartbeat: 2026-04-13T23:30:00Z
 
   const showToast = (message, type = 'success') => {
@@ -25,13 +26,20 @@ const AdminDashboard = () => {
     setTimeout(() => setToast(prev => ({ ...prev, visible: false })), 4000);
   };
 
+  useEffect(() => {
+    // Ping API to check connection
+    fetch('/api/ping?_t=' + Date.now())
+      .then(res => res.json())
+      .then(data => setApiStatus(data.status === 'online' ? 'online' : 'offline'))
+      .catch(() => setApiStatus('offline'));
+  }, []);
+
   const handleLogin = async (e) => {
     if (e) e.preventDefault();
     setLoading(true);
     setError(null);
 
     try {
-      // Build query string
       const params = new URLSearchParams({
         filter: timeFilter,
         search: searchQuery.trim(),
@@ -40,13 +48,12 @@ const AdminDashboard = () => {
         _t: Date.now()
       });
 
-      // RESILIENT FETCH: Try v6 first, then fallback to original if 404
-      let response = await fetch(`/api/get-leads-v6?${params.toString()}`);
-      
-      if (response.status === 404) {
-        console.log("v6 endpoint not ready, falling back to legacy...");
-        response = await fetch(`/api/get-leads?${params.toString()}`);
-      }
+      // Use the original, fully-deployed API endpoint
+      const response = await fetch(`/api/get-leads?${params.toString()}`, {
+        headers: {
+          'x-nextwave-auth': password
+        }
+      });
 
       const data = await response.json();
 
@@ -54,14 +61,15 @@ const AdminDashboard = () => {
         setLeads(data.leads);
         setIsLoggedIn(true);
         sessionStorage.setItem('admin_key', password);
-        showToast('Connected to Database');
+        showToast('Connected!');
       } else {
-        setError(data.error || 'Invalid credentials');
-        showToast(data.error || 'Connection failed', 'error');
+        const errorMsg = data.details ? `DB Error: ${data.details}` : (data.error || 'Invalid credentials');
+        setError(errorMsg);
+        showToast(errorMsg, 'error');
       }
     } catch (err) {
       console.error("Login Error:", err);
-      setError('System Syncing... Please wait 30s and try again.');
+      setError('Connection failed. Check your internet connection.');
     } finally {
       setLoading(false);
     }
@@ -97,7 +105,7 @@ const AdminDashboard = () => {
   const handleUpdateLead = async (id, status, notes, phone, is_archived) => {
     setIsUpdating(true);
     try {
-      const resp = await fetch('/api/update-lead-v6', {
+      const resp = await fetch('/api/update-lead', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -242,6 +250,27 @@ const AdminDashboard = () => {
             <img src="/NextWave_logo1.web.jpeg" alt="NextWave" style={{ width: '150px', marginBottom: '20px' }} />
           </div>
           <h2>Leads Dashboard</h2>
+          <div style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '6px',
+            padding: '4px 10px',
+            background: 'rgba(0,0,0,0.3)',
+            borderRadius: '20px',
+            fontSize: '11px',
+            marginTop: '5px',
+            marginBottom: '15px',
+            color: apiStatus === 'online' ? '#22c55e' : (apiStatus === 'offline' ? '#ef4444' : '#94a3b8')
+          }}>
+            <span style={{
+              width: '8px',
+              height: '8px',
+              borderRadius: '50%',
+              background: 'currentColor',
+              boxShadow: apiStatus === 'online' ? '0 0 8px #22c55e' : 'none'
+            }}></span>
+            {apiStatus === 'online' ? 'Database Online' : (apiStatus === 'offline' ? 'Local API Offline' : 'Checking Connection...')}
+          </div>
           <p>Secure access only</p>
           <form onSubmit={handleLogin}>
             <input 
@@ -271,7 +300,7 @@ const AdminDashboard = () => {
       <nav className="admin-nav">
         <div className="admin-nav-brand">
           <img src="/NextWave_logo1.web.jpeg" alt="NextWave" style={{ height: '30px' }} />
-          <div className="version-badge" style={{background: '#6366f1'}}>v6.1</div>
+          <div className="version-badge" style={{background: '#22c55e'}}>v7.0</div>
           <span>Admin Portal</span>
         </div>
         <div className="nav-actions">
