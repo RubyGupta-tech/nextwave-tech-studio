@@ -11,9 +11,10 @@ const Counter = ({ end, duration = 2000, suffix = "" }) => {
             ([entry]) => {
                 if (entry.isIntersecting) {
                     setIsVisible(true);
+                    observer.disconnect(); // stop observing once triggered
                 }
             },
-            { threshold: 0.1 }
+            { threshold: 0, rootMargin: "0px 0px -50px 0px" }
         );
 
         if (countRef.current) {
@@ -26,23 +27,27 @@ const Counter = ({ end, duration = 2000, suffix = "" }) => {
     useEffect(() => {
         if (!isVisible) return;
 
-        let startTimestamp = null;
-        const endValue = parseFloat(end);
-        
-        const step = (timestamp) => {
-            if (!startTimestamp) startTimestamp = timestamp;
-            const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-            const currentCount = progress * endValue;
+        // Small delay so the parent reveal animation finishes first
+        const delay = setTimeout(() => {
+            let startTimestamp = null;
+            const endValue = parseFloat(end);
             
-            // Format to 1 decimal if it's a float like 5.0
-            setCount(end.includes('.') ? currentCount.toFixed(1) : Math.floor(currentCount));
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                const currentCount = progress * endValue;
+                
+                setCount(end.includes('.') ? currentCount.toFixed(1) : Math.floor(currentCount));
+                
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            };
             
-            if (progress < 1) {
-                window.requestAnimationFrame(step);
-            }
-        };
-        
-        window.requestAnimationFrame(step);
+            window.requestAnimationFrame(step);
+        }, 400); // wait 400ms for parent reveal to complete
+
+        return () => clearTimeout(delay);
     }, [isVisible, end, duration]);
 
     return <span ref={countRef}>{count}{suffix}</span>;
