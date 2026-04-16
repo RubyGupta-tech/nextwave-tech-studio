@@ -352,7 +352,9 @@ nav a:hover::after {
 
 /* Mobile Realism Boost */
 @media (max-width: 768px) {
-    .hero-glow-trails { display: none !important; } /* Disabled to prevent hiding the background image */
+    /* Completely hide all hero particle layers on mobile to keep background image clean */
+    .hero-waves-container { display: none !important; }
+    .hero-glow-trails { display: none !important; }
     .hero-star-particle {
         width: 5px;
         height: 5px;
