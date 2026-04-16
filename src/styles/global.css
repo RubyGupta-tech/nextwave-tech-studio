@@ -4100,22 +4100,9 @@ body {
         justify-content: center;
     }
     
-    /* THE "DESKTOP COLOR" FIX FOR MOBILE */
+    /* THE "DESKTOP COLOR" FIX FOR MOBILE - hide blurry overlay that covers the background */
     .hero-asset-right {
-        position: absolute !important;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%) !important;
-        width: 140%;
-        height: auto;
-        opacity: 0.45;
-        filter: blur(30px);
-        z-index: 1;
-        pointer-events: none;
-    }
-    .hero-3d-asset {
-        max-width: 600px !important;
-        width: 100%;
+        display: none !important;
     }
 }
 
