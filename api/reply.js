@@ -23,13 +23,17 @@ export default async function handler(req, res) {
   try {
     // Send the reply email via Resend
     const { data, error: mailError } = await resend.emails.send({
-      from: 'NextWave Tech Studio <hello@dnextwave.com>',
+      from: 'NextWave (Ruby G - d.nextwavetech@gmail.com) <hello@dnextwave.com>',
       to: [toEmail],
       reply_to: 'd.nextwavetech@gmail.com',
       subject: `Re: Your Inquiry for ${service} - NextWave Tech Studio`,
       html: `
         <div style="font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; padding: 40px; color: #1e293b; max-width: 650px; margin: auto; border: 1px solid #e2e8f0; border-radius: 16px; background-color: #ffffff;">
           
+          <div style="margin-bottom: 25px; padding: 15px; background: #f0fdf4; border-radius: 8px; border: 1px solid #bbf7d0; font-size: 13px; color: #166534; text-align: center;">
+            <strong>💬 Studio Response:</strong> Please reply directly to this thread—your message will be delivered to <b>d.nextwavetech@gmail.com</b>.
+          </div>
+
           <div style="margin-bottom: 30px;">
             <img src="https://dnextwave.com/NextWave_logo1.web.jpeg" alt="NextWave Logo" style="width: 60px; height: auto; border-radius: 8px;" />
           </div>
