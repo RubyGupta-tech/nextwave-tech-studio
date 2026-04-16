@@ -276,7 +276,7 @@ nav a:hover::after {
     left: 0;
     width: 200%;
     height: 65%; /* Increased for better coverage */
-    opacity: 0.9;
+    opacity: 0.4; /* Reduced to show background image through waves */
 }
 
 .wave-1 {
