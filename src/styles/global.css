@@ -2711,9 +2711,17 @@ body {
         grid-template-columns: 1fr !important;
     }
 
-    /* Testimonials */
+    /* Testimonials - MOBILE LOCKDOWN */
     .testimonials-section {
-        padding: 60px 16px 80px;
+        padding: 60px 0 80px;
+        overflow: hidden !important; /* Override the visible setting to contain all content */
+    }
+
+    .testimonials-container {
+        padding: 0 16px;
+        max-width: 100vw !important;
+        overflow: hidden;
+        box-sizing: border-box;
     }
 
     .testimonials-heading {
@@ -2729,6 +2737,8 @@ body {
     .testimonials-display-wrapper {
         gap: 0;
         width: 100%;
+        max-width: 100%;
+        overflow: hidden;
     }
 
     .slider-nav-btn {
@@ -2736,8 +2746,8 @@ body {
     }
 
     .testimonials-viewport {
-        max-width: 100%;
         width: 100%;
+        max-width: 100%;
         overflow: hidden;
         padding: 10px 0;
     }
@@ -2749,8 +2759,10 @@ body {
 
     .testimonial-slide {
         min-width: 100%;
+        width: 100%;
         padding: 0;
         box-sizing: border-box;
+        overflow: hidden;
     }
 
     .testimonial-group {
@@ -2758,23 +2770,28 @@ body {
         flex-direction: column;
         width: 100%;
         gap: 20px;
-        padding: 0 8px;
+        padding: 0 16px;
         box-sizing: border-box;
     }
 
     .testimonial-card {
-        padding: 28px 20px;
+        padding: 24px 20px;
         border-radius: 16px;
         width: 100% !important;
         max-width: 100% !important;
-        flex: none;
+        min-width: 0 !important;
+        flex: 1 1 auto;
         box-sizing: border-box;
+        overflow: hidden;
     }
 
     .testimonial-text {
         font-size: 15px;
         line-height: 1.65;
         white-space: normal !important;
+        word-wrap: break-word !important;
+        overflow-wrap: break-word !important;
+        max-width: 100%;
     }
 
     .testimonial-avatar {
