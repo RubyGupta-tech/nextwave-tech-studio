@@ -1,4 +1,4 @@
-﻿:root {
+:root {
   --primary-color: #1ABC9C;
   --secondary-color: #00d2ff;
   --accent-color: #ff007f; /* Ultra Magenta */
@@ -5629,10 +5629,15 @@ body {
     .founder-grid,
     .mosaic-row,
     .services-grid-primary,
-    .portfolio-grid-new {
+    .portfolio-grid-new,
+    .services-detailed {
         display: flex !important;
         flex-direction: column !important;
         gap: 40px !important;
+    }
+
+    .service-block {
+        padding: 30px 20px !important;
     }
 
     .portfolio-grid-new {
