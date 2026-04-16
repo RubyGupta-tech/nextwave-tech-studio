@@ -474,6 +474,9 @@ const AdminDashboard = () => {
                       <span className={`source-tag ${lead.source || 'website_form'}`}>
                         {lead.source === 'chat_widget' ? '💬 Chat' : '📄 Form'}
                       </span>
+                      {lead.notes?.includes('--- REPLY SENT') && (
+                        <span className="replied-badge" title="Response has been sent via dashboard">✓ Sent</span>
+                      )}
                     </td>
                     <td><button type="button" className="view-btn">Consult / Edit</button></td>
                   </tr>
@@ -833,6 +836,18 @@ const AdminDashboard = () => {
           text-transform: uppercase;
           letter-spacing: 0.5px;
         }
+        .replied-badge {
+          display: inline-block;
+          margin-left: 8px;
+          background: #dcfce7;
+          color: #166534;
+          font-size: 10px;
+          font-weight: 900;
+          padding: 2px 6px;
+          border-radius: 4px;
+          text-transform: uppercase;
+          vertical-align: middle;
+        }
         .status-badge.new { background: #eff6ff; color: #3b82f6; }
         .status-badge.in-discussion { background: #fff7ed; color: #f97316; }
         .status-badge.proposal-sent { background: #f5f3ff; color: #8b5cf6; }
@@ -864,13 +879,20 @@ const AdminDashboard = () => {
           border-radius: 24px;
           overflow: hidden;
           box-shadow: 0 30px 60px rgba(0,0,0,0.2);
+          display: flex;
+          flex-direction: column;
+          max-height: 90vh; /* Keep modal within screen bounds */
         }
         .modal-header { background: #0B1F3A; color: #fff; padding: 30px; display: flex; justify-content: space-between; align-items: center; }
         .modal-id { font-size: 12px; opacity: 0.6; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
         .modal-header h3 { font-size: 24px; margin: 0; font-weight: 800; }
         .close-modal { background: rgba(255,255,255,0.1); border: none; color: #fff; font-size: 20px; cursor: pointer; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
         
-        .modal-body { padding: 40px; }
+        .modal-body { 
+          padding: 40px; 
+          overflow-y: auto; /* Enable scrolling for content */
+          flex: 1; 
+        }
         
         .modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px; }
         .crf-field { margin-bottom: 20px; }
