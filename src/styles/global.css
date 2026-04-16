@@ -1,4 +1,4 @@
-:root {
+﻿:root {
   --primary-color: #1ABC9C;
   --secondary-color: #00d2ff;
   --accent-color: #ff007f; /* Ultra Magenta */
@@ -255,7 +255,7 @@ nav a:hover::after {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    background-attachment: fixed; /* For a premium parallax effect */
+    background-attachment: scroll; /* For a premium parallax effect */
     position: relative;
     overflow: hidden;
 }
@@ -552,7 +552,7 @@ nav a:hover::after {
     line-height: 1.7;
 }
 
-/* Service Highlights (Pills) — Glassmorphism */
+/* Service Highlights (Pills) â€” Glassmorphism */
 .service-highlights {
     display: flex;
     gap: 16px;
@@ -1518,7 +1518,7 @@ nav a:hover::after {
     line-height: 1.7;
 }
 
-/* ===================== CONTACT — EDITORIAL SPLIT ===================== */
+/* ===================== CONTACT â€” EDITORIAL SPLIT ===================== */
 .contact-section {
     background-color: #060f1f;
 }
@@ -1535,7 +1535,7 @@ nav a:hover::after {
     }
 }
 
-/* ── LEFT PANEL ── */
+/* â”€â”€ LEFT PANEL â”€â”€ */
 .contact-left {
     background: linear-gradient(145deg, #0d2a4a 0%, #0a1628 100%);
     padding: 80px 60px;
@@ -1668,7 +1668,7 @@ nav a:hover::after {
     pointer-events: none;
 }
 
-/* ── RIGHT PANEL ── */
+/* â”€â”€ RIGHT PANEL â”€â”€ */
 .contact-right {
     background-color: #080e1d;
     padding: 80px 60px;
@@ -2220,7 +2220,7 @@ body {
     font-size: 16px;
 }
 
-/* ===================== FOOTER — LIGHT TEAL TO WHITE ===================== */
+/* ===================== FOOTER â€” LIGHT TEAL TO WHITE ===================== */
 .footer {
     background: linear-gradient(160deg, #1ABC9C 0%, #a5f3fc 30%, #e0f9fc 60%, #ffffff 100%);
     color: #1E293B;
@@ -2528,7 +2528,7 @@ body {
 
 /* ===================== MOBILE RESPONSIVE ===================== */
 
-/* Hamburger button — hidden on desktop */
+/* Hamburger button â€” hidden on desktop */
 .hamburger {
     display: none;
     flex-direction: column;
@@ -2562,7 +2562,7 @@ body {
     transform: translateY(-8px) rotate(-45deg);
 }
 
-/* ── TABLET: 768px and below ── */
+/* â”€â”€ TABLET: 768px and below â”€â”€ */
 @media (max-width: 768px) {
 
     /* Navbar */
@@ -2785,7 +2785,7 @@ body {
         gap: 14px;
     }
 
-    /* Contact — Editorial Split */
+    /* Contact â€” Editorial Split */
     .contact-split {
         grid-template-columns: 1fr !important;
     }
@@ -2852,7 +2852,7 @@ body {
     }
 }
 
-/* ── SMALL PHONE: 480px and below ── */
+/* â”€â”€ SMALL PHONE: 480px and below â”€â”€ */
 @media (max-width: 480px) {
 
     .hero h1 {
@@ -3348,7 +3348,7 @@ body {
         url('/images/portfolio_showcase_bg.png'); /* Unique showcase background */
     background-size: cover;
     background-position: center;
-    background-attachment: fixed; /* Parallax effect */
+    background-attachment: scroll; /* Parallax effect */
 }
 
 .portfolio-hero-title {
@@ -4316,7 +4316,7 @@ body {
     background-image: linear-gradient(rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.85)), url('../../images/about_hero_bg.png');
     background-size: cover;
     background-position: center;
-    background-attachment: fixed;
+    background-attachment: scroll;
     color: #FFFFFF;
     overflow: hidden;
 }
@@ -5273,7 +5273,7 @@ body {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    background-attachment: fixed;
+    background-attachment: scroll;
     color: #FFFFFF;
     margin-top: -20px;
     border-radius: 0 0 50px 50px;
@@ -5620,15 +5620,23 @@ body {
 @media (max-width: 992px) {
     .container {
         padding: 0 20px;
+        max-width: 100vw;
+        overflow-x: hidden;
     }
     
     .grid-2, 
     .about-story-grid, 
     .founder-grid,
-    .mosaic-row {
+    .mosaic-row,
+    .services-grid-primary,
+    .portfolio-grid-new {
         display: flex !important;
         flex-direction: column !important;
         gap: 40px !important;
+    }
+
+    .portfolio-grid-new {
+        grid-template-columns: 1fr !important;
     }
 
     .about-hero-content h1 {
