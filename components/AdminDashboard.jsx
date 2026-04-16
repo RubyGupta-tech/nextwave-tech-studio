@@ -17,7 +17,9 @@ const AdminDashboard = () => {
   const [toast, setToast] = useState({ message: '', type: 'success', visible: false });
   const [deletingLeadId, setDeletingLeadId] = useState(null);
   const [viewTab, setViewTab] = useState('active'); // 'active' or 'archived'
-  const [sysVersion] = useState('v6.1');
+  const [replyText, setReplyText] = useState('');
+  const [isSendingReply, setIsSendingReply] = useState(false);
+  const [sysVersion] = useState('v7.1');
   const [apiStatus, setApiStatus] = useState('checking'); // 'online', 'offline', 'checking'
   // Deployment Heartbeat: 2026-04-13T23:30:00Z
 
@@ -213,6 +215,50 @@ const AdminDashboard = () => {
     } catch (err) {
       console.error("Delete failed:", err);
       showToast('Delete failed', 'error');
+    }
+  };
+
+  const handleSendReply = async () => {
+    if (!replyText.trim()) {
+      showToast('Please type a message before sending!', 'error');
+      return;
+    }
+
+    setIsSendingReply(true);
+    try {
+      const resp = await fetch('/api/reply', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-nextwave-auth': password
+        },
+        body: JSON.stringify({
+          leadId: selectedLead.id,
+          toEmail: selectedLead.email,
+          toName: selectedLead.name,
+          replyText: replyText,
+          originalMessage: selectedLead.message || "Manual Entry",
+          service: selectedLead.service
+        })
+      });
+
+      const data = await resp.json();
+      if (resp.ok) {
+        showToast('Reply sent successfully!');
+        
+        // Append to notes automatically so there's a record
+        const newNotes = (selectedLead.notes || '') + `\n\n--- REPLY SENT ON ${new Date().toLocaleString()} ---\n${replyText}\n------------------------`;
+        handleUpdateLead(selectedLead.id, 'In Discussion', newNotes, selectedLead.phone, selectedLead.is_archived);
+        
+        setReplyText('');
+      } else {
+        showToast(data.error || 'Failed to send reply', 'error');
+      }
+    } catch (err) {
+      console.error("Reply failed:", err);
+      showToast('Network error!', 'error');
+    } finally {
+      setIsSendingReply(false);
     }
   };
 
@@ -526,8 +572,36 @@ const AdminDashboard = () => {
                 <div className="modal-message-section">
                   <h4>Customer Message:</h4>
                   <div className="message-text">
-                    {selectedLead.message}
+                    {selectedLead.message || "No message provided (Manual Entry)."}
                   </div>
+                </div>
+              </div>
+
+              {/* NEW DIRECT REPLY SECTION */}
+              <div className="crm-reply-section">
+                <header className="reply-header">
+                  <h4>🚀 Direct Studio Response</h4>
+                  <span className="reply-info">Sends as: hello@dnextwave.com</span>
+                </header>
+                <textarea 
+                  placeholder={`Hi ${selectedLead.name.split(' ')[0]}, thank you for reaching out regarding ${selectedLead.service}...`}
+                  value={replyText}
+                  onChange={(e) => setReplyText(e.target.value)}
+                  disabled={isSendingReply}
+                  style={{ minHeight: '140px', background: '#f8fafc', border: '1px solid #1ABC9C' }}
+                ></textarea>
+                <div className="reply-actions">
+                  <p style={{fontSize: '11px', color: '#64748b', margin: 0}}>
+                    This will send a professional HTML email directly to <strong>{selectedLead.email}</strong>.
+                  </p>
+                  <button 
+                    type="button" 
+                    onClick={handleSendReply} 
+                    className="reply-trigger-btn"
+                    disabled={isSendingReply || !selectedLead.email}
+                  >
+                    {isSendingReply ? 'Sending Response...' : 'Send Reply ➔'}
+                  </button>
                 </div>
               </div>
 
@@ -849,6 +923,45 @@ const AdminDashboard = () => {
         .archive-btn:hover { background: #fef08a; }
         .archive-btn.restore { background: #dcfce7; color: #166534; }
         .archive-btn.restore:hover { background: #bbf7d0; }
+
+        .crm-reply-section {
+          margin-top: 30px;
+          padding: 30px;
+          background: #f1f5f9;
+          border-radius: 16px;
+          border-left: 8px solid #1ABC9C;
+        }
+        .reply-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .reply-header h4 { margin: 0; color: #0B1F3A; font-weight: 800; }
+        .reply-info { font-size: 11px; font-weight: 700; color: #64748b; background: #fff; padding: 4px 10px; border-radius: 20px; }
+        .crm-reply-section textarea {
+          width: 100%;
+          min-height: 120px;
+          padding: 20px;
+          border-radius: 12px;
+          border: 1px solid #cbd5e1;
+          font-family: inherit;
+          font-size: 14px;
+          line-height: 1.6;
+          background: #fff;
+          margin-bottom: 15px;
+          box-sizing: border-box;
+        }
+        .reply-actions { display: flex; justify-content: space-between; align-items: center; gap: 20px; }
+        .reply-trigger-btn {
+          background: #1ABC9C;
+          color: #fff;
+          border: none;
+          padding: 12px 25px;
+          border-radius: 10px;
+          font-weight: 800;
+          cursor: pointer;
+          transition: 0.3s;
+          box-shadow: 0 4px 12px rgba(26,188,156,0.3);
+          white-space: nowrap;
+        }
+        .reply-trigger-btn:hover { background: #16a085; transform: translateY(-2px); }
+        .reply-trigger-btn:disabled { background: #94a3b8; cursor: not-allowed; transform: none; box-shadow: none; }
 
         .secondary-actions { display: flex; gap: 10px; align-items: center; }
 

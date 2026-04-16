@@ -1,14 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import "../src/styles/global.css";
 
-const testimonialsData = [
-    {
-        quote: "I strongly recommend Ruby as your go-to person to help with website building. She worked with me on creating my website. I found her to be very professional, time sensitive (which is huge for me), flexible in accommodating my asks and knowledgeable to share her thoughts with me. Thank you Ruby and I look forward to working with you again as I continue to upgrade.",
-        name: "Fiona G B",
-        title: "Ex-Accenture | Cross Cultural Expertise",
-        avatar: "FG",
-    },
-];
+import testimonialsData from "../src/data/testimonials.json";
 
 const Testimonials = () => {
     const [activeIndex, setActiveIndex] = useState(0);
