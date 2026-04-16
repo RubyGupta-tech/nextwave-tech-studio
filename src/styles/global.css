@@ -5618,19 +5618,29 @@ body {
 }
 
 @media (max-width: 992px) {
-    .founder-grid {
-        flex-direction: column;
-        text-align: center;
-        gap: 40px;
+    .container {
+        padding: 0 20px;
     }
     
-    .founder-image-wrapper {
-        flex: 0 0 auto;
+    .grid-2, 
+    .about-story-grid, 
+    .founder-grid,
+    .mosaic-row {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 40px !important;
     }
-    
+
+    .about-hero-content h1 {
+        font-size: 36px !important;
+    }
+
     .founder-image-circle {
-        width: 250px;
-        height: 250px;
-        margin: 0 auto;
+        width: 280px !important;
+        height: 280px !important;
+    }
+
+    .hamburger {
+        right: 20px !important;
     }
 }
