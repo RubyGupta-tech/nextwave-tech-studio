@@ -19,7 +19,9 @@ const AdminDashboard = () => {
   const [viewTab, setViewTab] = useState('active'); // 'active' or 'archived'
   const [replyText, setReplyText] = useState('');
   const [isSendingReply, setIsSendingReply] = useState(false);
-  const [sysVersion] = useState('v7.1');
+  const [messages, setMessages] = useState([]);
+  const [isLoadingMessages, setIsLoadingMessages] = useState(false);
+  const [sysVersion] = useState('v8.2');
   const [apiStatus, setApiStatus] = useState('checking'); // 'online', 'offline', 'checking'
   // Deployment Heartbeat: 2026-04-13T23:30:00Z
 
@@ -245,12 +247,8 @@ const AdminDashboard = () => {
       const data = await resp.json();
       if (resp.ok) {
         showToast('Reply sent successfully!');
-        
-        // Append to notes automatically so there's a record
-        const newNotes = (selectedLead.notes || '') + `\n\n--- REPLY SENT ON ${new Date().toLocaleString()} ---\n${replyText}\n------------------------`;
-        handleUpdateLead(selectedLead.id, 'In Discussion', newNotes, selectedLead.phone, selectedLead.is_archived);
-        
         setReplyText('');
+        fetchMessages(selectedLead.id); // Refresh chat history
       } else {
         showToast(data.error || 'Failed to send reply', 'error');
       }
@@ -259,6 +257,23 @@ const AdminDashboard = () => {
       showToast('Network error!', 'error');
     } finally {
       setIsSendingReply(false);
+    }
+  };
+
+  const fetchMessages = async (leadId) => {
+    setIsLoadingMessages(true);
+    try {
+      const resp = await fetch(`/api/get-messages?leadId=${leadId}`, {
+        headers: { 'x-nextwave-auth': password }
+      });
+      const data = await resp.json();
+      if (data.success) {
+        setMessages(data.messages);
+      }
+    } catch (err) {
+      console.error("Fetch messages failed:", err);
+    } finally {
+      setIsLoadingMessages(false);
     }
   };
 
@@ -461,7 +476,10 @@ const AdminDashboard = () => {
               </thead>
               <tbody>
                 {leads.map(lead => (
-                  <tr key={lead.id} onClick={() => setSelectedLead(lead)} className="lead-row">
+                  <tr key={lead.id} onClick={() => {
+                    setSelectedLead(lead);
+                    fetchMessages(lead.id);
+                  }} className="lead-row">
                     <td>{new Date(lead.created_at).toLocaleDateString()}</td>
                     <td><strong>{lead.name}</strong><div style={{fontSize: '11px', color: '#64748b'}}>{lead.phone}</div></td>
                     <td>{lead.email}</td>
@@ -567,16 +585,39 @@ const AdminDashboard = () => {
                       <option>In Discussion</option>
                       <option>Proposal Sent</option>
                       <option>Converted</option>
+                      <option>New Reply</option>
                       <option>Lost / Closed</option>
                     </select>
                   </div>
                 </div>
 
                 <div className="modal-message-section">
-                  <h4>Customer Message:</h4>
+                  <h4>Initial Inquiry:</h4>
                   <div className="message-text">
                     {selectedLead.message || "No message provided (Manual Entry)."}
                   </div>
+                </div>
+              </div>
+
+              {/* CONVERSATION HISTORY (CHAT UI) */}
+              <div className="conversation-history-container">
+                <header className="history-header">
+                  <h4>💬 Conversation History</h4>
+                  {isLoadingMessages && <span className="syncing-indicator">Syncing...</span>}
+                </header>
+                <div className="chat-bubbles-wrap">
+                  {messages.length === 0 ? (
+                    <div className="empty-chat">No replies sent yet. Send a response below to start the thread.</div>
+                  ) : (
+                    messages.map((msg) => (
+                      <div key={msg.id} className={`chat-bubble ${msg.sender}`}>
+                        <div className="bubble-content">{msg.content}</div>
+                        <div className="bubble-meta">
+                          {msg.sender === 'admin' ? 'NextWave Studio' : selectedLead.name} • {new Date(msg.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                        </div>
+                      </div>
+                    ))
+                  )}
                 </div>
               </div>
 
@@ -853,6 +894,7 @@ const AdminDashboard = () => {
         .status-badge.proposal-sent { background: #f5f3ff; color: #8b5cf6; }
         .status-badge.converted { background: #f0fdf4; color: #22c55e; }
         .status-badge.lost-/-closed { background: #fef2f2; color: #ef4444; }
+        .status-badge.new-reply { background: #fee2e2; color: #dc2626; border: 1px solid #fecaca; }
 
         .service-tag { background: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #475569; font-weight: 600; }
         .source-tag { font-size: 12px; font-weight: bold; }
@@ -946,6 +988,23 @@ const AdminDashboard = () => {
         .archive-btn.restore { background: #dcfce7; color: #166534; }
         .archive-btn.restore:hover { background: #bbf7d0; }
 
+        /* Conversation Thread Styles */
+        .conversation-history-container { margin-top: 30px; border: 1px solid #e2e8f0; border-radius: 16px; overflow: hidden; background: #fff; }
+        .history-header { background: #f8fafc; padding: 12px 20px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; }
+        .history-header h4 { margin: 0; font-size: 13px; color: #64748b; text-transform: uppercase; letter-spacing: 1px; }
+        .syncing-indicator { font-size: 11px; color: #1ABC9C; font-weight: bold; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
+        
+        .chat-bubbles-wrap { padding: 20px; max-height: 400px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; background: #fcfdfe; }
+        .empty-chat { text-align: center; color: #94a3b8; font-size: 13px; padding: 20px; font-style: italic; }
+        
+        .chat-bubble { max-width: 80%; padding: 12px 16px; border-radius: 15px; font-size: 14px; line-height: 1.5; position: relative; }
+        .chat-bubble.admin { align-self: flex-end; background: #0B1F3A; color: #fff; border-bottom-right-radius: 4px; }
+        .chat-bubble.client { align-self: flex-start; background: #fff; color: #1e293b; border-bottom-left-radius: 4px; border: 1px solid #e2e8f0; }
+        
+        .bubble-meta { font-size: 10px; margin-top: 6px; opacity: 0.6; }
+        .chat-bubble.admin .bubble-meta { text-align: right; }
+        
         .crm-reply-section {
           margin-top: 30px;
           padding: 30px;

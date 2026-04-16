@@ -77,6 +77,13 @@ ${replyText}
       return res.status(400).json({ error: mailError.message });
     }
 
+    // 3. Save to database conversation history
+    const sql = neon(process.env.DATABASE_URL);
+    await sql`
+      INSERT INTO messages (lead_id, sender, content, message_id, subject)
+      VALUES (${parseInt(leadId)}, 'admin', ${replyText}, ${data.id}, ${`Re: Your Inquiry for ${service}`})
+    `;
+
     return res.status(200).json({ 
       success: true, 
       message: 'Reply sent successfully!',
