@@ -377,7 +377,7 @@ const AdminDashboard = () => {
             />
             {error && <div className="error-text">{error}</div>}
             <button type="submit" disabled={loading}>
-              {loading ? 'Verifying Connection...' : 'Login ➔'}
+              {loading ? 'Verifying Connection...' : 'Login ->'}
             </button>
             <div style={{ marginTop: '15px', fontSize: '10px', color: 'rgba(255,255,255,0.3)' }}>
               System Version: v6.1 (Resilient Sync Active)
@@ -580,7 +580,7 @@ const AdminDashboard = () => {
               </div>
               <div className="modal-footer-actions">
                 <button type="button" onClick={handleManualAddLead} className="reply-btn" disabled={isUpdating}>
-                  {isUpdating ? 'Saving...' : 'Save New Lead ➔'}
+                  {isUpdating ? 'Saving...' : 'Save New Lead ->'}
                 </button>
               </div>
             </div>
@@ -690,7 +690,7 @@ const AdminDashboard = () => {
                     className="reply-trigger-btn"
                     disabled={isSendingReply || !selectedLead.email}
                   >
-                    {isSendingReply ? 'Sending Response...' : 'Send Reply ➔'}
+                    {isSendingReply ? 'Sending Response...' : 'Send Reply ->'}
                   </button>
                 </div>
               </div>
