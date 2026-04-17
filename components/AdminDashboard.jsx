@@ -246,11 +246,14 @@ const AdminDashboard = () => {
 
       const data = await resp.json();
       if (resp.ok) {
-        showToast('Reply sent successfully!');
+        showToast('Reply sent and logged successfully!');
         setReplyText('');
         fetchMessages(selectedLead.id); // Refresh chat history
       } else {
-        showToast(data.error || 'Failed to send reply', 'error');
+        // Show specific server error message
+        const errorMsg = data.error || data.details || 'Failed to send reply';
+        showToast(errorMsg, 'error');
+        console.error("Server error details:", data);
       }
     } catch (err) {
       console.error("Reply failed:", err);

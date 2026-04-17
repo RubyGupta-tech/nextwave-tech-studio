@@ -11,17 +11,40 @@ export default async function handler(req, res) {
   const authHeader = req.headers['x-nextwave-auth']?.trim();
   const correctPassword = process.env.ADMIN_PASSWORD?.trim();
 
-  // 1. Authorization Check
+  // 1. Authorization & Environment Check
   if (!authHeader || authHeader !== correctPassword) {
-    return res.status(401).json({ error: 'Unauthorized' });
+    return res.status(401).json({ error: 'Unauthorized: Admin password mismatch.' });
+  }
+
+  if (!process.env.RESEND_API_KEY) {
+    return res.status(500).json({ error: 'Server Error: RESEND_API_KEY is missing in Vercel settings.' });
+  }
+
+  if (!process.env.DATABASE_URL) {
+    return res.status(500).json({ error: 'Server Error: DATABASE_URL is missing.' });
   }
 
   if (!replyText || !toEmail) {
-    return res.status(400).json({ error: 'Missing required fields' });
+    return res.status(400).json({ error: 'Missing required fields (email or message content).' });
   }
 
   try {
-    // Send the reply email via Resend
+    const sql = neon(process.env.DATABASE_URL);
+
+    // 2. Ensure table exists (Self-healing)
+    await sql`
+      CREATE TABLE IF NOT EXISTS messages (
+        id SERIAL PRIMARY KEY,
+        lead_id INTEGER REFERENCES leads(id) ON DELETE CASCADE,
+        sender VARCHAR(50) NOT NULL,
+        content TEXT NOT NULL,
+        message_id VARCHAR(255) UNIQUE,
+        subject VARCHAR(255),
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+      );
+    `;
+
+    // 3. Send the reply email via Resend
     const { data, error: mailError } = await resend.emails.send({
       from: 'NextWave (Ruby G - d.nextwavetech@gmail.com) <hello@dnextwave.com>',
       to: [toEmail],
@@ -64,21 +87,16 @@ ${replyText}
               </tr>
             </table>
           </div>
-
-          <div style="margin-top: 30px; font-size: 11px; color: #cbd5e1; text-align: center;">
-            This email was sent from the NextWave Studio response system.
-          </div>
         </div>
       `,
     });
 
     if (mailError) {
-      console.error('Resend Reply Error:', mailError);
-      return res.status(400).json({ error: mailError.message });
+      console.error('Resend API Error:', mailError);
+      return res.status(400).json({ error: `Resend Error: ${mailError.message}` });
     }
 
-    // 3. Save to database conversation history
-    const sql = neon(process.env.DATABASE_URL);
+    // 4. Save to database conversation history
     await sql`
       INSERT INTO messages (lead_id, sender, content, message_id, subject)
       VALUES (${parseInt(leadId)}, 'admin', ${replyText}, ${data.id}, ${`Re: Your Inquiry for ${service}`})
@@ -86,11 +104,12 @@ ${replyText}
 
     return res.status(200).json({ 
       success: true, 
-      message: 'Reply sent successfully!',
+      message: 'Reply sent and logged successfully!',
       id: data.id 
     });
   } catch (error) {
-    console.error('Reply API Error:', error);
-    return res.status(500).json({ error: 'Internal server error', details: error.message });
+    console.error('Critical Reply Error:', error);
+    return res.status(500).json({ error: 'Critical Server Error', details: error.message });
   }
+}
 }
