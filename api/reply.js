@@ -46,7 +46,7 @@ export default async function handler(req, res) {
 
     // 3. Send the reply email via Resend
     const { data, error: mailError } = await resend.emails.send({
-      from: 'NextWave (Ruby G - d.nextwavetech@gmail.com) <hello@dnextwave.com>',
+      from: 'NextWave Tech Studio <hello@dnextwave.com>',
       to: [toEmail],
       reply_to: 'd.nextwavetech@gmail.com',
       subject: `Re: Your Inquiry for ${service} - NextWave Tech Studio`,
