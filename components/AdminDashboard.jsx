@@ -65,10 +65,19 @@ const AdminDashboard = () => {
       if (response.ok) {
         setLeads(data.leads);
         setIsLoggedIn(true);
-        sessionStorage.setItem('admin_key', password);
+        sessionStorage.setItem('admin_key', password.trim());
         showToast('Connected!');
       } else {
-        const errorMsg = data.details ? `DB Error: ${data.details}` : (data.error || 'Invalid credentials');
+        let errorMsg = 'Invalid credentials';
+        
+        if (response.status === 401) {
+          errorMsg = '❌ Incorrect Admin Password. Please check your Vercel settings.';
+        } else if (data.details) {
+          errorMsg = `DB Error: ${data.details}`;
+        } else if (data.error) {
+          errorMsg = data.error;
+        }
+
         setError(errorMsg);
         showToast(errorMsg, 'error');
 
