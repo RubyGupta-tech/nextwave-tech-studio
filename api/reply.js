@@ -1,4 +1,5 @@
 import { Resend } from 'resend';
+import { neon } from '@neondatabase/serverless';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -111,5 +112,4 @@ ${replyText}
     console.error('Critical Reply Error:', error);
     return res.status(500).json({ error: 'Critical Server Error', details: error.message });
   }
-}
 }
