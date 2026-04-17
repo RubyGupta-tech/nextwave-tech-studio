@@ -308,6 +308,8 @@ const AdminDashboard = () => {
       setIsSendingReply(false);
     }
   };
+  
+  const exportToCSV = () => {
     if (leads.length === 0) return;
     const headers = ["ID", "Date", "Name", "Email", "Service", "Source", "Status", "Message", "Notes"];
     const rows = leads.map(l => [
