@@ -23,6 +23,7 @@ const AdminDashboard = () => {
   const [isLoadingMessages, setIsLoadingMessages] = useState(false);
   const [sysVersion] = useState('v8.2');
   const [apiStatus, setApiStatus] = useState('checking'); // 'online', 'offline', 'checking'
+  const [showPassword, setShowPassword] = useState(false);
   // Deployment Heartbeat: 2026-04-13T23:30:00Z
 
   const showToast = (message, type = 'success') => {
@@ -55,7 +56,7 @@ const AdminDashboard = () => {
       // Use the original, fully-deployed API endpoint
       const response = await fetch(`/api/get-leads?${params.toString()}`, {
         headers: {
-          'x-nextwave-auth': password
+          'x-nextwave-auth': password.trim()
         }
       });
 
@@ -366,15 +367,25 @@ const AdminDashboard = () => {
           </div>
           <p>Secure access only</p>
           <form onSubmit={handleLogin}>
-            <input
-              type="password"
-              id="admin-password"
-              name="admin-password"
-              placeholder="Enter Admin Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
+            <div style={{ position: 'relative' }}>
+              <input 
+                type={showPassword ? "text" : "password"} 
+                id="admin-password"
+                name="admin-password"
+                placeholder="Enter Admin Password" 
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required 
+                style={{ paddingRight: '40px' }}
+              />
+              <button 
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: 'rgba(255,255,255,0.4)', cursor: 'pointer', fontSize: '14px', width: 'auto', padding: '5px' }}
+              >
+                {showPassword ? '👁️‍🗨️' : '👁️'}
+              </button>
+            </div>
             {error && <div className="error-text">{error}</div>}
             <button type="submit" disabled={loading}>
               {loading ? 'Verifying Connection...' : 'Login ->'}
