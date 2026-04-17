@@ -379,6 +379,20 @@ const AdminDashboard = () => {
             <button type="submit" disabled={loading}>
               {loading ? 'Verifying Connection...' : 'Login ->'}
             </button>
+            <div style={{ marginTop: '15px', textAlign: 'center' }}>
+              <button 
+                type="button" 
+                onClick={() => {
+                  sessionStorage.removeItem('admin_key');
+                  setPassword('');
+                  setError(null);
+                  showToast('Session cleared. Please re-enter password.', 'success');
+                }}
+                style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.4)', fontSize: '11px', cursor: 'pointer', textDecoration: 'underline' }}
+              >
+                Reset Stale Session
+              </button>
+            </div>
             <div style={{ marginTop: '15px', fontSize: '10px', color: 'rgba(255,255,255,0.3)' }}>
               System Version: v6.1 (Resilient Sync Active)
             </div>
