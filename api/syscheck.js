@@ -57,7 +57,7 @@ export default async function handler(req, res) {
         </p>
 
         <a href="/admin" style="display: inline-block; margin-top: 20px; padding: 12px 24px; background: #0B1F3A; color: #fff; text-decoration: none; border-radius: 8px; font-weight: 600;">
-          Open Dashboard ➔
+          Open Dashboard ->
         </a>
       </div>
     `);

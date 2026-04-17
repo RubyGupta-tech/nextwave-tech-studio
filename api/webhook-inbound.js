@@ -52,7 +52,7 @@ export default async function handler(req, res) {
             <p><strong>Message:</strong></p>
             <div style="background: #f8fafc; padding: 15px; border-radius: 8px;">${text}</div>
             <br/>
-            <a href="https://dnextwave.com/admin" style="display: inline-block; padding: 10px 20px; background: #0B1F3A; color: #fff; text-decoration: none; border-radius: 6px;">Open Dashboard ➔</a>
+            <a href="https://dnextwave.com/admin" style="display: inline-block; padding: 10px 20px; background: #0B1F3A; color: #fff; text-decoration: none; border-radius: 6px;">Open Dashboard -></a>
           </div>
         `,
       });
