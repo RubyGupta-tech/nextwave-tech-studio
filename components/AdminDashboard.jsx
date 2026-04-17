@@ -235,7 +235,7 @@ const AdminDashboard = () => {
 
     setIsSendingReply(true);
     try {
-      const resp = await fetch('/api/reply', {
+      const resp = await fetch('/api/crm-reply', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
