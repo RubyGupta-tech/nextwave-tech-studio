@@ -1,2 +1,0 @@
-Heartbeat Update: 2026-04-17T01:30:30Z
-Fix: Restored vercel.json API rewrites.
