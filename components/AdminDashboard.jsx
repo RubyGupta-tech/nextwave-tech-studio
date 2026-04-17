@@ -277,7 +277,27 @@ const AdminDashboard = () => {
     }
   };
 
-  const exportToCSV = () => {
+  const handleLogClientMessage = async (content) => {
+    if (!content.trim()) return;
+    setIsSendingReply(true);
+    try {
+      const resp = await fetch('/api/log-client-reply', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-nextwave-auth': password
+        },
+        body: JSON.stringify({ leadId: selectedLead.id, content })
+      });
+      if (resp.ok) {
+        fetchMessages(selectedLead.id);
+      }
+    } catch (err) {
+      console.error("Manual log failed:", err);
+    } finally {
+      setIsSendingReply(false);
+    }
+  };
     if (leads.length === 0) return;
     const headers = ["ID", "Date", "Name", "Email", "Service", "Source", "Status", "Message", "Notes"];
     const rows = leads.map(l => [
@@ -607,16 +627,30 @@ const AdminDashboard = () => {
                 </header>
                 <div className="chat-bubbles-wrap">
                   {messages.length === 0 ? (
-                    <div className="empty-chat">No replies sent yet. Send a response below to start the thread.</div>
+                    <div className="empty-chat">
+                      <p>No replies sent yet.</p>
+                      <button className="manual-log-btn" onClick={() => {
+                        const msg = prompt("Paste the client's reply here to keep your history updated:");
+                        if (msg) handleLogClientMessage(msg);
+                      }}>+ Log Client Message Manually</button>
+                    </div>
                   ) : (
-                    messages.map((msg) => (
-                      <div key={msg.id} className={`chat-bubble ${msg.sender}`}>
-                        <div className="bubble-content">{msg.content}</div>
-                        <div className="bubble-meta">
-                          {msg.sender === 'admin' ? 'NextWave Studio' : selectedLead.name} • {new Date(msg.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                    <>
+                      {messages.map((msg) => (
+                        <div key={msg.id} className={`chat-bubble ${msg.sender}`}>
+                          <div className="bubble-content">{msg.content}</div>
+                          <div className="bubble-meta">
+                            {msg.sender === 'admin' ? 'NextWave Studio' : selectedLead.name} • {new Date(msg.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                          </div>
                         </div>
+                      ))}
+                      <div style={{display: 'flex', justifyContent: 'center', marginTop: '10px'}}>
+                        <button className="manual-log-btn text" onClick={() => {
+                          const msg = prompt("Paste the client's reply here:");
+                          if (msg) handleLogClientMessage(msg);
+                        }}>+ Log a Client Reply</button>
                       </div>
-                    ))
+                    </>
                   )}
                 </div>
               </div>
@@ -1004,6 +1038,20 @@ const AdminDashboard = () => {
         
         .bubble-meta { font-size: 10px; margin-top: 6px; opacity: 0.6; }
         .chat-bubble.admin .bubble-meta { text-align: right; }
+        
+        .manual-log-btn { 
+          background: #f1f5f9; 
+          border: 1px dashed #cbd5e1; 
+          color: #64748b; 
+          padding: 8px 12px; 
+          border-radius: 8px; 
+          font-size: 12px; 
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+        .manual-log-btn:hover { background: #e2e8f0; color: #1e293b; border-style: solid; }
+        .manual-log-btn.text { background: transparent; border: none; font-weight: bold; color: #1ABC9C; }
+        .manual-log-btn.text:hover { text-decoration: underline; background: transparent; }
         
         .crm-reply-section {
           margin-top: 30px;
