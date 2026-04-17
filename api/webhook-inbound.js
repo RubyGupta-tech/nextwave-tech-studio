@@ -1,20 +1,19 @@
-import { neon } from '@neondatabase/serverless';
 import { Resend } from 'resend';
+import { neon } from '@neondatabase/serverless';
 
 export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
-
-  const payload = req.body;
-  if (payload.type !== 'email.received' || !payload.data) {
-    return res.status(200).json({ status: 'ignored', message: 'Not an inbound email' });
-  }
-
-  const { from, text, subject, message_id } = payload.data;
-  const resend = new Resend(process.env.RESEND_API_KEY || '');
-
   try {
+    if (req.method !== 'POST') {
+      return res.status(405).json({ error: 'Method not allowed' });
+    }
+
+    const payload = req.body;
+    if (payload.type !== 'email.received' || !payload.data) {
+      return res.status(200).json({ status: 'ignored', message: 'Not an inbound email' });
+    }
+
+    const { from, text, subject, message_id } = payload.data;
+    const resend = new Resend(process.env.RESEND_API_KEY || '');
     const sql = neon(process.env.DATABASE_URL || '');
 
     // 1. Identify the lead
@@ -59,9 +58,9 @@ export default async function handler(req, res) {
       });
     }
 
-    return res.status(200).json({ success: true });
+    return res.status(200).json({ success: true, message: 'Processed' });
   } catch (error) {
-    console.error('Webhook Error:', error);
+    console.error('Webhook Sync Error:', error.message);
     return res.status(500).json({ success: false, error: error.message });
   }
 }
