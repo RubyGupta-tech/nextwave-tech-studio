@@ -44,11 +44,11 @@ export default async function handler(req, res) {
           <div style="margin-bottom: 25px; padding: 15px; background: #f0fdf4; border-radius: 8px; border: 1px solid #bbf7d0; font-size: 13px; color: #166534; text-align: center;">
             <strong>💬 Studio Response:</strong> Please reply directly to this thread—your message will be delivered to <b>d.nextwavetech@gmail.com</b>.
           </div>
-          <p>Hi ${toName},</p>
+          <p>Hi ${toName || 'there'},</p>
           <div style="white-space: pre-wrap; line-height: 1.6; margin-bottom: 30px;">${replyText}</div>
           <div style="background: #f8fafc; padding: 20px; border-radius: 8px; border-left: 4px solid #1ABC9C;">
             <p style="font-size: 11px; color: #64748B; margin: 0 0 8px 0;">ORIGINAL MESSAGE:</p>
-            <p style="font-style: italic; margin: 0; font-size: 14px;">"${originalMessage}"</p>
+            <p style="font-style: italic; margin: 0; font-size: 14px;">"${originalMessage || 'N/A'}"</p>
           </div>
         </div>
       `,

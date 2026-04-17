@@ -70,7 +70,7 @@ const AdminDashboard = () => {
         const errorMsg = data.details ? `DB Error: ${data.details}` : (data.error || 'Invalid credentials');
         setError(errorMsg);
         showToast(errorMsg, 'error');
-        
+
         // 401 Safety: Clear stored password if it's invalid
         if (response.status === 401) {
           sessionStorage.removeItem('admin_key');
@@ -135,7 +135,7 @@ const AdminDashboard = () => {
 
         // Otherwise find and update the lead in the main list
         setLeads(prev => prev.map(l => l.id === id ? { ...l, status, notes, phone, is_archived } : l));
-        
+
         // Force update the selectedLead state to ensure modal reflects changes
         if (selectedLead && selectedLead.id === id) {
           setSelectedLead(prev => ({ ...prev, status, notes, phone, is_archived }));
@@ -152,7 +152,7 @@ const AdminDashboard = () => {
 
   const handleManualAddLead = async (e) => {
     if (e) e.preventDefault();
-    
+
     // 1. Better Validation
     if (!newLead.name || !newLead.name.trim()) {
       showToast("Client Name is required!", "error");
@@ -308,7 +308,7 @@ const AdminDashboard = () => {
       setIsSendingReply(false);
     }
   };
-  
+
   const exportToCSV = () => {
     if (leads.length === 0) return;
     const headers = ["ID", "Date", "Name", "Email", "Service", "Source", "Status", "Message", "Notes"];
@@ -366,14 +366,14 @@ const AdminDashboard = () => {
           </div>
           <p>Secure access only</p>
           <form onSubmit={handleLogin}>
-            <input 
-              type="password" 
+            <input
+              type="password"
               id="admin-password"
               name="admin-password"
-              placeholder="Enter Admin Password" 
+              placeholder="Enter Admin Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              required 
+              required
             />
             {error && <div className="error-text">{error}</div>}
             <button type="submit" disabled={loading}>
@@ -393,12 +393,12 @@ const AdminDashboard = () => {
       <nav className="admin-nav">
         <div className="admin-nav-brand">
           <img src="/NextWave_logo1.web.jpeg" alt="NextWave" style={{ height: '30px' }} />
-          <div className="version-badge" style={{background: '#22c55e'}}>v7.0</div>
+          <div className="version-badge" style={{ background: '#22c55e' }}>v7.0</div>
           <span>Admin Portal</span>
         </div>
         <div className="nav-actions">
           <div className="api-status">
-            <span className="status-dot"></span> 
+            <span className="status-dot"></span>
             {viewTab === 'active' ? 'Viewing Inbox' : 'Viewing Archives'}
           </div>
           <button type="button" onClick={() => {
@@ -429,16 +429,16 @@ const AdminDashboard = () => {
               <div className="ans-item"><span className="ans-label">New:</span> <span className="ans-val">{leads.filter(l => l.status === 'New').length}</span></div>
             </div>
           </div>
-          
+
           <div className="crm-master-controls">
-            <form className="search-box" onSubmit={(e) => { 
-                e.preventDefault(); 
-                e.stopPropagation(); 
-                handleLogin(); 
-              }}>
-              <input 
-                type="text" 
-                placeholder="Search name or email..." 
+            <form className="search-box" onSubmit={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              handleLogin();
+            }}>
+              <input
+                type="text"
+                placeholder="Search name or email..."
                 value={searchQuery}
                 onChange={(e) => {
                   const val = e.target.value;
@@ -455,7 +455,7 @@ const AdminDashboard = () => {
               {searchQuery && <button type="button" className="clear-search" onClick={() => { setSearchQuery(''); sessionStorage.removeItem('last_search'); }}>×</button>}
               <button type="submit" className="search-trigger-btn">🔍</button>
             </form>
-            
+
             <div className="filter-group">
               <select value={serviceFilter} onChange={(e) => setServiceFilter(e.target.value)} className="service-filter-select">
                 <option value="all">All Services</option>
@@ -491,7 +491,7 @@ const AdminDashboard = () => {
         ) : leads.length === 0 ? (
           <div className="no-leads">
             <p>{searchQuery ? `No results found for "${searchQuery}"` : "No inquiries found in the database yet."}</p>
-            {searchQuery && <button onClick={() => {setSearchQuery(''); setServiceFilter('all'); setTimeFilter('all');}} className="reset-filters-btn">Clear all filters</button>}
+            {searchQuery && <button onClick={() => { setSearchQuery(''); setServiceFilter('all'); setTimeFilter('all'); }} className="reset-filters-btn">Clear all filters</button>}
           </div>
         ) : (
           <div className="leads-table-container">
@@ -513,7 +513,7 @@ const AdminDashboard = () => {
                     fetchMessages(lead.id);
                   }} className="lead-row">
                     <td>{new Date(lead.created_at).toLocaleDateString()}</td>
-                    <td><strong>{lead.name}</strong><div style={{fontSize: '11px', color: '#64748b'}}>{lead.phone}</div></td>
+                    <td><strong>{lead.name}</strong><div style={{ fontSize: '11px', color: '#64748b' }}>{lead.phone}</div></td>
                     <td>{lead.email}</td>
                     <td>
                       <span className={`status-badge ${lead.status?.toLowerCase().replace(' ', '-') || 'new'}`}>
@@ -549,19 +549,19 @@ const AdminDashboard = () => {
               <div className="modal-grid">
                 <div className="crf-field">
                   <label>Client Name</label>
-                  <input type="text" placeholder="John Doe" value={newLead.name} onChange={e => setNewLead({...newLead, name: e.target.value})} />
+                  <input type="text" placeholder="John Doe" value={newLead.name} onChange={e => setNewLead({ ...newLead, name: e.target.value })} />
                 </div>
                 <div className="crf-field">
                   <label>Email Address</label>
-                  <input type="email" placeholder="john@example.com" value={newLead.email} onChange={e => setNewLead({...newLead, email: e.target.value})} />
+                  <input type="email" placeholder="john@example.com" value={newLead.email} onChange={e => setNewLead({ ...newLead, email: e.target.value })} />
                 </div>
                 <div className="crf-field">
                   <label>Phone Number</label>
-                  <input type="text" placeholder="925-XXX-XXXX" value={newLead.phone} onChange={e => setNewLead({...newLead, phone: e.target.value})} />
+                  <input type="text" placeholder="925-XXX-XXXX" value={newLead.phone} onChange={e => setNewLead({ ...newLead, phone: e.target.value })} />
                 </div>
                 <div className="crf-field">
                   <label>Service Interested In</label>
-                  <select onChange={e => setNewLead({...newLead, service: e.target.value})}>
+                  <select onChange={e => setNewLead({ ...newLead, service: e.target.value })}>
                     <option>Website Creation</option>
                     <option>Website Updates &amp; Fixes</option>
                     <option>SEO &amp; Internet Marketing</option>
@@ -570,12 +570,12 @@ const AdminDashboard = () => {
                   </select>
                 </div>
               </div>
-              <div className="crm-notes-section" style={{borderTop: 'none', paddingTop: 0}}>
-                <label style={{fontSize: '13px', fontWeight: 'bold', color: '#64748b', display: 'block', marginBottom: '8px'}}>Initial Consultation Notes</label>
-                <textarea 
+              <div className="crm-notes-section" style={{ borderTop: 'none', paddingTop: 0 }}>
+                <label style={{ fontSize: '13px', fontWeight: 'bold', color: '#64748b', display: 'block', marginBottom: '8px' }}>Initial Consultation Notes</label>
+                <textarea
                   placeholder="Quick summary of the phone call or inquiry..."
-                  onChange={e => setNewLead({...newLead, notes: e.target.value})}
-                  style={{minHeight: '100px'}}
+                  onChange={e => setNewLead({ ...newLead, notes: e.target.value })}
+                  style={{ minHeight: '100px' }}
                 ></textarea>
               </div>
               <div className="modal-footer-actions">
@@ -595,7 +595,7 @@ const AdminDashboard = () => {
               <h3>{selectedLead.name}</h3>
               <button className="close-modal" onClick={() => setSelectedLead(null)}>×</button>
             </header>
-            
+
             <div className="modal-body">
               <div className="modal-grid">
                 <div className="modal-main-info">
@@ -604,11 +604,11 @@ const AdminDashboard = () => {
                   <div className="info-row"><strong>Email:</strong> <a href={`mailto:${selectedLead.email}`} className="email-link">{selectedLead.email}</a></div>
                   <div className="info-row"><strong>Date:</strong> {new Date(selectedLead.created_at).toLocaleString()}</div>
                   <div className="info-row"><strong>Source:</strong> <span className="source-tag">{selectedLead.source?.replace('_', ' ')}</span></div>
-                  
+
                   <div className="status-management">
                     <label>Lifecycle Status:</label>
-                    <select 
-                      value={selectedLead.status || 'New'} 
+                    <select
+                      value={selectedLead.status || 'New'}
                       onChange={(e) => handleUpdateLead(selectedLead.id, e.target.value, selectedLead.notes, selectedLead.phone, selectedLead.is_archived)}
                       className="status-select"
                       disabled={isUpdating}
@@ -652,11 +652,11 @@ const AdminDashboard = () => {
                         <div key={msg.id} className={`chat-bubble ${msg.sender}`}>
                           <div className="bubble-content">{msg.content}</div>
                           <div className="bubble-meta">
-                            {msg.sender === 'admin' ? 'NextWave Studio' : selectedLead.name} • {new Date(msg.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                            {msg.sender === 'admin' ? 'NextWave Studio' : selectedLead.name} • {new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                           </div>
                         </div>
                       ))}
-                      <div style={{display: 'flex', justifyContent: 'center', marginTop: '10px'}}>
+                      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '10px' }}>
                         <button className="manual-log-btn text" onClick={() => {
                           const msg = prompt("Paste the client's reply here:");
                           if (msg) handleLogClientMessage(msg);
@@ -673,7 +673,7 @@ const AdminDashboard = () => {
                   <h4>🚀 Direct Studio Response</h4>
                   <span className="reply-info">Auto-Sync Enabled • Ruby @ NextWave</span>
                 </header>
-                <textarea 
+                <textarea
                   placeholder={`Hi ${selectedLead.name.split(' ')[0]}, thank you for reaching out regarding ${selectedLead.service}...`}
                   value={replyText}
                   onChange={(e) => setReplyText(e.target.value)}
@@ -681,12 +681,12 @@ const AdminDashboard = () => {
                   style={{ minHeight: '140px', background: '#f8fafc', border: '1px solid #1ABC9C' }}
                 ></textarea>
                 <div className="reply-actions">
-                  <p style={{fontSize: '11px', color: '#64748b', margin: 0}}>
+                  <p style={{ fontSize: '11px', color: '#64748b', margin: 0 }}>
                     This will send a professional HTML email directly to <strong>{selectedLead.email}</strong>.
                   </p>
-                  <button 
-                    type="button" 
-                    onClick={handleSendReply} 
+                  <button
+                    type="button"
+                    onClick={handleSendReply}
                     className="reply-trigger-btn"
                     disabled={isSendingReply || !selectedLead.email}
                   >
@@ -700,7 +700,7 @@ const AdminDashboard = () => {
                   <h4>Consultation Workspace</h4>
                   <span className="live-tag">Live Notes</span>
                 </div>
-                <textarea 
+                <textarea
                   placeholder="Type real-time notes during your call (budget, deadlines, project scope, internal thoughts)..."
                   defaultValue={selectedLead.notes || ''}
                   onBlur={(e) => handleUpdateLead(selectedLead.id, selectedLead.status, e.target.value, selectedLead.phone, selectedLead.is_archived)}
@@ -716,9 +716,9 @@ const AdminDashboard = () => {
                   ) : (
                     <button onClick={() => handleUpdateLead(selectedLead.id, selectedLead.status, selectedLead.notes, selectedLead.phone, true)} className="archive-btn">📦 Archive Lead</button>
                   )}
-                  
-                  <button 
-                    onClick={() => setDeletingLeadId(selectedLead.id)} 
+
+                  <button
+                    onClick={() => setDeletingLeadId(selectedLead.id)}
                     className="delete-lead-btn"
                   >Permanent Delete</button>
                 </div>
@@ -730,7 +730,7 @@ const AdminDashboard = () => {
 
       {/* Delete Confirmation Modal */}
       {deletingLeadId && (
-        <div className="modal-overlay" style={{zIndex: 3000}} onClick={() => setDeletingLeadId(null)}>
+        <div className="modal-overlay" style={{ zIndex: 3000 }} onClick={() => setDeletingLeadId(null)}>
           <div className="lead-modal confirm-box" onClick={e => e.stopPropagation()}>
             <div className="confirm-icon">⚠️</div>
             <h3>Delete Record permanently?</h3>
@@ -743,7 +743,8 @@ const AdminDashboard = () => {
         </div>
       )}
 
-      <style dangerouslySetInnerHTML={{ __html: `
+      <style dangerouslySetInnerHTML={{
+        __html: `
         .admin-login-container {
           min-height: 100vh;
           background: #0B1F3A;
