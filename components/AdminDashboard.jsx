@@ -70,6 +70,13 @@ const AdminDashboard = () => {
         const errorMsg = data.details ? `DB Error: ${data.details}` : (data.error || 'Invalid credentials');
         setError(errorMsg);
         showToast(errorMsg, 'error');
+        
+        // 401 Safety: Clear stored password if it's invalid
+        if (response.status === 401) {
+          sessionStorage.removeItem('admin_key');
+          setIsLoggedIn(false);
+          setPassword('');
+        }
       }
     } catch (err) {
       console.error("Login Error:", err);

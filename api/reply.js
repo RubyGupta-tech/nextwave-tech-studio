@@ -10,12 +10,11 @@ export default async function handler(req, res) {
   const authHeader = req.headers['x-nextwave-auth']?.trim();
   const correctPassword = process.env.ADMIN_PASSWORD?.trim();
 
-  // 1. Authorization Check (Always First)
+  // 1. Authorization & Environment Check
   if (!authHeader || authHeader !== correctPassword) {
     return res.status(401).json({ error: 'Unauthorized: Admin password mismatch.' });
   }
 
-  // 2. Environment Validation (Inside handler to prevent crash)
   if (!process.env.RESEND_API_KEY) {
     return res.status(500).json({ error: 'Server Error: RESEND_API_KEY is missing in Vercel settings.' });
   }
@@ -24,20 +23,15 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: 'Server Error: DATABASE_URL is missing.' });
   }
 
-  // 3. Safety Checks
-  if (!leadId) {
-    return res.status(400).json({ error: 'Missing leadId. Please refresh and try again.' });
-  }
-
-  if (!replyText || !toEmail) {
-    return res.status(400).json({ error: 'Missing required fields (email or message content).' });
+  if (!replyText || !toEmail || !leadId) {
+    return res.status(400).json({ error: 'Missing required fields (leadId, email, or message content).' });
   }
 
   try {
     const resend = new Resend(process.env.RESEND_API_KEY);
     const sql = neon(process.env.DATABASE_URL);
 
-    // Ensure table exists (Self-healing)
+    // 2. Ensure table exists (Self-healing)
     await sql`
       CREATE TABLE IF NOT EXISTS messages (
         id SERIAL PRIMARY KEY,
@@ -50,7 +44,7 @@ export default async function handler(req, res) {
       );
     `;
 
-    // 4. Send the reply email via Resend
+    // 3. Send the reply email via Resend
     const { data, error: mailError } = await resend.emails.send({
       from: 'NextWave Tech Studio <hello@dnextwave.com>',
       to: [toEmail],
@@ -102,12 +96,8 @@ ${replyText}
       return res.status(400).json({ error: `Resend Error: ${mailError.message}` });
     }
 
-    // 5. Save to database conversation history
+    // 4. Save to database conversation history
     const lId = parseInt(leadId);
-    if (isNaN(lId)) {
-      throw new Error(`Invalid lead identifier: ${leadId}`);
-    }
-
     await sql`
       INSERT INTO messages (lead_id, sender, content, message_id, subject)
       VALUES (${lId}, 'admin', ${replyText}, ${data.id}, ${`Re: Your Inquiry for ${service}`})
