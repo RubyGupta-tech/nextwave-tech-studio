@@ -625,7 +625,7 @@ const AdminDashboard = () => {
               <div className="crm-reply-section">
                 <header className="reply-header">
                   <h4>🚀 Direct Studio Response</h4>
-                  <span className="reply-info">Sends as: hello@dnextwave.com</span>
+                  <span className="reply-info">Auto-Sync Enabled • Ruby @ NextWave</span>
                 </header>
                 <textarea 
                   placeholder={`Hi ${selectedLead.name.split(' ')[0]}, thank you for reaching out regarding ${selectedLead.service}...`}

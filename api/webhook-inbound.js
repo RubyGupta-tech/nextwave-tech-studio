@@ -51,9 +51,34 @@ export default async function handler(req, res) {
       WHERE id = ${leadId} AND status != 'Converted'
     `;
 
+    const { data: forwardData, error: forwardError } = await resend.emails.send({
+      from: 'NextWave Studio Bridge <notifications@dnextwave.com>',
+      to: ['d.nextwavetech@gmail.com'],
+      subject: `[STUDIO REPLY] From: ${from} - ${subject}`,
+      html: `
+        <div style="font-family: sans-serif; padding: 20px; border: 1px solid #e2e8f0; border-radius: 12px;">
+          <h2 style="color: #1ABC9C;">New Client Response Received</h2>
+          <p><strong>From:</strong> ${from}</p>
+          <p><strong>Subject:</strong> ${subject}</p>
+          <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;" />
+          <div style="background: #f8fafc; padding: 15px; border-radius: 8px; font-style: italic;">
+            ${text}
+          </div>
+          <br/>
+          <a href="https://dnextwave.com/admin" style="display: inline-block; padding: 10px 20px; background: #0B1F3A; color: #fff; text-decoration: none; border-radius: 6px;">
+            Open Dashboard to Reply ➔
+          </a>
+        </div>
+      `,
+    });
+
+    if (forwardError) {
+      console.error('Forwarding Error:', forwardError);
+    }
+
     return res.status(200).json({ 
       success: true, 
-      message: 'Inbound message synced to database successfully',
+      message: 'Inbound message synced and forwarded successfully',
       leadId: leadId
     });
   } catch (error) {

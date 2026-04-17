@@ -25,7 +25,7 @@ export default async function handler(req, res) {
     const { data, error: mailError } = await resend.emails.send({
       from: 'NextWave (Ruby G - d.nextwavetech@gmail.com) <hello@dnextwave.com>',
       to: [toEmail],
-      reply_to: 'd.nextwavetech@gmail.com',
+      reply_to: 'ruby@dnextwave.com',
       subject: `Re: Your Inquiry for ${service} - NextWave Tech Studio`,
       html: `
         <div style="font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; padding: 40px; color: #1e293b; max-width: 650px; margin: auto; border: 1px solid #e2e8f0; border-radius: 16px; background-color: #ffffff;">
