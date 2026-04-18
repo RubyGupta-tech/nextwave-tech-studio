@@ -226,7 +226,7 @@ const AdminDashboard = () => {
         body: JSON.stringify({ id })
       });
       if (resp.ok) {
-        setLeads(leads.filter(l => l.id !== id));
+        setLeads(prev => prev.filter(l => l.id !== id));
         setSelectedLead(null);
         setDeletingLeadId(null);
         showToast('Lead deleted permanently', 'error');
@@ -798,8 +798,8 @@ const AdminDashboard = () => {
 
       {/* Delete Confirmation Modal */}
       {deletingLeadId && (
-        <div className="modal-overlay" style={{ zIndex: 7000 }} onClick={() => setDeletingLeadId(null)}>
-          <div className="lead-modal confirm-box" onClick={e => e.stopPropagation()}>
+        <div className="modal-overlay" style={{ zIndex: 9000 }} onClick={() => setDeletingLeadId(null)}>
+          <div className="lead-modal confirm-box" style={{ zIndex: 9001 }} onClick={e => e.stopPropagation()}>
             <div className="confirm-icon">⚠️</div>
             <h3>Delete Record permanently?</h3>
             <p>Are you sure you want to remove this lead? This action cannot be undone and all consultation notes will be lost.</p>
@@ -991,7 +991,11 @@ const AdminDashboard = () => {
           line-height: 1.5; 
           position: relative;
           box-shadow: 0 1px 0.5px rgba(0,0,0,0.13);
-          animation: slideUp 0.3s ease-out;
+          animation: slideUp 0.3s ease-out forwards;
+        }
+        @keyframes slideUp { 
+          from { opacity: 0; transform: translateY(15px); } 
+          to { opacity: 1; transform: translateY(0); } 
         }
         
         .chat-bubble.admin { 
