@@ -1058,6 +1058,24 @@ const AdminDashboard = () => {
         .reply-trigger-btn { background: #0B1F3A; color: #fff; border: none; padding: 14px 30px; border-radius: 12px; font-weight: 800; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 12px rgba(11,31,58,0.2); }
         .reply-trigger-btn:hover { background: #1a3a5f; transform: translateY(-2px); }
 
+        .crm-notes-section { margin-top: 30px; }
+        .crm-notes-section textarea {
+          width: 100%;
+          min-height: 220px;
+          padding: 20px;
+          border-radius: 15px;
+          border: 1px solid #cbd5e1;
+          font-family: inherit;
+          font-size: 15px;
+          line-height: 1.6;
+          background: #fff;
+          box-sizing: border-box;
+          transition: 0.3s;
+          resize: vertical;
+        }
+        .crm-notes-section textarea:focus { outline: none; border-color: #1ABC9C; box-shadow: 0 0 0 3px rgba(26, 188, 156, 0.1); }
+        .notes-tip { font-size: 11px; color: #94a3b8; margin-top: 8px; font-style: italic; }
+
         /* Secondary Actions & Delete Button */
         .modal-footer-actions { margin-top: 40px; padding-top: 30px; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; }
         .delete-lead-btn { background: #fee2e2; color: #ef4444; border: 1px solid #fecaca; padding: 12px 20px; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; transition: 0.2s; }
