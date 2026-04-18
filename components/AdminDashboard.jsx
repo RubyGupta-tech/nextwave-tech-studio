@@ -21,7 +21,7 @@ const AdminDashboard = () => {
   const [isSendingReply, setIsSendingReply] = useState(false);
   const [messages, setMessages] = useState([]);
   const [isLoadingMessages, setIsLoadingMessages] = useState(false);
-  const [sysVersion] = useState('v9.0');
+  const [sysVersion] = useState('v11.0');
   const [apiStatus, setApiStatus] = useState('checking'); // 'online', 'offline', 'checking'
   const [showPassword, setShowPassword] = useState(false);
   // Deployment Heartbeat: 2026-04-13T23:30:00Z
