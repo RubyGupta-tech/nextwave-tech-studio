@@ -783,7 +783,7 @@ const AdminDashboard = () => {
 
       {/* Delete Confirmation Modal */}
       {deletingLeadId && (
-        <div className="modal-overlay" style={{ zIndex: 3000 }} onClick={() => setDeletingLeadId(null)}>
+        <div className="modal-overlay" style={{ zIndex: 7000 }} onClick={() => setDeletingLeadId(null)}>
           <div className="lead-modal confirm-box" onClick={e => e.stopPropagation()}>
             <div className="confirm-icon">⚠️</div>
             <h3>Delete Record permanently?</h3>
@@ -1075,5 +1075,6 @@ const AdminDashboard = () => {
       `}} />
     </div>
   );
+};
 
 export default AdminDashboard;
