@@ -966,11 +966,13 @@ const AdminDashboard = () => {
         .history-header h4 { margin: 0; font-size: 13px; color: #64748b; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 800; }
         
         .chat-bubbles-wrap { 
+          width: 100%;
           padding: 30px; 
           max-height: 500px; 
           overflow-y: auto; 
           display: flex; 
           flex-direction: column; 
+          box-sizing: border-box;
           gap: 12px; 
           background: #e5ddd5; /* WhatsApp beige background */
           background-image: radial-gradient(#d2c6b9 1px, transparent 1px);
@@ -1033,6 +1035,7 @@ const AdminDashboard = () => {
           font-size: 14px;
           transition: 0.3s;
           background: #fff;
+          color: #1e293b; /* Explicit dark text */
         }
         .log-input-group input:focus { border-color: #1ABC9C; box-shadow: 0 0 0 4px rgba(26, 188, 156, 0.15); outline: none; }
         
@@ -1054,7 +1057,7 @@ const AdminDashboard = () => {
 
         /* Response & Notes Styling */
         .crm-reply-section { margin-top: 30px; padding: 30px; background: #eff6ff; border-radius: 20px; border: 1px solid #dbeafe; }
-        .crm-reply-section textarea { width: 100%; min-height: 140px; padding: 20px; border-radius: 15px; border: 1px solid #cbd5e1; font-family: inherit; font-size: 14px; line-height: 1.6; background: #fff; box-sizing: border-box; }
+        .crm-reply-section textarea { width: 100%; min-height: 140px; padding: 20px; border-radius: 15px; border: 1px solid #cbd5e1; font-family: inherit; font-size: 14px; line-height: 1.6; background: #fff; color: #1e293b; box-sizing: border-box; }
         .reply-trigger-btn { background: #0B1F3A; color: #fff; border: none; padding: 14px 30px; border-radius: 12px; font-weight: 800; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 12px rgba(11,31,58,0.2); }
         .reply-trigger-btn:hover { background: #1a3a5f; transform: translateY(-2px); }
 
