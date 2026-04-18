@@ -679,10 +679,25 @@ const AdminDashboard = () => {
                   ) : (
                     <>
                       {messages.map((msg) => (
-                        <div key={msg.id} className={`chat-bubble ${msg.sender}`}>
-                          <div className="bubble-content">{msg.content}</div>
-                          <div className="bubble-meta">
-                            {msg.sender === 'admin' ? 'NextWave Studio' : selectedLead.name} • {new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        <div key={msg.id} className={`chat-bubble-container ${msg.sender === 'admin' ? 'sent' : 'received'}`}>
+                          <div className={`chat-bubble ${msg.sender}`}>
+                            <div className="bubble-sender">
+                              {msg.sender === 'admin' ? 'NextWave Studio' : selectedLead.name}
+                            </div>
+                            <div className="bubble-content">{msg.content}</div>
+                            <div className="bubble-footer">
+                              <span className="bubble-time">
+                                {new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                              </span>
+                              {msg.sender === 'admin' && (
+                                <span className="bubble-status">
+                                  <svg width="16" height="11" viewBox="0 0 16 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M4.5 9L1.5 6L0.5 7L4.5 11L13.5 2L12.5 1L4.5 9Z" fill="#34B7F1"/>
+                                    <path d="M8.5 9L5.5 6L4.5 7L8.5 11L17.5 2L16.5 1L8.5 9Z" fill="#34B7F1"/>
+                                  </svg>
+                                </span>
+                              )}
+                            </div>
                           </div>
                         </div>
                       ))}
@@ -950,25 +965,54 @@ const AdminDashboard = () => {
         .history-header { background: #f8fafc; padding: 15px 25px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; }
         .history-header h4 { margin: 0; font-size: 13px; color: #64748b; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 800; }
         
-        .chat-bubbles-wrap { padding: 30px; max-height: 500px; overflow-y: auto; display: flex; flex-direction: column; gap: 20px; background: #ffffff; }
+        .chat-bubbles-wrap { 
+          padding: 30px; 
+          max-height: 500px; 
+          overflow-y: auto; 
+          display: flex; 
+          flex-direction: column; 
+          gap: 12px; 
+          background: #e5ddd5; /* WhatsApp beige background */
+          background-image: radial-gradient(#d2c6b9 1px, transparent 1px);
+          background-size: 20px 20px;
+        }
         
+        .chat-bubble-container { display: flex; width: 100%; margin-bottom: 2px; }
+        .chat-bubble-container.sent { justify-content: flex-end; }
+        .chat-bubble-container.received { justify-content: flex-start; }
+
         .chat-bubble { 
-          max-width: 85%; 
-          padding: 15px 20px; 
-          border-radius: 20px; 
-          font-size: 15px; 
-          line-height: 1.6; 
+          max-width: 75%; 
+          padding: 8px 12px 6px; 
+          border-radius: 10px; 
+          font-size: 14.5px; 
+          line-height: 1.5; 
           position: relative;
-          box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+          box-shadow: 0 1px 0.5px rgba(0,0,0,0.13);
           animation: slideUp 0.3s ease-out;
         }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        .chat-bubble.admin { align-self: flex-end; background: #0B1F3A; color: #fff; border-bottom-right-radius: 4px; }
-        .chat-bubble.client { align-self: flex-start; background: #f1f5f9; color: #1e293b; border-bottom-left-radius: 4px; border: 1px solid #e2e8f0; }
         
-        .bubble-meta { font-size: 10px; margin-top: 8px; opacity: 0.7; font-weight: bold; }
-        .chat-bubble.admin .bubble-meta { text-align: right; color: rgba(255,255,255,0.8); }
+        .chat-bubble.admin { 
+          background: #e7ffdb; /* WhatsApp sent color */
+          color: #1e293b; 
+          border-top-right-radius: 0; 
+        }
+        .chat-bubble.client { 
+          background: #ffffff; /* WhatsApp received color */
+          color: #1e293b; 
+          border-top-left-radius: 0; 
+        }
+        
+        .bubble-sender { font-size: 11px; font-weight: 800; color: #128c7e; margin-bottom: 4px; }
+        .chat-bubble.admin .bubble-sender { color: #075e54; }
+        
+        .bubble-content { margin-bottom: 4px; word-break: break-word; }
+        
+        .bubble-footer { display: flex; align-items: center; justify-content: flex-end; gap: 4px; margin-top: -2px; }
+        .bubble-time { font-size: 10px; color: #64748b; font-weight: 600; text-transform: uppercase; }
+        .bubble-status { display: flex; align-items: center; }
+        .bubble-status svg { width: 15px; height: 10px; }
+
         .chat-bubble.client .bubble-meta { color: #64748b; }
 
         /* Deluxe Logging Bar */
