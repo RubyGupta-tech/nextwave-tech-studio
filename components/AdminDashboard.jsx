@@ -21,7 +21,7 @@ const AdminDashboard = () => {
   const [isSendingReply, setIsSendingReply] = useState(false);
   const [messages, setMessages] = useState([]);
   const [isLoadingMessages, setIsLoadingMessages] = useState(false);
-  const [sysVersion] = useState('v8.2');
+  const [sysVersion] = useState('v9.0');
   const [apiStatus, setApiStatus] = useState('checking'); // 'online', 'offline', 'checking'
   const [showPassword, setShowPassword] = useState(false);
   // Deployment Heartbeat: 2026-04-13T23:30:00Z
@@ -665,7 +665,7 @@ const AdminDashboard = () => {
                 </div>
               </div>
 
-              {/* CONVERSATION HISTORY (CHAT UI) */}
+               {/* CONVERSATION HISTORY (CHAT UI) */}
               <div className="conversation-history-container">
                 <header className="history-header">
                   <h4>💬 Conversation History</h4>
@@ -674,11 +674,7 @@ const AdminDashboard = () => {
                 <div className="chat-bubbles-wrap">
                   {messages.length === 0 ? (
                     <div className="empty-chat">
-                      <p>No replies sent yet.</p>
-                      <button className="manual-log-btn" onClick={() => {
-                        const msg = prompt("Paste the client's reply here to keep your history updated:");
-                        if (msg) handleLogClientMessage(msg);
-                      }}>+ Log Client Message Manually</button>
+                      <p>No messages yet. Use the tool below to log your first contact.</p>
                     </div>
                   ) : (
                     <>
@@ -690,14 +686,37 @@ const AdminDashboard = () => {
                           </div>
                         </div>
                       ))}
-                      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '10px' }}>
-                        <button className="manual-log-btn text" onClick={() => {
-                          const msg = prompt("Paste the client's reply here:");
-                          if (msg) handleLogClientMessage(msg);
-                        }}>+ Log a Client Reply</button>
-                      </div>
                     </>
                   )}
+                </div>
+                
+                {/* NEW: Nice Pop Inline Manual Logger */}
+                <div className="manual-log-area">
+                  <div className="log-input-group">
+                    <input 
+                      type="text" 
+                      placeholder="Log a client reply (phone call, SMS, or outside email)..."
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' && e.target.value.trim()) {
+                          handleLogClientMessage(e.target.value);
+                          e.target.value = '';
+                        }
+                      }}
+                      id="manual-log-input"
+                    />
+                    <button 
+                      className="log-pop-btn"
+                      onClick={() => {
+                        const input = document.getElementById('manual-log-input');
+                        if (input && input.value.trim()) {
+                          handleLogClientMessage(input.value);
+                          input.value = '';
+                        }
+                      }}
+                    >
+                      Log Entry
+                    </button>
+                  </div>
                 </div>
               </div>
 
@@ -1224,6 +1243,74 @@ const AdminDashboard = () => {
         .confirm-btn { flex: 1.5; padding: 12px; border-radius: 12px; border: none; background: #ef4444; color: #fff; font-weight: bold; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2); }
         .confirm-btn:hover { background: #dc2626; transform: translateY(-2px); }
         .cancel-btn:hover { background: #fff; border-color: #cbd5e1; }
+
+        /* Mobile Responsiveness Improvements */
+        @media (max-width: 1024px) {
+          .admin-nav { padding: 15px 20px; }
+          .admin-content { padding: 20px; }
+          .header-main { flex-direction: column; gap: 15px; }
+          .analytics-summary { flex-wrap: wrap; }
+          .crm-master-controls { flex-direction: column; align-items: stretch; }
+          .search-box { min-width: 0; }
+          .filter-group { flex-wrap: wrap; justify-content: space-between; }
+        }
+
+        @media (max-width: 768px) {
+          .admin-nav-brand span { display: none; }
+          .leads-table th:nth-child(3), .leads-table td:nth-child(3),
+          .leads-table th:nth-child(5), .leads-table td:nth-child(5) { display: none; } /* Hide email and source on small screens */
+          
+          .modal-grid { grid-template-columns: 1fr; }
+          .lead-modal { max-height: 100vh; border-radius: 0; }
+          .modal-body { padding: 20px; }
+          .secondary-actions { flex-direction: column; width: 100%; }
+          .archive-btn, .delete-lead-btn { width: 100%; }
+          
+          .reply-actions { flex-direction: column; gap: 15px; }
+          .reply-trigger-btn { width: 100%; }
+        }
+
+        @media (max-width: 480px) {
+          .admin-nav { padding: 10px; }
+          .version-badge { display: none; }
+          .tab-btn { padding: 8px 10px; font-size: 11px; }
+          .header-main h1 { font-size: 24px; }
+          .ans-item { padding: 8px 12px; }
+          .ans-val { font-size: 14px; }
+        }
+
+        /* Nice Log Pop Button Styling */
+        .manual-log-area { padding: 15px 20px; background: #fff; border-top: 1px solid #e2e8f0; }
+        .log-input-group { display: flex; gap: 10px; }
+        .log-input-group input { 
+          flex: 1; 
+          padding: 10px 15px; 
+          border-radius: 8px; 
+          border: 1px solid #cbd5e1; 
+          font-size: 13px;
+          transition: 0.3s;
+        }
+        .log-input-group input:focus { border-color: #1ABC9C; outline: none; box-shadow: 0 0 0 3px rgba(26, 188, 156, 0.1); }
+        .log-pop-btn { 
+          background: #1ABC9C; 
+          color: white; 
+          border: none; 
+          padding: 0 20px; 
+          border-radius: 8px; 
+          font-weight: bold; 
+          font-size: 13px;
+          cursor: pointer;
+          transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+          white-space: nowrap;
+          box-shadow: 0 4px 10px rgba(26, 188, 156, 0.2);
+        }
+        .log-pop-btn:hover { 
+          background: #16a085; 
+          transform: scale(1.05) translateY(-2px);
+          box-shadow: 0 6px 15px rgba(26, 188, 156, 0.3);
+        }
+        .log-pop-btn:active { transform: scale(0.95); }
+
       `}} />
     </div>
   );

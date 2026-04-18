@@ -19,9 +19,15 @@ export default async function handler(req, res) {
 
   try {
     const sql = neon(process.env.DATABASE_URL);
-
+    
+    // 1. Delete associated messages first (Cascade delete)
     await sql`
-      DELETE FROM leads WHERE id = ${id}
+      DELETE FROM messages WHERE lead_id = ${parseInt(id)}
+    `;
+
+    // 2. Delete the lead
+    await sql`
+      DELETE FROM leads WHERE id = ${parseInt(id)}
     `;
 
     return res.status(200).json({ success: true, message: 'Lead deleted successfully' });
