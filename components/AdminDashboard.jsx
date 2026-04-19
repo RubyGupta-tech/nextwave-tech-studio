@@ -21,7 +21,7 @@ const AdminDashboard = () => {
   const [isSendingReply, setIsSendingReply] = useState(false);
   const [messages, setMessages] = useState([]);
   const [isLoadingMessages, setIsLoadingMessages] = useState(false);
-  const [sysVersion] = useState('v11.0');
+  const [sysVersion] = useState('v12.0');
   const [apiStatus, setApiStatus] = useState('checking'); // 'online', 'offline', 'checking'
   const [showPassword, setShowPassword] = useState(false);
   // Deployment Heartbeat: 2026-04-13T23:30:00Z
@@ -1123,18 +1123,36 @@ const AdminDashboard = () => {
         .confirm-box { 
           max-width: 420px !important; 
           border-radius: 30px !important; 
-          padding: 40px !important; 
+          padding: 30px !important; 
           text-align: center;
-          max-height: auto !important;
+          max-height: 90vh !important;
           animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+          overflow-y: auto;
         }
         @keyframes popIn { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
         
         .confirm-icon { font-size: 50px; margin-bottom: 20px; }
         .confirm-actions { display: flex; gap: 15px; margin-top: 30px; }
         .cancel-btn { flex: 1; padding: 14px; border-radius: 12px; border: 1px solid #e2e8f0; background: #f8fafc; color: #64748b; font-weight: bold; cursor: pointer; }
-        .confirm-btn { flex: 1.5; padding: 14px; border-radius: 12px; border: none; background: #ef4444; color: #fff; font-weight: bold; cursor: pointer; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2); }
+        .confirm-btn { 
+          flex: 1.5; 
+          padding: 16px; 
+          border-radius: 12px; 
+          border: none; 
+          background: #ef4444; 
+          color: #ffffff !important; 
+          font-weight: 800; 
+          cursor: pointer; 
+          box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2); 
+          -webkit-tap-highlight-color: transparent;
+        }
         .confirm-btn:hover { background: #dc2626; transform: scale(1.05); }
+
+        @media (max-width: 480px) {
+          .confirm-box { padding: 25px !important; border-radius: 20px !important; width: 90% !important; }
+          .confirm-actions { flex-direction: column; gap: 10px; }
+          .confirm-btn, .cancel-btn { width: 100%; flex: none; }
+        }
 
         /* Toast UI */
         .toast-container { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px); background: #fff; padding: 12px 24px; border-radius: 50px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); display: flex; align-items: center; gap: 12px; z-index: 9999; transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); opacity: 0; border: 1px solid #eee; }
