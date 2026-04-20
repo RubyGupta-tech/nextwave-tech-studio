@@ -21,7 +21,8 @@ const AdminDashboard = () => {
   const [isSendingReply, setIsSendingReply] = useState(false);
   const [messages, setMessages] = useState([]);
   const [isLoadingMessages, setIsLoadingMessages] = useState(false);
-  const [sysVersion] = useState('v24.0 (PERFECT MOBILE)');
+  const [isSyncExpanded, setIsSyncExpanded] = useState(false);
+  const [sysVersion] = useState('v25.0 (COMPACT STUDIO)');
   const [apiStatus, setApiStatus] = useState('checking'); // 'online', 'offline', 'checking'
   const [expectedLen, setExpectedLen] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -471,18 +472,18 @@ const AdminDashboard = () => {
             top: 0,
             left: 0,
             width: '100%',
-            background: '#f97316', // BRIGHT ORANGE FOR v24
+            background: '#8b5cf6', // PEARL PURPLE FOR v25
             color: 'white',
             textAlign: 'center',
-            padding: '12px',
+            padding: '10px',
             fontWeight: '900',
-            fontSize: '16px',
+            fontSize: '15px',
             zIndex: 10000,
-            boxShadow: '0 4px 25px rgba(249, 115, 22, 0.5)',
+            boxShadow: '0 4px 20px rgba(139, 92, 246, 0.4)',
             textTransform: 'uppercase',
-            letterSpacing: '2px'
+            letterSpacing: '1px'
           }}>
-            ⚡ VERSION v24.0 (HARD UPDATE) - REFRESH IF NOT ORANGE
+            ✅ SECURITY SYSTEM v25.0 (COMPACT STUDIO) - CONNECTED
           </div>
         <div className="admin-login-card">
           <div className="admin-logo">
@@ -602,20 +603,25 @@ const AdminDashboard = () => {
           </button>
         </div>
 
-        <div className="integration-info-box">
-          <h5>⚡ Gmail Auto-Sync Active</h5>
-          <p>Copy this URL into <b>Zapier</b> or <b>Make</b> to auto-post client replies here:</p>
-          <div 
-            className="webhook-url-display" 
-            onClick={() => {
-              const url = `https://dnextwave.com/api/inbound?auth=${password.trim()}`;
-              navigator.clipboard.writeText(url);
-              showToast('URL Copied to Clipboard!');
-            }}
-          >
-            https://dnextwave.com/api/inbound?auth=***
+        <div 
+          className={`integration-info-box ${isSyncExpanded ? 'expanded' : ''}`}
+          onClick={() => setIsSyncExpanded(!isSyncExpanded)}
+        >
+          <h5>⚡ Gmail Auto-Sync {isSyncExpanded ? 'Info' : 'Click to View Setup'}</h5>
+          <div style={{ marginTop: '10px' }}>
+            <p>Copy this URL into <b>Zapier</b> or <b>Make</b> to auto-post client replies here:</p>
+            <div 
+              className="webhook-url-display" 
+              onClick={(e) => {
+                e.stopPropagation();
+                const url = `https://dnextwave.com/api/inbound?auth=${password.trim()}`;
+                navigator.clipboard.writeText(url);
+                showToast('URL Copied to Clipboard!');
+              }}
+            >
+              https://dnextwave.com/api/inbound?auth=***
+            </div>
           </div>
-          <p style={{ marginTop: '8px', opacity: 0.7 }}>Click above to copy your private sync link.</p>
         </div>
 
         <header className="content-header">
@@ -1352,28 +1358,31 @@ const AdminDashboard = () => {
 
         /* Mobile Fixes & Transitions */
         @media (max-width: 768px) {
-          .admin-nav { padding: 20px; flex-direction: column; gap: 15px; }
-          .admin-nav-brand { flex-direction: column; gap: 8px; }
-          .nav-actions { width: 100%; justify-content: center; border-top: 1px solid rgba(0,0,0,0.05); padding-top: 15px; }
-          .admin-nav-brand span { display: block; font-size: 14px; opacity: 0.6; }
-          .version-badge { position: absolute; top: 10px; left: 10px; margin: 0; }
-          
-          /* Main Modal Full-Screen on Mobile */
-          .lead-modal:not(.confirm-box) { max-height: 100vh; border-radius: 0; }
-          .modal-header { background: #0B1F3A; color: #fff; padding: 25px 60px 25px 25px; display: flex; justify-content: space-between; align-items: center; }
-          .modal-header h3 { font-size: 20px; }
-          .modal-grid { grid-template-columns: 1fr; }
-          .modal-body { padding: 20px; }
-          .chat-bubbles-wrap { padding: 15px; }
-          .chat-bubble { max-width: 98%; } 
-          
-          .integration-info-box { padding: 12px; font-size: 10px; border-radius: 8px; }
-          .integration-info-box h5 { font-size: 11px; }
+          .admin-nav { padding: 10px 15px; flex-direction: row; justify-content: space-between; align-items: center; }
+          .admin-nav-brand { flex-direction: row; gap: 8px; align-items: center; }
+          .admin-nav-brand img { height: 22px !important; }
+          .nav-actions { width: auto; border: none; padding: 0; }
+          .admin-nav-brand span { display: none; }
+          .version-badge { position: static; font-size: 9px; padding: 1px 4px; }
+          .logout-btn { padding: 4px 10px; font-size: 11px; }
 
-          .secondary-actions { flex-direction: column; width: 100%; gap: 10px; }
-          .archive-btn, .delete-lead-btn { width: 100%; }
-          .modal-footer-actions { flex-direction: column-reverse; gap: 20px; }
-          .reply-trigger-btn { width: 100%; }
+          .content-header { margin-bottom: 20px; padding-bottom: 15px; gap: 15px; }
+          .header-main h1 { font-size: 22px; }
+          
+          /* Compact Buttons */
+          .crm-master-controls { display: flex; flex-direction: row !important; flex-wrap: wrap; gap: 8px; }
+          .search-box { order: -1; margin-bottom: 10px; }
+          .add-manual-btn, .export-btn { flex: 1; min-width: 120px; padding: 10px; font-size: 11px; border-radius: 8px; }
+          
+          .lead-modal:not(.confirm-box) { max-height: 100vh; border-radius: 0; }
+          .modal-header { padding: 15px 50px 15px 20px; }
+          .modal-header h3 { font-size: 18px; }
+
+          .integration-info-box { padding: 8px; border-radius: 8px; margin-bottom: 10px; max-height: 40px; overflow: hidden; transition: 0.3s; cursor: pointer; position: relative; }
+          .integration-info-box.expanded { max-height: 200px; }
+          .integration-info-box h5 { font-size: 10px; margin: 0; display: flex; justify-content: space-between; align-items: center; }
+          .integration-info-box h5::after { content: '▼'; font-size: 8px; transition: 0.3s; }
+          .integration-info-box.expanded h5::after { transform: rotate(180deg); }
         }
 
         /* The "Perfect Mobile Card" Overhaul */
