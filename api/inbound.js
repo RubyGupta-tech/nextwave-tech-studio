@@ -2,6 +2,17 @@ import { neon } from '@neondatabase/serverless';
 
 export default async function handler(req, res) {
   // 1. Validation: Only POST allowed (Zapier/Make use POST)
+  // Friendly message for browser visits
+  if (req.method === 'GET') {
+    return res.status(200).send(`
+      <div style="font-family: sans-serif; padding: 40px; text-align: center; color: #0B1F3A;">
+        <h1 style="color: #1ABC9C;">⚡ NextWave CRM Sync Engine</h1>
+        <p>Your Inbox Webhook is <b>ONLINE</b> and waiting for deliveries.</p>
+        <p style="font-size: 13px; color: #64748b;">(Note: This URL is for Zapier/Make automation. Visits via browser are for status checking only.)</p>
+      </div>
+    `);
+  }
+
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
