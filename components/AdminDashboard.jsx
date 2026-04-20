@@ -21,7 +21,7 @@ const AdminDashboard = () => {
   const [isSendingReply, setIsSendingReply] = useState(false);
   const [messages, setMessages] = useState([]);
   const [isLoadingMessages, setIsLoadingMessages] = useState(false);
-  const [sysVersion] = useState('v21.0 (PREMIUM DESIGN)');
+  const [sysVersion] = useState('v22.0 (GMAIL-SYNC READY)');
   const [apiStatus, setApiStatus] = useState('checking'); // 'online', 'offline', 'checking'
   const [expectedLen, setExpectedLen] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -482,7 +482,7 @@ const AdminDashboard = () => {
             textTransform: 'uppercase',
             letterSpacing: '1.5px'
           }}>
-            ✅ SECURITY SYSTEM v21.0 (PREMIUM DESIGN) - CONNECTED
+            ✅ SECURITY SYSTEM v22.0 (GMAIL-SYNC READY) - CONNECTED
           </div>
         <div className="admin-login-card">
           <div className="admin-logo">
@@ -600,6 +600,22 @@ const AdminDashboard = () => {
             📦 Archives
             <span className="tab-count">{viewTab === 'archived' ? leads.length : ''}</span>
           </button>
+        </div>
+
+        <div className="integration-info-box">
+          <h5>⚡ Gmail Auto-Sync Active</h5>
+          <p>Copy this URL into <b>Zapier</b> or <b>Make</b> to auto-post client replies here:</p>
+          <div 
+            className="webhook-url-display" 
+            onClick={() => {
+              const url = `https://dnextwave.com/api/inbound?auth=${password.trim()}`;
+              navigator.clipboard.writeText(url);
+              showToast('URL Copied to Clipboard!');
+            }}
+          >
+            https://dnextwave.com/api/inbound?auth=***
+          </div>
+          <p style={{ marginTop: '8px', opacity: 0.7 }}>Click above to copy your private sync link.</p>
         </div>
 
         <header className="content-header">
@@ -1040,6 +1056,27 @@ const AdminDashboard = () => {
         .status-dot { width: 8px; height: 8px; background: #1ABC9C; border-radius: 50%; box-shadow: 0 0 10px #1ABC9C; animation: pulse 2s infinite; }
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
         .logout-btn { background: #fee2e2; color: #991b1b; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: 600; }
+        
+        .integration-info-box { 
+          background: #0B1F3A; 
+          color: #fff; 
+          padding: 15px; 
+          border-radius: 12px; 
+          margin-bottom: 20px; 
+          font-size: 11px;
+          border-left: 4px solid #1ABC9C;
+        }
+        .integration-info-box h5 { margin: 0 0 8px 0; color: #1ABC9C; font-size: 12px; text-transform: uppercase; }
+        .webhook-url-display { 
+          background: rgba(255,255,255,0.1); 
+          padding: 8px; 
+          border-radius: 6px; 
+          word-break: break-all; 
+          margin-top: 5px;
+          cursor: pointer;
+          font-family: monospace;
+        }
+        .webhook-url-display:hover { background: rgba(255,255,255,0.2); }
 
         .tab-control { display: flex; gap: 5px; margin-bottom: 30px; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; }
         .tab-btn { background: transparent; border: none; padding: 10px 20px; font-weight: 800; color: #64748b; cursor: pointer; border-radius: 8px; transition: 0.3s; display: flex; align-items: center; gap: 8px; }
