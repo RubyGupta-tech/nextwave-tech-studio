@@ -6,11 +6,15 @@ export default async function handler(req, res) {
   }
 
   const { name, email, phone, service, notes, source = 'manual_entry' } = req.body;
-  const authHeader = req.headers['x-nextwave-auth']?.trim();
+  const authHeader = (req.headers['x-crm-admin-key'] || req.headers['x-nextwave-auth'] || req.body.auth)?.trim();
   const correctPassword = process.env.ADMIN_PASSWORD?.trim();
 
   // 1. Authorization Check
-  if (!authHeader || authHeader !== correctPassword) {
+  if (!authHeader) {
+    return res.status(401).json({ error: 'Auth header missing' });
+  }
+
+  if (authHeader !== correctPassword) {
     return res.status(401).json({ error: 'Unauthorized manual entry' });
   }
 

@@ -4,6 +4,9 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-MSK3BS9BKL"></script>
     <script>
@@ -13,6 +16,17 @@
 
         gtag('config', 'G-MSK3BS9BKL');
     </script>
+    <script>
+        // Nuclear Cache Buster for v18.0
+        const CACHE_VERSION = 'v18.0';
+        if (localStorage.getItem('LAST_STABLE_VER') !== CACHE_VERSION) {
+            console.log('Nuking old cache for v18.0...');
+            localStorage.clear();
+            sessionStorage.clear();
+            localStorage.setItem('LAST_STABLE_VER', CACHE_VERSION);
+        }
+    </script>
+    <meta name="build-id" content="1776715600" />
     <title>NextWave Tech Studio | Premium Web Development & Digital Growth</title>
     <meta name="description" content="NextWave Tech Studio builds high-performance, high-conversion websites for small businesses, non-profits, and brands. Transform your digital presence today." />
     <meta name="keywords" content="Web Development, Small Business Website, Non-Profit Web Design, React Developer, SEO Optimization, NextWave Tech Studio" />

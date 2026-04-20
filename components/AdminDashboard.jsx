@@ -21,8 +21,10 @@ const AdminDashboard = () => {
   const [isSendingReply, setIsSendingReply] = useState(false);
   const [messages, setMessages] = useState([]);
   const [isLoadingMessages, setIsLoadingMessages] = useState(false);
-  const [sysVersion] = useState('v12.0');
+  const [sysVersion] = useState('v18.0 (NUCLEAR)');
   const [apiStatus, setApiStatus] = useState('checking'); // 'online', 'offline', 'checking'
+  const [expectedLen, setExpectedLen] = useState(0);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   // Deployment Heartbeat: 2026-04-13T23:30:00Z
 
@@ -32,15 +34,32 @@ const AdminDashboard = () => {
   };
 
   useEffect(() => {
-    // Ping API to check connection
+    // 1. Domain Enforcement: Redirect to dnextwave.com if on vercel.app
+    if (window.location.host.includes('vercel.app')) {
+      window.location.replace('https://dnextwave.com/admin');
+      return;
+    }
+
+    // 2. Ping API to check connection
     fetch('/api/ping?_t=' + Date.now())
       .then(res => res.json())
-      .then(data => setApiStatus(data.status === 'online' ? 'online' : 'offline'))
+      .then(data => {
+        if (data.status === 'online') {
+          setApiStatus('online');
+          setExpectedLen(data.pLen || 0);
+        } else {
+          setApiStatus('offline');
+        }
+      })
       .catch(() => setApiStatus('offline'));
   }, []);
 
   const handleLogin = async (e) => {
     if (e) e.preventDefault();
+    if (!password.trim()) {
+      setError("Please enter a password first.");
+      return;
+    }
     setLoading(true);
     setError(null);
 
@@ -50,17 +69,27 @@ const AdminDashboard = () => {
         search: searchQuery.trim(),
         service: serviceFilter,
         tab: viewTab,
-        _t: Date.now()
+        _t: Date.now(),
+        auth: password.trim()
       });
 
       // Use the original, fully-deployed API endpoint
       const response = await fetch(`/api/get-leads?${params.toString()}`, {
         headers: {
+          'x-crm-admin-key': password.trim(),
           'x-nextwave-auth': password.trim()
         }
       });
 
       const data = await response.json();
+
+      if (!response.ok) {
+        setError(`Connection Refused [${data.error || response.status}]`);
+        if (response.status === 401) {
+          sessionStorage.removeItem('admin_key');
+        }
+        return;
+      }
 
       if (response.ok) {
         setLeads(data.leads);
@@ -84,8 +113,13 @@ const AdminDashboard = () => {
         // 401 Safety: Clear stored password if it's invalid
         if (response.status === 401) {
           sessionStorage.removeItem('admin_key');
-          setIsLoggedIn(false);
-          setPassword('');
+          if (data.status === 'online') {
+            setApiStatus('online');
+            setExpectedLen(data.pLen || 0);
+          } else {
+            setIsLoggedIn(false);
+            setPassword('');
+          }
         }
       }
     } catch (err) {
@@ -123,17 +157,35 @@ const AdminDashboard = () => {
     }
   }, [timeFilter, searchQuery, serviceFilter, viewTab]);
 
+  const handleEmergencyReset = () => {
+    sessionStorage.clear();
+    localStorage.clear();
+    setPassword('');
+    setIsLoggedIn(false);
+    showToast('🚨 System Synced & Cleared. Forcing Refresh...', 'success');
+    setTimeout(() => {
+      window.location.reload(true);
+    }, 1500);
+  };
+
   const handleUpdateLead = async (id, status, notes, phone, is_archived) => {
+    if (!password.trim()) return;
     setIsUpdating(true);
     try {
       const resp = await fetch('/api/update-lead', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'x-nextwave-auth': password
+          'x-crm-admin-key': password.trim(),
+          'x-nextwave-auth': password.trim()
         },
-        body: JSON.stringify({ id, status, notes, phone, is_archived })
+        body: JSON.stringify({ id, status, notes, phone, is_archived, auth: password.trim() })
       });
+      if (resp.status === 401) {
+        const data = await resp.json();
+        showToast(`Unauthorized: ${data.error}`, 'error');
+        return;
+      }
       if (resp.ok) {
         // If the lead was archived/restored, it should move out of the current view
         if (typeof is_archived !== 'undefined' && is_archived !== (viewTab === 'archived')) {
@@ -162,6 +214,7 @@ const AdminDashboard = () => {
 
   const handleManualAddLead = async (e) => {
     if (e) e.preventDefault();
+    if (!password.trim()) return;
 
     // 1. Better Validation
     if (!newLead.name || !newLead.name.trim()) {
@@ -179,9 +232,10 @@ const AdminDashboard = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'x-nextwave-auth': password
+          'x-crm-admin-key': password.trim(),
+          'x-nextwave-auth': password.trim()
         },
-        body: JSON.stringify(newLead)
+        body: JSON.stringify({ ...newLead, auth: password.trim() })
       });
 
       // Handle cases where the endpoint is not ready yet (404 during deployment)
@@ -199,6 +253,10 @@ const AdminDashboard = () => {
       }
 
       const data = await resp.json();
+      if (resp.status === 401) {
+        showToast(`Unauthorized: ${data.error}`, 'error');
+        return;
+      }
       if (resp.ok) {
         setLeads(prev => [data.lead, ...prev]);
         setShowAddModal(false);
@@ -216,28 +274,45 @@ const AdminDashboard = () => {
   };
 
   const handleDeleteLead = async (id) => {
+    if (!password.trim()) return;
+    setIsDeleting(true);
     try {
       const resp = await fetch('/api/delete-lead', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'x-nextwave-auth': password
+          'x-crm-admin-key': password.trim(),
+          'x-nextwave-auth': password.trim()
         },
         body: JSON.stringify({ id })
       });
+
+      const data = await resp.json();
+
+      if (resp.status === 401) {
+        console.error("Auth Failure details:", data);
+        showToast(`Unauthorized: ${data.error || 'Session Expired'}`, 'error');
+        return;
+      }
+
       if (resp.ok) {
         setLeads(prev => prev.filter(l => l.id !== id));
         setSelectedLead(null);
         setDeletingLeadId(null);
-        showToast('Lead deleted permanently', 'error');
+        showToast('Lead deleted permanently', 'success');
+      } else {
+        showToast(data.error || 'Failed to delete lead', 'error');
       }
     } catch (err) {
       console.error("Delete failed:", err);
-      showToast('Delete failed', 'error');
+      showToast('Connection error. Try again.', 'error');
+    } finally {
+      setIsDeleting(false);
     }
   };
 
   const handleSendReply = async () => {
+    if (!password.trim()) return;
     if (!replyText.trim()) {
       showToast('Please type a message before sending!', 'error');
       return;
@@ -249,7 +324,8 @@ const AdminDashboard = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'x-nextwave-auth': password
+          'x-crm-admin-key': password.trim(),
+          'x-nextwave-auth': password.trim()
         },
         body: JSON.stringify({
           leadId: selectedLead.id,
@@ -257,11 +333,16 @@ const AdminDashboard = () => {
           toName: selectedLead.name,
           replyText: replyText,
           originalMessage: selectedLead.message || "Manual Entry",
-          service: selectedLead.service
+          service: selectedLead.service,
+          auth: password.trim()
         })
       });
 
       const data = await resp.json();
+      if (resp.status === 401) {
+        showToast(`Unauthorized: ${data.error}`, 'error');
+        return;
+      }
       if (resp.ok) {
         showToast('Reply sent and logged successfully!');
         setReplyText('');
@@ -281,14 +362,20 @@ const AdminDashboard = () => {
   };
 
   const fetchMessages = async (leadId) => {
+    if (!password.trim()) return;
     setIsLoadingMessages(true);
     try {
-      const resp = await fetch(`/api/get-messages?leadId=${leadId}`, {
-        headers: { 'x-nextwave-auth': password }
+      const resp = await fetch(`/api/get-messages?leadId=${leadId}&auth=${encodeURIComponent(password.trim())}`, {
+        headers: { 
+          'x-crm-admin-key': password.trim(),
+          'x-nextwave-auth': password.trim() 
+        }
       });
       const data = await resp.json();
-      if (data.success) {
+      if (resp.ok) {
         setMessages(data.messages);
+      } else if (resp.status === 401) {
+        console.error("Auth Failure in fetchMessages:", data);
       }
     } catch (err) {
       console.error("Fetch messages failed:", err);
@@ -298,6 +385,7 @@ const AdminDashboard = () => {
   };
 
   const handleLogClientMessage = async (content) => {
+    if (!password.trim()) return;
     if (!content.trim()) return;
     setIsSendingReply(true);
     try {
@@ -305,10 +393,16 @@ const AdminDashboard = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'x-nextwave-auth': password
+          'x-crm-admin-key': password.trim(),
+          'x-nextwave-auth': password.trim()
         },
-        body: JSON.stringify({ leadId: selectedLead.id, content })
+        body: JSON.stringify({ leadId: selectedLead.id, content, auth: password.trim() })
       });
+      if (resp.status === 401) {
+        const data = await resp.json();
+        showToast(`Unauthorized: ${data.error}`, 'error');
+        return;
+      }
       if (resp.ok) {
         fetchMessages(selectedLead.id);
       }
@@ -348,6 +442,24 @@ const AdminDashboard = () => {
   if (!isLoggedIn) {
     return (
       <div className="admin-login-container">
+          <div style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100%',
+            background: '#dc2626', // DARK RED FOR NUCLEAR SYNC
+            color: 'white',
+            textAlign: 'center',
+            padding: '12px',
+            fontWeight: '900',
+            fontSize: '16px',
+            zIndex: 10000,
+            boxShadow: '0 4px 20px rgba(220, 38, 38, 0.5)',
+            textTransform: 'uppercase',
+            letterSpacing: '1px'
+          }}>
+            ☢️ EMERGENCY v18.0 (HARD SYNC REQUIRED) - REFRESH IF NOT RED
+          </div>
         <div className="admin-login-card">
           <div className="admin-logo">
             <img src="/NextWave_logo1.web.jpeg" alt="NextWave" style={{ width: '150px', marginBottom: '20px' }} />
@@ -395,11 +507,16 @@ const AdminDashboard = () => {
                 {showPassword ? '👁️‍🗨️' : '👁️'}
               </button>
             </div>
+            {expectedLen > 0 && password.length > 0 && password.length !== expectedLen && (
+              <div className="error-text" style={{ fontSize: '10px', marginTop: '5px', color: '#fbbf24' }}>
+                ⚠️ Password Length Mismatch (Expected: {expectedLen}, Typed: {password.length})
+              </div>
+            )}
             {error && <div className="error-text">{error}</div>}
             <button type="submit" disabled={loading}>
               {loading ? 'Verifying Connection...' : 'Login ->'}
             </button>
-            <div style={{ marginTop: '15px', textAlign: 'center' }}>
+            <div style={{ marginTop: '15px', textAlign: 'center', display: 'flex', flexDirection: 'column', gap: '8px' }}>
               <button 
                 type="button" 
                 onClick={() => {
@@ -411,6 +528,13 @@ const AdminDashboard = () => {
                 style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.4)', fontSize: '11px', cursor: 'pointer', textDecoration: 'underline' }}
               >
                 Reset Stale Session
+              </button>
+              <button 
+                type="button" 
+                onClick={handleEmergencyReset}
+                style={{ background: 'rgba(239, 68, 68, 0.2)', border: '1px solid #ef4444', color: '#fff', fontSize: '11px', cursor: 'pointer', padding: '8px', borderRadius: '6px', fontWeight: 'bold' }}
+              >
+                🚨 Emergency Session Reset (Fix Sync)
               </button>
             </div>
             <div style={{ marginTop: '15px', fontSize: '10px', color: 'rgba(255,255,255,0.3)' }}>
@@ -427,7 +551,7 @@ const AdminDashboard = () => {
       <nav className="admin-nav">
         <div className="admin-nav-brand">
           <img src="/NextWave_logo1.web.jpeg" alt="NextWave" style={{ height: '30px' }} />
-          <div className="version-badge" style={{ background: '#22c55e' }}>v7.0</div>
+          <div className="version-badge" style={{ background: '#dc2626' }}>v18.0</div>
           <span>Admin Portal</span>
         </div>
         <div className="nav-actions">
@@ -798,14 +922,21 @@ const AdminDashboard = () => {
 
       {/* Delete Confirmation Modal */}
       {deletingLeadId && (
-        <div className="modal-overlay" style={{ zIndex: 9000 }} onClick={() => setDeletingLeadId(null)}>
+        <div className="modal-overlay" style={{ zIndex: 9000 }} onClick={() => !isDeleting && setDeletingLeadId(null)}>
           <div className="lead-modal confirm-box" style={{ zIndex: 9001 }} onClick={e => e.stopPropagation()}>
-            <div className="confirm-icon">⚠️</div>
-            <h3>Delete Record permanently?</h3>
-            <p>Are you sure you want to remove this lead? This action cannot be undone and all consultation notes will be lost.</p>
+            <div className="confirm-icon">{isDeleting ? '⏳' : '⚠️'}</div>
+            <h3>{isDeleting ? 'Deleting Record...' : 'Delete Record permanently?'}</h3>
+            <p>{isDeleting ? 'Please wait while we remove this lead from the database.' : 'Are you sure you want to remove this lead? This action cannot be undone and all consultation notes will be lost.'}</p>
             <div className="confirm-actions">
-              <button className="cancel-btn" onClick={() => setDeletingLeadId(null)}>No, Keep it</button>
-              <button className="confirm-btn" onClick={() => handleDeleteLead(deletingLeadId)}>Yes, Delete permanently</button>
+              <button className="cancel-btn" onClick={() => setDeletingLeadId(null)} disabled={isDeleting}>No, Keep it</button>
+              <button 
+                className="confirm-btn" 
+                onClick={() => handleDeleteLead(deletingLeadId)}
+                disabled={isDeleting}
+                style={{ opacity: isDeleting ? 0.7 : 1, cursor: isDeleting ? 'not-allowed' : 'pointer' }}
+              >
+                {isDeleting ? 'Processing...' : 'Yes, Delete permanently'}
+              </button>
             </div>
           </div>
         </div>
@@ -936,7 +1067,7 @@ const AdminDashboard = () => {
         .lead-modal {
           background: #fff;
           width: 100%;
-          max-width: 900px;
+          max-width: 1200px;
           border-radius: 30px;
           overflow: hidden;
           box-shadow: 0 40px 100px rgba(0,0,0,0.4);
@@ -984,14 +1115,20 @@ const AdminDashboard = () => {
         .chat-bubble-container.received { justify-content: flex-start; }
 
         .chat-bubble { 
-          max-width: 75%; 
-          padding: 8px 12px 6px; 
-          border-radius: 10px; 
-          font-size: 14.5px; 
+          max-width: 94%; 
+          min-width: 240px;
+          padding: 12px 18px 10px; 
+          border-radius: 12px; 
+          font-size: 16px; 
           line-height: 1.5; 
           position: relative;
           box-shadow: 0 1px 0.5px rgba(0,0,0,0.13);
           animation: slideUp 0.3s ease-out forwards;
+          flex: 0 0 auto !important;
+          width: fit-content !important;
+          min-width: 240px !important;
+          box-sizing: border-box !important;
+          display: block !important;
         }
         @keyframes slideUp { 
           from { opacity: 0; transform: translateY(15px); } 
@@ -1009,10 +1146,24 @@ const AdminDashboard = () => {
           border-top-left-radius: 0; 
         }
         
-        .bubble-sender { font-size: 11px; font-weight: 800; color: #128c7e; margin-bottom: 4px; }
+        .bubble-sender { 
+          font-size: 11px; 
+          font-weight: 800; 
+          color: #128c7e; 
+          margin-bottom: 4px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
         .chat-bubble.admin .bubble-sender { color: #075e54; }
         
-        .bubble-content { margin-bottom: 4px; word-break: break-word; }
+        .bubble-content { 
+          margin-bottom: 6px; 
+          overflow-wrap: break-word; 
+          word-wrap: break-word;
+          word-break: normal; 
+          white-space: pre-wrap; 
+        }
         
         .bubble-footer { display: flex; align-items: center; justify-content: flex-end; gap: 4px; margin-top: -2px; }
         .bubble-time { font-size: 10px; color: #64748b; font-weight: 600; text-transform: uppercase; }

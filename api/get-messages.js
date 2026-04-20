@@ -6,12 +6,19 @@ export default async function handler(req, res) {
   }
 
   const { leadId } = req.query;
-  const authHeader = req.headers['x-nextwave-auth']?.trim();
+  const authHeader = (req.headers['x-crm-admin-key'] || req.headers['x-nextwave-auth'] || req.query.auth)?.trim();
   const correctPassword = process.env.ADMIN_PASSWORD?.trim();
 
-  // 1. Authorization Check
-  if (!authHeader || authHeader !== correctPassword) {
-    return res.status(401).json({ error: 'Unauthorized' });
+  if (!correctPassword) {
+    return res.status(500).json({ error: 'ERR_ENV_PASSWORD_MISSING' });
+  }
+
+  if (!authHeader) {
+    return res.status(401).json({ error: 'ERR_AUTH_MISSING' });
+  }
+
+  if (authHeader !== correctPassword) {
+    return res.status(401).json({ error: 'ERR_AUTH_INVALID' });
   }
 
   if (!leadId) {

@@ -6,11 +6,15 @@ export default async function handler(req, res) {
   }
 
   const { id, status, notes, phone, is_archived } = req.body;
-  const authHeader = req.headers['x-nextwave-auth']?.trim();
+  const authHeader = (req.headers['x-crm-admin-key'] || req.headers['x-nextwave-auth'] || req.body.auth)?.trim();
   const correctPassword = process.env.ADMIN_PASSWORD?.trim();
 
-  if (!authHeader || authHeader !== correctPassword) {
-    return res.status(401).json({ error: 'Unauthorized' });
+  if (!authHeader) {
+    return res.status(401).json({ error: 'Auth header missing' });
+  }
+
+  if (authHeader !== correctPassword) {
+    return res.status(401).json({ error: 'Invalid password' });
   }
 
   if (!process.env.DATABASE_URL) {

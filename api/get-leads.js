@@ -7,22 +7,24 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  // 2. Check for the admin password in the headers
-  const authHeader = req.headers['x-nextwave-auth']?.trim();
+  // 2. Check for the admin password (headers first, then query param fallback for GET)
+  const authHeader = (req.headers['x-crm-admin-key'] || req.headers['x-nextwave-auth'] || req.query.auth)?.trim();
   const correctPassword = process.env.ADMIN_PASSWORD?.trim();
 
   if (!correctPassword) {
-    return res.status(500).json({ error: 'Server Error: ADMIN_PASSWORD is not set.' });
+    return res.status(500).json({ error: 'ERR_ENV_PASSWORD_MISSING' });
   }
 
-  if (!authHeader || authHeader !== correctPassword) {
-    return res.status(401).json({ 
-      error: 'Invalid password. Unauthorized access.' 
-    });
+  if (!authHeader) {
+    return res.status(401).json({ error: 'ERR_AUTH_MISSING' });
+  }
+
+  if (authHeader !== correctPassword) {
+    return res.status(401).json({ error: 'ERR_AUTH_INVALID' });
   }
 
   if (!process.env.DATABASE_URL) {
-    return res.status(500).json({ error: 'DATABASE_URL is not defined.' });
+    return res.status(500).json({ error: 'ERR_ENV_DB_URL_MISSING' });
   }
 
   try {
