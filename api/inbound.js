@@ -26,9 +26,27 @@ export default async function handler(req, res) {
     return res.status(401).json({ error: 'Unauthorized: Invalid or missing sync key.' });
   }
 
-  // 3. Data Check
-  if (!from_email || !content) {
-    return res.status(400).json({ error: 'Missing required email data (from_email and content).' });
+  // 3. Robust Data Extraction
+  // We check multiple common webhook field names (Zapier, Mailgun, SendGrid)
+  let emailContent = (
+    content || 
+    req.body.text || 
+    req.body.body || 
+    req.body['body-plain'] || 
+    req.body['stripped-text'] || 
+    req.body['stripped_text'] ||
+    subject
+  );
+
+  // If content is an object (sometimes webhooks nest data), try to stringify or find text
+  if (emailContent && typeof emailContent === 'object') {
+    emailContent = emailContent.text || emailContent.body || JSON.stringify(emailContent);
+  }
+
+  const finalContent = emailContent?.toString().trim() || "(No text content found in email sync)";
+
+  if (!from_email) {
+    return res.status(400).json({ error: 'Missing from_email field.' });
   }
 
   try {
@@ -48,7 +66,7 @@ export default async function handler(req, res) {
     // 5. Insert into messages as 'client'
     await sql`
       INSERT INTO messages (lead_id, sender, content)
-      VALUES (${leadId}, 'client', ${content})
+      VALUES (${leadId}, 'client', ${finalContent})
     `;
 
     return res.status(200).json({ success: true, message: 'Message synced to CRM successfully.' });

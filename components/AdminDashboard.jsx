@@ -22,7 +22,8 @@ const AdminDashboard = () => {
   const [messages, setMessages] = useState([]);
   const [isLoadingMessages, setIsLoadingMessages] = useState(false);
   const [isSyncExpanded, setIsSyncExpanded] = useState(false);
-  const [sysVersion] = useState('v25.0 (COMPACT STUDIO)');
+  const [isDashControlsOpen, setIsDashControlsOpen] = useState(false);
+  const [sysVersion] = useState('v26.0 (ONE-TOUCH)');
   const [apiStatus, setApiStatus] = useState('checking'); // 'online', 'offline', 'checking'
   const [expectedLen, setExpectedLen] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -472,18 +473,18 @@ const AdminDashboard = () => {
             top: 0,
             left: 0,
             width: '100%',
-            background: '#8b5cf6', // PEARL PURPLE FOR v25
+            background: '#ec4899', // ROSE PINK FOR v26
             color: 'white',
             textAlign: 'center',
             padding: '10px',
             fontWeight: '900',
             fontSize: '15px',
             zIndex: 10000,
-            boxShadow: '0 4px 20px rgba(139, 92, 246, 0.4)',
+            boxShadow: '0 4px 20px rgba(236, 72, 153, 0.4)',
             textTransform: 'uppercase',
             letterSpacing: '1px'
           }}>
-            ✅ SECURITY SYSTEM v25.0 (COMPACT STUDIO) - CONNECTED
+            🏢 NEXTWAVE v26.0 - REFRESH IF NOT ROSE PINK
           </div>
         <div className="admin-login-card">
           <div className="admin-logo">
@@ -576,7 +577,6 @@ const AdminDashboard = () => {
       <nav className="admin-nav">
         <div className="admin-nav-brand">
           <img src="/NextWave_logo1.web.jpeg" alt="NextWave" style={{ height: '30px' }} />
-          <div className="version-badge" style={{ background: '#dc2626' }}>v18.0</div>
           <span>Admin Portal</span>
         </div>
         <div className="nav-actions">
@@ -624,7 +624,15 @@ const AdminDashboard = () => {
           </div>
         </div>
 
-        <header className="content-header">
+        <button 
+          className="mobile-dash-toggle" 
+          onClick={() => setIsDashControlsOpen(!isDashControlsOpen)}
+        >
+          {isDashControlsOpen ? '✖ Close Dashboard Controls' : '🎛️ Open Dashboard Controls'}
+        </button>
+
+        <div className={`collapsible-dash-section ${isDashControlsOpen ? 'open' : ''}`}>
+          <header className="content-header">
           <div className="header-main">
             <h1>Customer Inquiries</h1>
             <div className="analytics-summary">
@@ -638,6 +646,7 @@ const AdminDashboard = () => {
             <form className="search-box" onSubmit={(e) => {
               e.preventDefault();
               e.stopPropagation();
+              // handleLogin() is used to refresh the list with the current searchQuery
               handleLogin();
             }}>
               <input
@@ -647,13 +656,7 @@ const AdminDashboard = () => {
                 onChange={(e) => {
                   const val = e.target.value;
                   setSearchQuery(val);
-                  // Save immediately so it survives a reload even if debounce hasn't fired
                   sessionStorage.setItem('last_search', val);
-                }}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
-                    // Enter will trigger the form's onSubmit
-                  }
                 }}
               />
               {searchQuery && <button type="button" className="clear-search" onClick={() => { setSearchQuery(''); sessionStorage.removeItem('last_search'); }}>×</button>}
@@ -686,6 +689,7 @@ const AdminDashboard = () => {
             </button>
           </div>
         </header>
+      </div>
 
         {loading ? (
           <div className="leads-loading">
@@ -1377,6 +1381,36 @@ const AdminDashboard = () => {
           .lead-modal:not(.confirm-box) { max-height: 100vh; border-radius: 0; }
           .modal-header { padding: 15px 50px 15px 20px; }
           .modal-header h3 { font-size: 18px; }
+
+          .mobile-dash-toggle {
+            display: block !important;
+            width: 100%;
+            padding: 12px;
+            background: #0B1F3A;
+            color: #1ABC9C;
+            border: 1px solid #1ABC9C;
+            border-radius: 12px;
+            font-weight: 800;
+            text-transform: uppercase;
+            font-size: 11px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: 0.3s;
+          }
+
+          .collapsible-dash-section {
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0;
+            transform: translateY(-20px);
+          }
+          .collapsible-dash-section.open {
+            max-height: 1000px; /* high value for content */
+            opacity: 1;
+            transform: translateY(0);
+            margin-bottom: 20px;
+          }
 
           .integration-info-box { padding: 8px; border-radius: 8px; margin-bottom: 10px; max-height: 40px; overflow: hidden; transition: 0.3s; cursor: pointer; position: relative; }
           .integration-info-box.expanded { max-height: 200px; }
