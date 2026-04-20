@@ -21,7 +21,7 @@ const AdminDashboard = () => {
   const [isSendingReply, setIsSendingReply] = useState(false);
   const [messages, setMessages] = useState([]);
   const [isLoadingMessages, setIsLoadingMessages] = useState(false);
-  const [sysVersion] = useState('v23.0 (MOBILE OPTIMIZED)');
+  const [sysVersion] = useState('v24.0 (PERFECT MOBILE)');
   const [apiStatus, setApiStatus] = useState('checking'); // 'online', 'offline', 'checking'
   const [expectedLen, setExpectedLen] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -471,18 +471,18 @@ const AdminDashboard = () => {
             top: 0,
             left: 0,
             width: '100%',
-            background: '#128c7e', // WHATSAPP GREEN FOR STABLE v20
+            background: '#f97316', // BRIGHT ORANGE FOR v24
             color: 'white',
             textAlign: 'center',
-            padding: '8px',
-            fontWeight: 'bold',
-            fontSize: '14px',
+            padding: '12px',
+            fontWeight: '900',
+            fontSize: '16px',
             zIndex: 10000,
-            boxShadow: '0 2px 10px rgba(0,0,0,0.3)',
+            boxShadow: '0 4px 25px rgba(249, 115, 22, 0.5)',
             textTransform: 'uppercase',
-            letterSpacing: '1.5px'
+            letterSpacing: '2px'
           }}>
-            ✅ SECURITY SYSTEM v23.0 (MOBILE OPTIMIZED) - CONNECTED
+            ⚡ VERSION v24.0 (HARD UPDATE) - REFRESH IF NOT ORANGE
           </div>
         <div className="admin-login-card">
           <div className="admin-logo">
@@ -706,27 +706,28 @@ const AdminDashboard = () => {
               </thead>
               <tbody>
                 {leads.map(lead => (
-                  <tr key={lead.id} onClick={() => {
+                  <tr key={lead.id} className="lead-row" onClick={() => {
                     setSelectedLead(lead);
                     fetchMessages(lead.id);
-                  }} className="lead-row">
-                    <td>{new Date(lead.created_at).toLocaleDateString()}</td>
-                    <td><strong>{lead.name}</strong><div style={{ fontSize: '11px', color: '#64748b' }}>{lead.phone}</div></td>
-                    <td>{lead.email}</td>
-                    <td>
-                      <span className={`status-badge ${lead.status?.toLowerCase().replace(' ', '-') || 'new'}`}>
+                  }}>
+                    <td data-label="DATE">{new Date(lead.created_at).toLocaleDateString()}</td>
+                    <td data-label="NAME">
+                      <strong>{lead.name}</strong>
+                      <div style={{ fontSize: '11px', color: '#64748b' }}>{lead.phone}</div>
+                    </td>
+                    <td data-label="EMAIL">{lead.email}</td>
+                    <td data-label="STATUS">
+                      <span className={`status-badge ${lead.status?.toLowerCase().replace(/ /g, '-') || 'new'}`}>
                         {lead.status || 'New'}
                       </span>
                     </td>
-                    <td>
-                      <span className={`source-tag ${lead.source || 'website_form'}`}>
-                        {lead.source === 'chat_widget' ? '💬 Chat' : '📄 Form'}
-                      </span>
+                    <td data-label="SOURCE">{lead.source?.replace('_', ' ') || 'Direct'}</td>
+                    <td data-label="ACTION">
+                      <button type="button" className="view-btn">Consult / Edit</button>
                       {lead.notes?.includes('--- REPLY SENT') && (
                         <span className="replied-badge" title="Response has been sent via dashboard">✓ Sent</span>
                       )}
                     </td>
-                    <td><button type="button" className="view-btn">Consult / Edit</button></td>
                   </tr>
                 ))}
               </tbody>
@@ -1350,32 +1351,23 @@ const AdminDashboard = () => {
         .archive-btn:hover { background: #e2e8f0; }
 
         /* Mobile Fixes & Transitions */
-        @media (max-width: 1024px) {
-          .admin-nav { padding: 15px 20px; }
-          .admin-content { padding: 20px; }
-          .header-main { flex-direction: column; gap: 15px; }
-          .analytics-summary { flex-wrap: wrap; }
-          .crm-master-controls { flex-direction: column; align-items: stretch; }
-        }
-
         @media (max-width: 768px) {
-          .admin-nav { padding: 15px 20px; flex-wrap: wrap; gap: 10px; }
-          .nav-actions { width: 100%; justify-content: space-between; border-top: 1px solid rgba(0,0,0,0.05); padding-top: 10px; }
-          .admin-nav-brand span { display: none; }
-          .version-badge { order: -1; }
-          .leads-table th:nth-child(2), .leads-table td:nth-child(2) { font-weight: bold; }
-          .leads-table th:nth-child(3), .leads-table td:nth-child(3),
-          .leads-table th:nth-child(5), .leads-table td:nth-child(5) { display: none; }
+          .admin-nav { padding: 20px; flex-direction: column; gap: 15px; }
+          .admin-nav-brand { flex-direction: column; gap: 8px; }
+          .nav-actions { width: 100%; justify-content: center; border-top: 1px solid rgba(0,0,0,0.05); padding-top: 15px; }
+          .admin-nav-brand span { display: block; font-size: 14px; opacity: 0.6; }
+          .version-badge { position: absolute; top: 10px; left: 10px; margin: 0; }
           
           /* Main Modal Full-Screen on Mobile */
           .lead-modal:not(.confirm-box) { max-height: 100vh; border-radius: 0; }
-          .modal-header { background: #0B1F3A; color: #fff; padding: 25px 50px 25px 25px; display: flex; justify-content: space-between; align-items: center; }
+          .modal-header { background: #0B1F3A; color: #fff; padding: 25px 60px 25px 25px; display: flex; justify-content: space-between; align-items: center; }
+          .modal-header h3 { font-size: 20px; }
           .modal-grid { grid-template-columns: 1fr; }
-          .modal-body { padding: 25px; }
-          .chat-bubbles-wrap { padding: 20px; }
-          .chat-bubble { max-width: 95%; } /* wider bubbles on mobile */
+          .modal-body { padding: 20px; }
+          .chat-bubbles-wrap { padding: 15px; }
+          .chat-bubble { max-width: 98%; } 
           
-          .integration-info-box { padding: 12px; font-size: 10px; }
+          .integration-info-box { padding: 12px; font-size: 10px; border-radius: 8px; }
           .integration-info-box h5 { font-size: 11px; }
 
           .secondary-actions { flex-direction: column; width: 100%; gap: 10px; }
@@ -1384,41 +1376,58 @@ const AdminDashboard = () => {
           .reply-trigger-btn { width: 100%; }
         }
 
-        /* Small Pop Confirmation Modal */
-        .confirm-box { 
-          max-width: 420px !important; 
-          border-radius: 30px !important; 
-          padding: 30px !important; 
-          text-align: center;
-          max-height: 90vh !important;
-          animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-          overflow-y: auto;
+        /* The "Perfect Mobile Card" Overhaul */
+        @media (max-width: 640px) {
+          .leads-table-container { background: transparent; box-shadow: none; border: none; }
+          .leads-table { display: block; }
+          .leads-table thead { display: none; } /* Hide headers on mobile */
+          .leads-table tbody { display: block; }
+          .lead-row { 
+            display: grid; 
+            grid-template-columns: 1fr; 
+            background: #fff; 
+            margin-bottom: 20px; 
+            border-radius: 18px; 
+            padding: 20px; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0;
+            position: relative;
+          }
+          .lead-row td { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 10px 0; 
+            border: none;
+            font-size: 14px;
+          }
+          .lead-row td::before { 
+            content: attr(data-label); 
+            font-weight: 800; 
+            color: #64748b; 
+            font-size: 11px; 
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+          }
+          .lead-row td:last-child { 
+            border-top: 1px solid #f1f5f9; 
+            margin-top: 10px; 
+            padding-top: 15px;
+            justify-content: stretch;
+          }
+          .lead-row td:last-child button { width: 100%; display: flex; justify-content: center; }
+          
+          .crm-master-controls { gap: 12px; }
+          .search-box { min-width: 100%; }
+          .add-manual-btn, .export-btn { width: 100%; }
         }
-        @keyframes popIn { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-        
-        .confirm-icon { font-size: 50px; margin-bottom: 20px; }
-        .confirm-actions { display: flex; gap: 15px; margin-top: 30px; }
-        .cancel-btn { flex: 1; padding: 14px; border-radius: 12px; border: 1px solid #e2e8f0; background: #f8fafc; color: #64748b; font-weight: bold; cursor: pointer; }
-        .confirm-btn { 
-          flex: 1.5; 
-          padding: 16px; 
-          border-radius: 12px; 
-          border: none; 
-          background: #ef4444; 
-          color: #ffffff !important; 
-          font-weight: 800; 
-          cursor: pointer; 
-          box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2); 
-          -webkit-tap-highlight-color: transparent;
-        }
-        .confirm-btn:hover { background: #dc2626; transform: scale(1.05); }
 
         @media (max-width: 480px) {
           .confirm-box { padding: 25px !important; border-radius: 20px !important; width: 90% !important; }
           .confirm-actions { flex-direction: column; gap: 10px; }
           .confirm-btn, .cancel-btn { width: 100%; flex: none; }
-          .analytics-summary { flex-direction: column; width: 100%; }
-          .ans-item { width: 100%; justify-content: space-between; display: flex; }
+          .analytics-summary { flex-direction: column; width: 100%; gap: 10px; }
+          .ans-item { width: 100%; justify-content: space-between; display: flex; padding: 15px; }
         }
 
         /* Toast UI */
