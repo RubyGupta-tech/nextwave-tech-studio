@@ -21,7 +21,7 @@ const AdminDashboard = () => {
   const [isSendingReply, setIsSendingReply] = useState(false);
   const [messages, setMessages] = useState([]);
   const [isLoadingMessages, setIsLoadingMessages] = useState(false);
-  const [sysVersion] = useState('v18.0 (NUCLEAR)');
+  const [sysVersion] = useState('v20.0 (ULTRA-WIDE)');
   const [apiStatus, setApiStatus] = useState('checking'); // 'online', 'offline', 'checking'
   const [expectedLen, setExpectedLen] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -384,6 +384,30 @@ const AdminDashboard = () => {
     }
   };
 
+  const handleDeleteMessage = async (messageId, leadId) => {
+    if (!password.trim()) return;
+    try {
+      const resp = await fetch('/api/delete-message', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-crm-admin-key': password.trim(),
+          'x-nextwave-auth': password.trim()
+        },
+        body: JSON.stringify({ id: messageId, auth: password.trim() })
+      });
+      const data = await resp.json();
+      if (resp.ok) {
+        showToast('Message deleted');
+        fetchMessages(leadId); // Refresh history
+      } else {
+        showToast(data.error || 'Failed to delete message', 'error');
+      }
+    } catch (err) {
+      console.error("Delete msg failed:", err);
+    }
+  };
+
   const handleLogClientMessage = async (content) => {
     if (!password.trim()) return;
     if (!content.trim()) return;
@@ -447,18 +471,18 @@ const AdminDashboard = () => {
             top: 0,
             left: 0,
             width: '100%',
-            background: '#dc2626', // DARK RED FOR NUCLEAR SYNC
+            background: '#128c7e', // WHATSAPP GREEN FOR STABLE v20
             color: 'white',
             textAlign: 'center',
-            padding: '12px',
-            fontWeight: '900',
-            fontSize: '16px',
+            padding: '8px',
+            fontWeight: 'bold',
+            fontSize: '14px',
             zIndex: 10000,
-            boxShadow: '0 4px 20px rgba(220, 38, 38, 0.5)',
+            boxShadow: '0 2px 10px rgba(0,0,0,0.3)',
             textTransform: 'uppercase',
-            letterSpacing: '1px'
+            letterSpacing: '1.5px'
           }}>
-            ☢️ EMERGENCY v18.0 (HARD SYNC REQUIRED) - REFRESH IF NOT RED
+            ✅ SECURITY SYSTEM v20.0 (ULTRA-WIDE LOGS) - CONNECTED
           </div>
         <div className="admin-login-card">
           <div className="admin-logo">
@@ -813,6 +837,16 @@ const AdminDashboard = () => {
                               <span className="bubble-time">
                                 {new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                               </span>
+                              <button 
+                                className="delete-msg-btn"
+                                onClick={() => handleDeleteMessage(msg.id, selectedLead.id)}
+                                title="Delete this message"
+                              >
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                  <polyline points="3 6 5 6 21 6"></polyline>
+                                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                </svg>
+                              </button>
                               {msg.sender === 'admin' && (
                                 <span className="bubble-status">
                                   <svg width="16" height="11" viewBox="0 0 16 11" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -1115,20 +1149,21 @@ const AdminDashboard = () => {
         .chat-bubble-container.received { justify-content: flex-start; }
 
         .chat-bubble { 
-          max-width: 94%; 
+          max-width: 98%; 
           min-width: 240px;
           padding: 12px 18px 10px; 
-          border-radius: 12px; 
+          border-radius: 14px; 
           font-size: 16px; 
-          line-height: 1.5; 
+          line-height: 1.6; 
           position: relative;
-          box-shadow: 0 1px 0.5px rgba(0,0,0,0.13);
+          box-shadow: 0 1px 2px rgba(0,0,0,0.1);
           animation: slideUp 0.3s ease-out forwards;
           flex: 0 0 auto !important;
           width: fit-content !important;
           min-width: 240px !important;
           box-sizing: border-box !important;
           display: block !important;
+          border: 1px solid rgba(0,0,0,0.05);
         }
         @keyframes slideUp { 
           from { opacity: 0; transform: translateY(15px); } 
@@ -1169,6 +1204,25 @@ const AdminDashboard = () => {
         .bubble-time { font-size: 10px; color: #64748b; font-weight: 600; text-transform: uppercase; }
         .bubble-status { display: flex; align-items: center; }
         .bubble-status svg { width: 15px; height: 10px; }
+
+        .delete-msg-btn {
+          background: none;
+          border: none;
+          color: rgba(0,0,0,0.1);
+          padding: 4px;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          border-radius: 4px;
+          transition: 0.2s;
+        }
+        .chat-bubble:hover .delete-msg-btn {
+          color: #ef4444;
+        }
+        .delete-msg-btn:hover {
+          background: rgba(239, 68, 68, 0.1);
+          color: #dc2626 !important;
+        }
 
         .chat-bubble.client .bubble-meta { color: #64748b; }
 
