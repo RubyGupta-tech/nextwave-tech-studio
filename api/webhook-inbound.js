@@ -8,11 +8,25 @@ export default async function handler(req, res) {
     }
 
     const payload = req.body;
-    if (payload.type !== 'email.received' || !payload.data) {
-      return res.status(200).json({ status: 'ignored', message: 'Not an inbound email' });
+    // 1. Robust Data Extraction (Synced with inbound.js v27.0)
+    const { from, subject, message_id } = (payload?.data || {});
+    let textContent = (
+      payload.data?.text || 
+      payload.data?.body || 
+      payload.data?.content ||
+      payload.data?.['body-plain'] || 
+      payload.data?.['stripped-text'] || 
+      payload.data?.['stripped_text'] ||
+      subject
+    );
+
+    // Debug Fallback: If still empty, save the whole data object so we can see what's missing
+    if (!textContent) {
+      textContent = `(Sync Debug) RAW DATA: ${JSON.stringify(payload.data || payload)}`;
     }
 
-    const { from, text, subject, message_id } = payload.data;
+    const finalContent = textContent?.toString().trim() || "(No text content found)";
+
     const resend = new Resend(process.env.RESEND_API_KEY || '');
     const sql = neon(process.env.DATABASE_URL || '');
 
@@ -27,10 +41,10 @@ export default async function handler(req, res) {
     if (leads.length > 0) {
       const leadId = leads[0].id;
 
-      // 2. Save the message
+      // 3. Save the message
       await sql`
         INSERT INTO messages (lead_id, sender, content, message_id, subject)
-        VALUES (${leadId}, 'client', ${text || 'No text content'}, ${message_id}, ${subject})
+        VALUES (${leadId}, 'client', ${finalContent}, ${message_id}, ${subject})
         ON CONFLICT (message_id) DO NOTHING
       `;
 
@@ -50,7 +64,7 @@ export default async function handler(req, res) {
             <h2 style="color: #1ABC9C;">New Client Response</h2>
             <p><strong>From:</strong> ${from}</p>
             <p><strong>Message:</strong></p>
-            <div style="background: #f8fafc; padding: 15px; border-radius: 8px;">${text}</div>
+            <div style="background: #f8fafc; padding: 15px; border-radius: 8px;">${finalContent}</div>
             <br/>
             <a href="https://dnextwave.com/admin" style="display: inline-block; padding: 10px 20px; background: #0B1F3A; color: #fff; text-decoration: none; border-radius: 6px;">Open Dashboard -></a>
           </div>

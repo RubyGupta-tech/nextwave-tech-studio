@@ -23,7 +23,7 @@ const AdminDashboard = () => {
   const [isLoadingMessages, setIsLoadingMessages] = useState(false);
   const [isSyncExpanded, setIsSyncExpanded] = useState(false);
   const [isDashControlsOpen, setIsDashControlsOpen] = useState(false);
-  const [sysVersion] = useState('v26.0 (ONE-TOUCH)');
+  const [sysVersion] = useState('v27.0 (DIVINE SYNC)');
   const [apiStatus, setApiStatus] = useState('checking'); // 'online', 'offline', 'checking'
   const [expectedLen, setExpectedLen] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -473,18 +473,18 @@ const AdminDashboard = () => {
             top: 0,
             left: 0,
             width: '100%',
-            background: '#ec4899', // ROSE PINK FOR v26
+            background: '#2dd4bf', // TEAL / DIVINE SYNC
             color: 'white',
             textAlign: 'center',
             padding: '10px',
             fontWeight: '900',
             fontSize: '15px',
             zIndex: 10000,
-            boxShadow: '0 4px 20px rgba(236, 72, 153, 0.4)',
+            boxShadow: '0 4px 20px rgba(45, 212, 191, 0.4)',
             textTransform: 'uppercase',
             letterSpacing: '1px'
           }}>
-            🏢 NEXTWAVE v26.0 - REFRESH IF NOT ROSE PINK
+            🌟 DIVINE SYNC v27.0 - REFRESH TO RECLAIM TEXT
           </div>
         <div className="admin-login-card">
           <div className="admin-logo">
