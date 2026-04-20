@@ -5,7 +5,7 @@ export default async function handler(req, res) {
     auth: !!process.env.ADMIN_PASSWORD,
     db: !!process.env.DATABASE_URL,
     pLen: process.env.ADMIN_PASSWORD?.length || 0,
-    v: 19,
+    v: 20,
     status: 'checking'
   };
 
