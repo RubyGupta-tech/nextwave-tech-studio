@@ -21,7 +21,7 @@ const AdminDashboard = () => {
   const [isSendingReply, setIsSendingReply] = useState(false);
   const [messages, setMessages] = useState([]);
   const [isLoadingMessages, setIsLoadingMessages] = useState(false);
-  const [sysVersion] = useState('v20.0 (ULTRA-WIDE)');
+  const [sysVersion] = useState('v21.0 (PREMIUM DESIGN)');
   const [apiStatus, setApiStatus] = useState('checking'); // 'online', 'offline', 'checking'
   const [expectedLen, setExpectedLen] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -482,7 +482,7 @@ const AdminDashboard = () => {
             textTransform: 'uppercase',
             letterSpacing: '1.5px'
           }}>
-            ✅ SECURITY SYSTEM v20.0 (ULTRA-WIDE LOGS) - CONNECTED
+            ✅ SECURITY SYSTEM v21.0 (PREMIUM DESIGN) - CONNECTED
           </div>
         <div className="admin-login-card">
           <div className="admin-logo">
@@ -839,12 +839,16 @@ const AdminDashboard = () => {
                               </span>
                               <button 
                                 className="delete-msg-btn"
-                                onClick={() => handleDeleteMessage(msg.id, selectedLead.id)}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleDeleteMessage(msg.id, selectedLead.id);
+                                }}
                                 title="Delete this message"
                               >
-                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                  <polyline points="3 6 5 6 21 6"></polyline>
-                                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                  <path d="M3 6h18"></path>
+                                  <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+                                  <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
                                 </svg>
                               </button>
                               {msg.sender === 'admin' && (
@@ -1206,22 +1210,35 @@ const AdminDashboard = () => {
         .bubble-status svg { width: 15px; height: 10px; }
 
         .delete-msg-btn {
-          background: none;
-          border: none;
-          color: rgba(0,0,0,0.1);
-          padding: 4px;
+          position: absolute;
+          top: 10px;
+          right: 10px;
+          background: rgba(255, 255, 255, 0.7);
+          backdrop-filter: blur(4px);
+          border: 1px solid rgba(0, 0, 0, 0.05);
+          color: #94a3b8;
+          padding: 6px;
           cursor: pointer;
           display: flex;
           align-items: center;
-          border-radius: 4px;
-          transition: 0.2s;
+          justify-content: center;
+          border-radius: 8px;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          opacity: 0;
+          transform: scale(0.8);
+          z-index: 10;
         }
+
         .chat-bubble:hover .delete-msg-btn {
-          color: #ef4444;
+          opacity: 1;
+          transform: scale(1);
         }
+
         .delete-msg-btn:hover {
-          background: rgba(239, 68, 68, 0.1);
-          color: #dc2626 !important;
+          background: #fee2e2;
+          color: #ef4444 !important;
+          border-color: #fecaca;
+          box-shadow: 0 4px 12px rgba(239, 68, 68, 0.15);
         }
 
         .chat-bubble.client .bubble-meta { color: #64748b; }
