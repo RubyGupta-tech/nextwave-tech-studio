@@ -21,7 +21,7 @@ const AdminDashboard = () => {
   const [isSendingReply, setIsSendingReply] = useState(false);
   const [messages, setMessages] = useState([]);
   const [isLoadingMessages, setIsLoadingMessages] = useState(false);
-  const [sysVersion] = useState('v22.0 (GMAIL-SYNC READY)');
+  const [sysVersion] = useState('v23.0 (MOBILE OPTIMIZED)');
   const [apiStatus, setApiStatus] = useState('checking'); // 'online', 'offline', 'checking'
   const [expectedLen, setExpectedLen] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -482,7 +482,7 @@ const AdminDashboard = () => {
             textTransform: 'uppercase',
             letterSpacing: '1.5px'
           }}>
-            ✅ SECURITY SYSTEM v22.0 (GMAIL-SYNC READY) - CONNECTED
+            ✅ SECURITY SYSTEM v23.0 (MOBILE OPTIMIZED) - CONNECTED
           </div>
         <div className="admin-login-card">
           <div className="admin-logo">
@@ -1359,6 +1359,8 @@ const AdminDashboard = () => {
         }
 
         @media (max-width: 768px) {
+          .admin-nav { padding: 15px 20px; flex-wrap: wrap; gap: 10px; }
+          .nav-actions { width: 100%; justify-content: space-between; border-top: 1px solid rgba(0,0,0,0.05); padding-top: 10px; }
           .admin-nav-brand span { display: none; }
           .version-badge { order: -1; }
           .leads-table th:nth-child(2), .leads-table td:nth-child(2) { font-weight: bold; }
@@ -1367,11 +1369,15 @@ const AdminDashboard = () => {
           
           /* Main Modal Full-Screen on Mobile */
           .lead-modal:not(.confirm-box) { max-height: 100vh; border-radius: 0; }
+          .modal-header { background: #0B1F3A; color: #fff; padding: 25px 50px 25px 25px; display: flex; justify-content: space-between; align-items: center; }
           .modal-grid { grid-template-columns: 1fr; }
           .modal-body { padding: 25px; }
           .chat-bubbles-wrap { padding: 20px; }
           .chat-bubble { max-width: 95%; } /* wider bubbles on mobile */
           
+          .integration-info-box { padding: 12px; font-size: 10px; }
+          .integration-info-box h5 { font-size: 11px; }
+
           .secondary-actions { flex-direction: column; width: 100%; gap: 10px; }
           .archive-btn, .delete-lead-btn { width: 100%; }
           .modal-footer-actions { flex-direction: column-reverse; gap: 20px; }
@@ -1411,6 +1417,8 @@ const AdminDashboard = () => {
           .confirm-box { padding: 25px !important; border-radius: 20px !important; width: 90% !important; }
           .confirm-actions { flex-direction: column; gap: 10px; }
           .confirm-btn, .cancel-btn { width: 100%; flex: none; }
+          .analytics-summary { flex-direction: column; width: 100%; }
+          .ans-item { width: 100%; justify-content: space-between; display: flex; }
         }
 
         /* Toast UI */
