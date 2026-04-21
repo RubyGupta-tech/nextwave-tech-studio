@@ -23,7 +23,7 @@ const AdminDashboard = () => {
   const [isLoadingMessages, setIsLoadingMessages] = useState(false);
   const [isSyncExpanded, setIsSyncExpanded] = useState(false);
   const [isDashControlsOpen, setIsDashControlsOpen] = useState(false);
-  const [sysVersion] = useState('v28.0 (DEBUG DUMP)');
+  const [sysVersion] = useState('v29.0 (STABLE STUDIO)');
   const [apiStatus, setApiStatus] = useState('checking'); // 'online', 'offline', 'checking'
   const [expectedLen, setExpectedLen] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -473,18 +473,18 @@ const AdminDashboard = () => {
             top: 0,
             left: 0,
             width: '100%',
-            background: '#eab308', // ELECTRIC YELLOW FOR v28
-            color: 'black',
+            background: '#10b981', // STABLE EMERALD GREEN FOR v29
+            color: 'white',
             textAlign: 'center',
             padding: '10px',
             fontWeight: '900',
             fontSize: '15px',
             zIndex: 10000,
-            boxShadow: '0 4px 20px rgba(234, 179, 8, 0.4)',
+            boxShadow: '0 4px 20px rgba(16, 185, 129, 0.4)',
             textTransform: 'uppercase',
             letterSpacing: '1px'
           }}>
-            🚧 DEBUG DUMP v28.0 - SEND TEST EMAIL NOW
+            ✅ STABLE STUDIO v29.0 - SYSTEM OPTIMIZED
           </div>
         <div className="admin-login-card">
           <div className="admin-logo">
@@ -577,7 +577,7 @@ const AdminDashboard = () => {
       <nav className="admin-nav">
         <div className="admin-nav-brand">
           <img src="/NextWave_logo1.web.jpeg" alt="NextWave" style={{ height: '30px' }} />
-          <span>Admin Portal</span>
+          <span>Admin Portal <small style={{ fontSize: '10px', opacity: 0.6, background: '#10b981', color: 'white', padding: '2px 6px', borderRadius: '4px', marginLeft: '6px' }}>{sysVersion.split(' ')[0]}</small></span>
         </div>
         <div className="nav-actions">
           <div className="api-status">
