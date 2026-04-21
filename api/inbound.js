@@ -30,18 +30,22 @@ export default async function handler(req, res) {
   let finalContent = "";
   let senderEmail = from_email || req.body.data?.from;
 
-  // 3. Robust Content Extraction (v30.0 Ultra Sync)
+  // 3. Robust Content Extraction (v31.0 Platinum Sync)
   if (req.body.data?.email_id) {
     // This is a Resend Metadata Webhook
+    const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+    await sleep(1000);
+
     try {
       const { data, error } = await resend.emails.receiving.get(req.body.data.email_id);
       if (!error && data) {
         finalContent = data.text || data.html?.replace(/<[^>]*>?/gm, '') || req.body.data.subject || "No Content";
       } else {
-        finalContent = req.body.data.subject || "Resend Meta Sync (No text found)";
+        const errorMsg = error?.message || JSON.stringify(error) || 'Unknown Sync Error';
+        finalContent = `[PLATINUM SYNC ERROR]: ${errorMsg}`;
       }
     } catch (err) {
-      finalContent = req.body.data.subject || "Sync Fetch Error";
+      finalContent = `[PLATINUM SYNC EXCEPTION]: ${err.message}`;
     }
   } else {
     // Normal Webhook (Zapier/Direct)

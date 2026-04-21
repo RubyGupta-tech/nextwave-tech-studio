@@ -23,7 +23,7 @@ const AdminDashboard = () => {
   const [isLoadingMessages, setIsLoadingMessages] = useState(false);
   const [isSyncExpanded, setIsSyncExpanded] = useState(false);
   const [isDashControlsOpen, setIsDashControlsOpen] = useState(false);
-  const [sysVersion] = useState('v30.0 (ULTRA SYNC)');
+  const [sysVersion] = useState('v31.0 (PLATINUM SYNC)');
   const [apiStatus, setApiStatus] = useState('checking'); // 'online', 'offline', 'checking'
   const [expectedLen, setExpectedLen] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -473,18 +473,18 @@ const AdminDashboard = () => {
             top: 0,
             left: 0,
             width: '100%',
-            background: 'linear-gradient(90deg, #2dd4bf 0%, #14b8a6 100%)', // DIAMOND TEAL GRADIENT
-            color: 'white',
+            background: 'linear-gradient(90deg, #f8fafc 0%, #cbd5e1 100%)', // PLATINUM WHITE
+            color: '#0f172a',
             textAlign: 'center',
             padding: '10px',
             fontWeight: '900',
             fontSize: '15px',
             zIndex: 10000,
-            boxShadow: '0 4px 25px rgba(20, 184, 166, 0.5)',
+            boxShadow: '0 4px 25px rgba(203, 213, 225, 0.5)',
             textTransform: 'uppercase',
             letterSpacing: '1px'
           }}>
-            💎 ULTRA SYNC v30.0 - SYSTEM ONLINE
+            🏢 PLATINUM SYNC v31.0 - ENGINE REFRESHED
           </div>
         <div className="admin-login-card">
           <div className="admin-logo">
@@ -577,7 +577,7 @@ const AdminDashboard = () => {
       <nav className="admin-nav">
         <div className="admin-nav-brand">
           <img src="/NextWave_logo1.web.jpeg" alt="NextWave" style={{ height: '30px' }} />
-          <span>Admin Portal <small style={{ fontSize: '10px', opacity: 1, background: 'rgba(255,255,255,0.2)', color: 'white', padding: '2px 8px', borderRadius: '20px', marginLeft: '8px', border: '1px solid rgba(255,255,255,0.3)' }}>{sysVersion.split(' ')[0]}</small></span>
+          <span>Admin Portal <small style={{ fontSize: '10px', opacity: 1, background: '#cbd5e1', color: '#0f172a', padding: '2px 8px', borderRadius: '20px', marginLeft: '8px', border: '1px solid #94a3b8' }}>{sysVersion.split(' ')[0]}</small></span>
         </div>
         <div className="nav-actions">
           <div className="api-status">

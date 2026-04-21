@@ -21,7 +21,11 @@ export default async function handler(req, res) {
     const resend = new Resend(process.env.RESEND_API_KEY || '');
     const sql = neon(process.env.DATABASE_URL || '');
 
-    // 2. Fetch Actual Body Content from Resend
+    // 2. Fetch Actual Body Content from Resend (v31.0 Platinum Sync)
+    // We add a tiny delay to allow Resend to index the email content after delivery notification.
+    const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+    await sleep(1000);
+
     let finalContent = "";
     try {
       const { data, error } = await resend.emails.receiving.get(emailId);
@@ -29,12 +33,13 @@ export default async function handler(req, res) {
         // Fallback: Text -> HTML (stripped) -> Subject
         finalContent = data.text || data.html?.replace(/<[^>]*>?/gm, '') || subject;
       } else {
-        console.warn('Resend Fetch Error:', error);
-        finalContent = subject; 
+        const errorMsg = error?.message || JSON.stringify(error) || 'Unknown Fetch Error';
+        console.warn('Resend Fetch Error:', errorMsg);
+        finalContent = `[PLATINUM ERROR]: ${errorMsg} (Subject: ${subject})`;
       }
     } catch (err) {
        console.error('Fetch Exception:', err);
-       finalContent = subject;
+       finalContent = `[PLATINUM EXCEPTION]: ${err.message} (Subject: ${subject})`;
     }
 
     const cleanContent = finalContent.toString().trim();
