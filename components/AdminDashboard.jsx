@@ -23,7 +23,7 @@ const AdminDashboard = () => {
   const [isLoadingMessages, setIsLoadingMessages] = useState(false);
   const [isSyncExpanded, setIsSyncExpanded] = useState(false);
   const [isDashControlsOpen, setIsDashControlsOpen] = useState(false);
-  const [sysVersion] = useState('v27.0 (DIVINE SYNC)');
+  const [sysVersion] = useState('v28.0 (DEBUG DUMP)');
   const [apiStatus, setApiStatus] = useState('checking'); // 'online', 'offline', 'checking'
   const [expectedLen, setExpectedLen] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -473,18 +473,18 @@ const AdminDashboard = () => {
             top: 0,
             left: 0,
             width: '100%',
-            background: '#2dd4bf', // TEAL / DIVINE SYNC
-            color: 'white',
+            background: '#eab308', // ELECTRIC YELLOW FOR v28
+            color: 'black',
             textAlign: 'center',
             padding: '10px',
             fontWeight: '900',
             fontSize: '15px',
             zIndex: 10000,
-            boxShadow: '0 4px 20px rgba(45, 212, 191, 0.4)',
+            boxShadow: '0 4px 20px rgba(234, 179, 8, 0.4)',
             textTransform: 'uppercase',
             letterSpacing: '1px'
           }}>
-            🌟 DIVINE SYNC v27.0 - REFRESH TO RECLAIM TEXT
+            🚧 DEBUG DUMP v28.0 - SEND TEST EMAIL NOW
           </div>
         <div className="admin-login-card">
           <div className="admin-logo">

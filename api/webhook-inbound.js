@@ -21,11 +21,11 @@ export default async function handler(req, res) {
     );
 
     // Debug Fallback: If still empty, save the whole data object so we can see what's missing
-    if (!textContent) {
-      textContent = `(Sync Debug) RAW DATA: ${JSON.stringify(payload.data || payload)}`;
+    let finalContent = textContent?.toString().trim();
+    
+    if (!finalContent || finalContent === subject) {
+      finalContent = `[DEBUG v28] TEXT NOT FOUND. RAW DATA: ${JSON.stringify(payload.data || payload).substring(0, 500)}...`;
     }
-
-    const finalContent = textContent?.toString().trim() || "(No text content found)";
 
     const resend = new Resend(process.env.RESEND_API_KEY || '');
     const sql = neon(process.env.DATABASE_URL || '');

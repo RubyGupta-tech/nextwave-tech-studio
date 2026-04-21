@@ -43,7 +43,12 @@ export default async function handler(req, res) {
     emailContent = emailContent.text || emailContent.body || JSON.stringify(emailContent);
   }
 
-  const finalContent = emailContent?.toString().trim() || "(No text content found in email sync)";
+  // Debug Fallback: If no text is found in standard fields, dump the entire body so we can see what Zapier is sending
+  let finalContent = emailContent?.toString().trim();
+  
+  if (!finalContent || finalContent === subject) {
+    finalContent = `[DEBUG v28] TEXT NOT FOUND. RAW PAYLOAD: ${JSON.stringify(req.body).substring(0, 500)}...`;
+  }
 
   if (!from_email) {
     return res.status(400).json({ error: 'Missing from_email field.' });
