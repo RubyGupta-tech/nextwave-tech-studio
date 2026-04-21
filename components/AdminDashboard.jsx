@@ -23,7 +23,7 @@ const AdminDashboard = () => {
   const [isLoadingMessages, setIsLoadingMessages] = useState(false);
   const [isSyncExpanded, setIsSyncExpanded] = useState(false);
   const [isDashControlsOpen, setIsDashControlsOpen] = useState(false);
-  const [sysVersion] = useState('v29.0 (STABLE STUDIO)');
+  const [sysVersion] = useState('v30.0 (ULTRA SYNC)');
   const [apiStatus, setApiStatus] = useState('checking'); // 'online', 'offline', 'checking'
   const [expectedLen, setExpectedLen] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -473,18 +473,18 @@ const AdminDashboard = () => {
             top: 0,
             left: 0,
             width: '100%',
-            background: '#10b981', // STABLE EMERALD GREEN FOR v29
+            background: 'linear-gradient(90deg, #2dd4bf 0%, #14b8a6 100%)', // DIAMOND TEAL GRADIENT
             color: 'white',
             textAlign: 'center',
             padding: '10px',
             fontWeight: '900',
             fontSize: '15px',
             zIndex: 10000,
-            boxShadow: '0 4px 20px rgba(16, 185, 129, 0.4)',
+            boxShadow: '0 4px 25px rgba(20, 184, 166, 0.5)',
             textTransform: 'uppercase',
             letterSpacing: '1px'
           }}>
-            ✅ STABLE STUDIO v29.0 - SYSTEM OPTIMIZED
+            💎 ULTRA SYNC v30.0 - SYSTEM ONLINE
           </div>
         <div className="admin-login-card">
           <div className="admin-logo">
@@ -577,7 +577,7 @@ const AdminDashboard = () => {
       <nav className="admin-nav">
         <div className="admin-nav-brand">
           <img src="/NextWave_logo1.web.jpeg" alt="NextWave" style={{ height: '30px' }} />
-          <span>Admin Portal <small style={{ fontSize: '10px', opacity: 0.6, background: '#10b981', color: 'white', padding: '2px 6px', borderRadius: '4px', marginLeft: '6px' }}>{sysVersion.split(' ')[0]}</small></span>
+          <span>Admin Portal <small style={{ fontSize: '10px', opacity: 1, background: 'rgba(255,255,255,0.2)', color: 'white', padding: '2px 8px', borderRadius: '20px', marginLeft: '8px', border: '1px solid rgba(255,255,255,0.3)' }}>{sysVersion.split(' ')[0]}</small></span>
         </div>
         <div className="nav-actions">
           <div className="api-status">

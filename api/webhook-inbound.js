@@ -8,32 +8,41 @@ export default async function handler(req, res) {
     }
 
     const payload = req.body;
-    // 1. Robust Data Extraction (Synced with inbound.js v27.0)
-    const { from, subject, message_id } = (payload?.data || {});
-    let textContent = (
-      payload.data?.text || 
-      payload.data?.body || 
-      payload.data?.content ||
-      payload.data?.['body-plain'] || 
-      payload.data?.['stripped-text'] || 
-      payload.data?.['stripped_text'] ||
-      subject
-    );
-
-    // Debug Fallback: If still empty, save the whole data object so we can see what's missing
-    let finalContent = textContent?.toString().trim();
     
-    if (!finalContent || finalContent === subject) {
-      finalContent = `[DEBUG v28] TEXT NOT FOUND. RAW DATA: ${JSON.stringify(payload.data || payload).substring(0, 500)}...`;
+    // 1. Metadata Verification
+    const emailId = payload.data?.email_id;
+    const fromEmail = payload.data?.from;
+    const subject = payload.data?.subject || "No Subject";
+
+    if (!emailId || !fromEmail) {
+      return res.status(200).json({ status: 'ignored', message: 'Incomplete metadata' });
     }
 
     const resend = new Resend(process.env.RESEND_API_KEY || '');
     const sql = neon(process.env.DATABASE_URL || '');
 
+    // 2. Fetch Actual Body Content from Resend
+    let finalContent = "";
+    try {
+      const { data, error } = await resend.emails.receiving.get(emailId);
+      if (!error && data) {
+        // Fallback: Text -> HTML (stripped) -> Subject
+        finalContent = data.text || data.html?.replace(/<[^>]*>?/gm, '') || subject;
+      } else {
+        console.warn('Resend Fetch Error:', error);
+        finalContent = subject; 
+      }
+    } catch (err) {
+       console.error('Fetch Exception:', err);
+       finalContent = subject;
+    }
+
+    const cleanContent = finalContent.toString().trim();
+
     // 1. Identify the lead
     const leads = await sql`
       SELECT id FROM leads 
-      WHERE email ILIKE ${from} 
+      WHERE email ILIKE ${fromEmail} 
       ORDER BY created_at DESC 
       LIMIT 1
     `;
@@ -44,7 +53,7 @@ export default async function handler(req, res) {
       // 3. Save the message
       await sql`
         INSERT INTO messages (lead_id, sender, content, message_id, subject)
-        VALUES (${leadId}, 'client', ${finalContent}, ${message_id}, ${subject})
+        VALUES (${leadId}, 'client', ${cleanContent}, ${emailId}, ${subject})
         ON CONFLICT (message_id) DO NOTHING
       `;
 
@@ -58,13 +67,13 @@ export default async function handler(req, res) {
       await resend.emails.send({
         from: 'NextWave Studio Bridge <notifications@dnextwave.com>',
         to: ['d.nextwavetech@gmail.com'],
-        subject: `[STUDIO REPLY] From: ${from} - ${subject}`,
+        subject: `[STUDIO REPLY] From: ${fromEmail} - ${subject}`,
         html: `
           <div style="font-family: sans-serif; padding: 20px; border: 1px solid #e2e8f0; border-radius: 12px; max-width: 600px;">
             <h2 style="color: #1ABC9C;">New Client Response</h2>
-            <p><strong>From:</strong> ${from}</p>
+            <p><strong>From:</strong> ${fromEmail}</p>
             <p><strong>Message:</strong></p>
-            <div style="background: #f8fafc; padding: 15px; border-radius: 8px;">${finalContent}</div>
+            <div style="background: #f8fafc; padding: 15px; border-radius: 8px;">${cleanContent}</div>
             <br/>
             <a href="https://dnextwave.com/admin" style="display: inline-block; padding: 10px 20px; background: #0B1F3A; color: #fff; text-decoration: none; border-radius: 6px;">Open Dashboard -></a>
           </div>
