@@ -23,7 +23,7 @@ const AdminDashboard = () => {
   const [isLoadingMessages, setIsLoadingMessages] = useState(false);
   const [isSyncExpanded, setIsSyncExpanded] = useState(false);
   const [isDashControlsOpen, setIsDashControlsOpen] = useState(false);
-  const [sysVersion] = useState('v31.0 (PLATINUM SYNC)');
+  const [sysVersion] = useState('v31.1 (PLATINUM SYNC)');
   const [apiStatus, setApiStatus] = useState('checking'); // 'online', 'offline', 'checking'
   const [expectedLen, setExpectedLen] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -484,7 +484,7 @@ const AdminDashboard = () => {
             textTransform: 'uppercase',
             letterSpacing: '1px'
           }}>
-            🏢 PLATINUM SYNC v31.0 - ENGINE REFRESHED
+            💎 PLATINUM SYNC v31.1 - SYSTEM ONLINE
           </div>
         <div className="admin-login-card">
           <div className="admin-logo">
@@ -564,7 +564,7 @@ const AdminDashboard = () => {
               </button>
             </div>
             <div style={{ marginTop: '15px', fontSize: '10px', color: 'rgba(255,255,255,0.3)' }}>
-              System Version: v6.1 (Resilient Sync Active)
+              System Version: v31.1 (PLATINUM SYNC ACTIVE)
             </div>
           </form>
         </div>
@@ -744,6 +744,9 @@ const AdminDashboard = () => {
             </table>
           </div>
         )}
+        <div style={{ marginTop: '30px', textAlign: 'center', fontSize: '11px', color: '#94a3b8', borderTop: '1px solid #e2e8f0', paddingTop: '20px' }}>
+          NextWave CRM {sysVersion} • Built for Ruby Gupta
+        </div>
       </main>
 
       {/* Add Lead Modal */}
@@ -1366,7 +1369,7 @@ const AdminDashboard = () => {
           .admin-nav-brand { flex-direction: row; gap: 8px; align-items: center; }
           .admin-nav-brand img { height: 22px !important; }
           .nav-actions { width: auto; border: none; padding: 0; }
-          .admin-nav-brand span { display: none; }
+          .admin-nav-brand span { display: flex; align-items: center; }
           .version-badge { position: static; font-size: 9px; padding: 1px 4px; }
           .logout-btn { padding: 4px 10px; font-size: 11px; }
 
