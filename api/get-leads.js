@@ -30,6 +30,9 @@ export default async function handler(req, res) {
   try {
     const sql = neon(process.env.DATABASE_URL);
     
+    // Silent Migration (v32.1): Ensure updated_at exists for sorting
+    await sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP`.catch(() => {});
+    
     // 3. Handle Filtering Logic
     const filter = req.query.filter || 'all';
     const searchQuery = (req.query.search || '').trim();
