@@ -53,7 +53,7 @@ export default async function handler(req, res) {
           OR (${filter} = 'week' AND created_at >= NOW() - INTERVAL '7 days')
           OR (${filter} = 'month' AND created_at >= NOW() - INTERVAL '30 days')
         )
-      ORDER BY created_at DESC 
+      ORDER BY updated_at DESC, created_at DESC 
       LIMIT 1000
     `;
 

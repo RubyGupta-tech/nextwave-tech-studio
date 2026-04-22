@@ -28,14 +28,24 @@ export default async function handler(req, res) {
 
     let finalContent = "";
     try {
-      const { data, error } = await resend.emails.receiving.get(emailId);
+      // Robust Fetch (v32.0 Platinum Sync)
+      const { data, error } = await resend.emails.get(emailId);
+      
       if (!error && data) {
         // Fallback: Text -> HTML (stripped) -> Subject
         finalContent = data.text || data.html?.replace(/<[^>]*>?/gm, '') || subject;
       } else {
-        const errorMsg = error?.message || JSON.stringify(error) || 'Unknown Fetch Error';
-        console.warn('Resend Fetch Error:', errorMsg);
-        finalContent = `[PLATINUM ERROR]: ${errorMsg} (Subject: ${subject})`;
+        // Try fallback to receiving if get fails (SDK variation)
+        try {
+          const fallback = await resend.emails.receiving?.get(emailId);
+          if (fallback?.data) {
+             finalContent = fallback.data.text || fallback.data.html?.replace(/<[^>]*>?/gm, '') || subject;
+          } else { throw new Error(error?.message || "No data"); }
+        } catch (fErr) {
+          const errorMsg = error?.message || fErr.message || 'Unknown Fetch Error';
+          console.warn('Resend Fetch Error:', errorMsg);
+          finalContent = `[PLATINUM ERROR]: ${errorMsg} (Subject: ${subject})`;
+        }
       }
     } catch (err) {
        console.error('Fetch Exception:', err);
@@ -62,9 +72,10 @@ export default async function handler(req, res) {
         ON CONFLICT (message_id) DO NOTHING
       `;
 
-      // 3. Update lead status
+      // 3. Update lead status & timestamp
       await sql`
-        UPDATE leads SET status = 'New Reply' 
+        UPDATE leads 
+        SET status = 'New Reply', updated_at = NOW() 
         WHERE id = ${leadId} AND status != 'Converted'
       `;
 

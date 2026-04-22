@@ -23,7 +23,7 @@ const AdminDashboard = () => {
   const [isLoadingMessages, setIsLoadingMessages] = useState(false);
   const [isSyncExpanded, setIsSyncExpanded] = useState(false);
   const [isDashControlsOpen, setIsDashControlsOpen] = useState(false);
-  const [sysVersion] = useState('v31.1 (PLATINUM SYNC)');
+  const [sysVersion] = useState('v32.0 (PLATINUM SYNC)');
   const [apiStatus, setApiStatus] = useState('checking'); // 'online', 'offline', 'checking'
   const [expectedLen, setExpectedLen] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -168,6 +168,35 @@ const AdminDashboard = () => {
     setTimeout(() => {
       window.location.reload(true);
     }, 1500);
+  };
+
+  // Nice relative date formatting
+  const formatRelativeDate = (dateString) => {
+    if (!dateString) return 'N/A';
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffMs = now - date;
+    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+    
+    // Today
+    if (diffDays === 0 && date.getDate() === now.getDate()) {
+      return `Today, ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+    }
+    
+    // Yesterday
+    const yesterday = new Date();
+    yesterday.setDate(now.getDate() - 1);
+    if (date.getDate() === yesterday.getDate() && date.getMonth() === yesterday.getMonth()) {
+      return `Yesterday, ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+    }
+    
+    // Within this year
+    if (date.getFullYear() === now.getFullYear()) {
+      return date.toLocaleDateString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+    }
+    
+    // Older
+    return date.toLocaleDateString([], { year: 'numeric', month: 'short', day: 'numeric' });
   };
 
   const handleUpdateLead = async (id, status, notes, phone, is_archived) => {
@@ -484,7 +513,7 @@ const AdminDashboard = () => {
             textTransform: 'uppercase',
             letterSpacing: '1px'
           }}>
-            💎 PLATINUM SYNC v31.1 - SYSTEM ONLINE
+            💎 PLATINUM SYNC {sysVersion} - SYSTEM ONLINE
           </div>
         <div className="admin-login-card">
           <div className="admin-logo">
@@ -564,7 +593,7 @@ const AdminDashboard = () => {
               </button>
             </div>
             <div style={{ marginTop: '15px', fontSize: '10px', color: 'rgba(255,255,255,0.3)' }}>
-              System Version: v31.1 (PLATINUM SYNC ACTIVE)
+              System Version: {sysVersion}
             </div>
           </form>
         </div>
@@ -720,7 +749,7 @@ const AdminDashboard = () => {
                     setSelectedLead(lead);
                     fetchMessages(lead.id);
                   }}>
-                    <td data-label="DATE">{new Date(lead.created_at).toLocaleDateString()}</td>
+                    <td data-label="DATE">{formatRelativeDate(lead.updated_at || lead.created_at)}</td>
                     <td data-label="NAME">
                       <strong>{lead.name}</strong>
                       <div style={{ fontSize: '11px', color: '#64748b' }}>{lead.phone}</div>
@@ -814,7 +843,7 @@ const AdminDashboard = () => {
                   <div className="info-row"><strong>Phone:</strong> <input type="text" className="inline-edit-input" defaultValue={selectedLead.phone} onBlur={(e) => handleUpdateLead(selectedLead.id, selectedLead.status, selectedLead.notes, e.target.value)} /></div>
                   <div className="info-row"><strong>Service:</strong> <span className="service-tag">{selectedLead.service}</span></div>
                   <div className="info-row"><strong>Email:</strong> <a href={`mailto:${selectedLead.email}`} className="email-link">{selectedLead.email}</a></div>
-                  <div className="info-row"><strong>Date:</strong> {new Date(selectedLead.created_at).toLocaleString()}</div>
+                  <div className="info-row"><strong>Last Activity:</strong> {formatRelativeDate(selectedLead.updated_at || selectedLead.created_at)}</div>
                   <div className="info-row"><strong>Source:</strong> <span className="source-tag">{selectedLead.source?.replace('_', ' ')}</span></div>
 
                   <div className="status-management">
@@ -865,7 +894,7 @@ const AdminDashboard = () => {
                             <div className="bubble-content">{msg.content}</div>
                             <div className="bubble-footer">
                               <span className="bubble-time">
-                                {new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                {formatRelativeDate(msg.created_at)}
                               </span>
                               <button 
                                 className="delete-msg-btn"

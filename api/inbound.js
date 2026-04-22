@@ -37,15 +37,21 @@ export default async function handler(req, res) {
     await sleep(1000);
 
     try {
-      const { data, error } = await resend.emails.receiving.get(req.body.data.email_id);
+      const { data, error } = await resend.emails.get(req.body.data.email_id);
       if (!error && data) {
-        finalContent = data.text || data.html?.replace(/<[^>]*>?/gm, '') || req.body.data.subject || "No Content";
+         finalContent = data.text || data.html?.replace(/<[^>]*>?/gm, '') || req.body.data.subject || "No Content";
       } else {
-        const errorMsg = error?.message || JSON.stringify(error) || 'Unknown Sync Error';
-        finalContent = `[PLATINUM SYNC ERROR]: ${errorMsg}`;
+        try {
+          const fallback = await resend.emails.receiving?.get(req.body.data.email_id);
+          if (fallback?.data) {
+             finalContent = fallback.data.text || fallback.data.html?.replace(/<[^>]*>?/gm, '') || req.body.data.subject || "No Content";
+          } else { throw new Error(error?.message || "No data"); }
+        } catch (fErr) {
+          finalContent = `[PLATINUM ERROR]: ${error?.message || fErr.message} (Subject: ${req.body.data.subject})`;
+        }
       }
     } catch (err) {
-      finalContent = `[PLATINUM SYNC EXCEPTION]: ${err.message}`;
+       finalContent = `[PLATINUM EXCEPTION]: ${err.message} (Subject: ${req.body.data.subject})`;
     }
   } else {
     // Normal Webhook (Zapier/Direct)
