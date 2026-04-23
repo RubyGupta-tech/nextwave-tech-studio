@@ -34,34 +34,48 @@ export default async function handler(req, res) {
   if (req.body.data?.email_id) {
     // This is a Resend Metadata Webhook
     const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
-    await sleep(1000);
+    await sleep(3000); 
 
-    try {
-      const { data, error } = await resend.emails.get(req.body.data.email_id);
-      if (!error && data) {
-         finalContent = data.text || data.html?.replace(/<[^>]*>?/gm, '') || req.body.data.subject || "No Content";
-      } else {
-        try {
-          const fallback = await resend.emails.receiving?.get(req.body.data.email_id);
+    let finalContent = "";
+    let attempts = 0;
+    const maxAttempts = 2;
+
+    while (attempts < maxAttempts && !finalContent) {
+      try {
+        attempts++;
+        const { data, error } = await resend.emails.receiving.get(req.body.data.email_id);
+        
+        if (!error && data) {
+           finalContent = data.text || data.html?.replace(/<[^>]*>?/gm, '') || req.body.data.subject || "No Content";
+        } else {
+          const fallback = await resend.emails.get(req.body.data.email_id);
           if (fallback?.data) {
              finalContent = fallback.data.text || fallback.data.html?.replace(/<[^>]*>?/gm, '') || req.body.data.subject || "No Content";
-          } else { throw new Error(error?.message || "No data"); }
-        } catch (fErr) {
-          const errMsg = error?.message || fErr.message || 'Unknown Sync Error';
-          if (errMsg.toLowerCase().includes('restricted to only send')) {
-            finalContent = `⚠️ [RESTRICTED CONTENT]: Your API Key is "Sending Only". Update it to "Full Access" on Resend.com to read replies here. (Subject: ${req.body.data.subject})`;
-          } else {
-            finalContent = `[PLATINUM ERROR]: ${errMsg} (Subject: ${req.body.data.subject})`;
+          } else { 
+            const errMsg = error?.message || fallback.error?.message || "Not Found";
+            if (errMsg.toLowerCase().includes('restricted to only send')) {
+              finalContent = `⚠️ [RESTRICTED CONTENT]: Your API Key is "Sending Only". Update it to "Full Access" on Resend.com. (Subject: ${req.body.data.subject})`;
+              break;
+            }
+            if (attempts < maxAttempts) {
+              await sleep(2000);
+            } else {
+              finalContent = `[PLATINUM ERROR]: ${errMsg} (Subject: ${req.body.data.subject})`;
+            }
           }
         }
-      }
-    } catch (err) {
-       const exMsg = err.message || "";
-       if (exMsg.toLowerCase().includes('restricted to only send')) {
-          finalContent = `⚠️ [RESTRICTED]: API Key limited to "Sending Only". (Subject: ${req.body.data.subject})`;
-       } else {
+      } catch (err) {
+        const exMsg = err.message || "";
+        if (exMsg.toLowerCase().includes('restricted to only send')) {
+           finalContent = `⚠️ [RESTRICTED]: API Key limited to "Sending Only". (Subject: ${req.body.data.subject})`;
+           break;
+        }
+        if (attempts < maxAttempts) {
+          await sleep(2000);
+        } else {
           finalContent = `[PLATINUM EXCEPTION]: ${exMsg} (Subject: ${req.body.data.subject})`;
-       }
+        }
+      }
     }
   } else {
     // Normal Webhook (Zapier/Direct)
