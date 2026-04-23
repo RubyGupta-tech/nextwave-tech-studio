@@ -14,21 +14,21 @@ export default async function handler(req, res) {
     const fromEmail = payload.data?.from;
     const subject = payload.data?.subject || "No Subject";
 
-    if (!emailId || !fromEmail) {
-      return res.status(200).json({ status: 'ignored', message: 'Incomplete metadata' });
+    if (payload.type !== 'email.received') {
+      return res.status(200).json({ status: 'ignored', type: payload.type });
     }
 
     const resend = new Resend(process.env.RESEND_API_KEY || '');
     const sql = neon(process.env.DATABASE_URL || '');
 
-    // v34.0 Maximum Reliability Polling
+    // v34.1 Resilience Polling
     const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
     
-    // Check payload first (just in case Resend includes it now)
+    // Check payload first
     let finalContent = payload.data?.text || payload.data?.html?.replace(/<[^>]*>?/gm, '') || "";
     
     if (!finalContent) {
-      await sleep(5000); // Initial 5s buffer 
+      await sleep(3000); // Wait 3s initially
       
       let attempts = 0;
       const maxAttempts = 3;
@@ -49,26 +49,24 @@ export default async function handler(req, res) {
           if (!error && data) {
             finalContent = data.text || data.html?.replace(/<[^>]*>?/gm, '') || subject;
           } else {
-            const errorMsg = error?.message || "Still Indexing...";
+            const errorMsg = error?.message || "Indexing...";
             if (errorMsg.toLowerCase().includes('restricted to only send')) {
               finalContent = `⚠️ [RESTRICTED]: Update Resend API Key to "Full Access". (Subject: ${subject})`;
               break;
             }
-            
             if (attempts < maxAttempts) {
-              await sleep(3000); // Wait another 3s between retries
-            } else {
-              finalContent = `[PLATINUM ERROR]: Email content still indexing at Resend after 15s. Please refresh dashboard in a moment. (Subject: ${subject})`;
+              await sleep(3000);
             }
           }
         } catch (err) {
-           if (attempts < maxAttempts) {
-             await sleep(3000);
-           } else {
-             finalContent = `[PLATINUM EXCEPTION]: ${err.message} (Subject: ${subject})`;
-           }
+           if (attempts < maxAttempts) await sleep(2000);
         }
       }
+    }
+
+    // v34.1 Graceful Fallback: If still no content, save metadata anyway
+    if (!finalContent) {
+      finalContent = `📩 **NEW REPLY RECEIVED**\nSubject: ${subject}\n\n[The full text of this message is still indexing at Resend. Please check your inbox directly or refresh the dashboard in a moment.]`;
     }
 
     const cleanContent = finalContent.toString().trim();

@@ -65,18 +65,16 @@ export default async function handler(req, res) {
             }
             if (attempts < maxAttempts) {
               await sleep(3000);
-            } else {
-              finalContent = `[PLATINUM ERROR]: Email content still indexing at Resend after 15s. (Subject: ${req.body.data.subject})`;
             }
           }
         } catch (err) {
-          if (attempts < maxAttempts) {
-            await sleep(3000);
-          } else {
-            finalContent = `[PLATINUM EXCEPTION]: ${err.message} (Subject: ${req.body.data.subject})`;
-          }
+          if (attempts < maxAttempts) await sleep(2000);
         }
       }
+    }
+
+    if (!finalContent) {
+      finalContent = `📩 **REPLY RECEIVED**\nSubject: ${req.body.data.subject}\n\n[Full text still indexing at Resend. Refresh in 1-2 minutes.]`;
     }
   } else {
     // Normal Webhook (Zapier/Direct)
