@@ -43,25 +43,29 @@ export default async function handler(req, res) {
     while (attempts < maxAttempts && !finalContent) {
       try {
         attempts++;
-        const { data, error } = await resend.emails.receiving.get(req.body.data.email_id);
+        let response = null;
+        if (resend.emails && resend.emails.receiving && typeof resend.emails.receiving.get === 'function') {
+          response = await resend.emails.receiving.get(req.body.data.email_id);
+        } else if (resend.emails && typeof resend.emails.get === 'function') {
+          response = await resend.emails.get(req.body.data.email_id);
+        } else {
+          throw new Error("Resend SDK: emails namespace missing");
+        }
+        
+        const { data, error } = response || {};
         
         if (!error && data) {
            finalContent = data.text || data.html?.replace(/<[^>]*>?/gm, '') || req.body.data.subject || "No Content";
         } else {
-          const fallback = await resend.emails.get(req.body.data.email_id);
-          if (fallback?.data) {
-             finalContent = fallback.data.text || fallback.data.html?.replace(/<[^>]*>?/gm, '') || req.body.data.subject || "No Content";
-          } else { 
-            const errMsg = error?.message || fallback.error?.message || "Not Found";
-            if (errMsg.toLowerCase().includes('restricted to only send')) {
-              finalContent = `⚠️ [RESTRICTED CONTENT]: Your API Key is "Sending Only". Update it to "Full Access" on Resend.com. (Subject: ${req.body.data.subject})`;
-              break;
-            }
-            if (attempts < maxAttempts) {
-              await sleep(2000);
-            } else {
-              finalContent = `[PLATINUM ERROR]: ${errMsg} (Subject: ${req.body.data.subject})`;
-            }
+          const errMsg = error?.message || "Not Found";
+          if (errMsg.toLowerCase().includes('restricted to only send')) {
+            finalContent = `⚠️ [RESTRICTED CONTENT]: Your API Key is "Sending Only". Update it to "Full Access" on Resend.com. (Subject: ${req.body.data.subject})`;
+            break;
+          }
+          if (attempts < maxAttempts) {
+            await sleep(2000);
+          } else {
+            finalContent = `[PLATINUM ERROR]: ${errMsg} (Subject: ${req.body.data.subject})`;
           }
         }
       } catch (err) {

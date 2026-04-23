@@ -32,34 +32,39 @@ export default async function handler(req, res) {
     while (attempts < maxAttempts && !finalContent) {
       try {
         attempts++;
-        // Priority: Receiving API (Official for Inbound)
-        const { data, error } = await resend.emails.receiving.get(emailId);
+        
+        let response = null;
+        // Hyper-Defensive Namespace Checks (v33.1)
+        if (resend.emails && resend.emails.receiving && typeof resend.emails.receiving.get === 'function') {
+          response = await resend.emails.receiving.get(emailId);
+        } else if (resend.emails && typeof resend.emails.get === 'function') {
+          response = await resend.emails.get(emailId);
+        } else {
+          throw new Error("Resend SDK: emails namespace or get function is missing");
+        }
+        
+        const { data, error } = response || {};
         
         if (!error && data) {
           finalContent = data.text || data.html?.replace(/<[^>]*>?/gm, '') || subject;
         } else {
-          // Fallback: General Emails API
-          const fallback = await resend.emails.get(emailId);
-          if (fallback?.data) {
-             finalContent = fallback.data.text || fallback.data.html?.replace(/<[^>]*>?/gm, '') || subject;
+          const errorMsg = error?.message || "Email not found yet";
+          if (errorMsg.toLowerCase().includes('restricted to only send')) {
+            finalContent = `⚠️ [RESTRICTED CONTENT]: New reply received, but your Resend API Key is limited to "Sending Only". Please update to "Full Access" on Resend.com. (Subject: ${subject})`;
+            break;
+          }
+          
+          if (attempts < maxAttempts) {
+            console.log(`Email not found (${errorMsg}), retrying...`);
+            await sleep(2000);
           } else {
-             const errorMsg = error?.message || fallback.error?.message || "Not Found";
-             if (errorMsg.toLowerCase().includes('restricted to only send')) {
-                finalContent = `⚠️ [RESTRICTED CONTENT]: New reply received, but your Resend API Key is limited to "Sending Only". Please update to "Full Access" on Resend.com. (Subject: ${subject})`;
-                break;
-             }
-             if (attempts < maxAttempts) {
-                console.log(`Email not found, retrying attempt ${attempts+1}...`);
-                await sleep(2000); // Wait another 2s before retry
-             } else {
-                finalContent = `[PLATINUM ERROR]: ${errorMsg} (Subject: ${subject})`;
-             }
+            finalContent = `[PLATINUM ERROR]: ${errorMsg} (Subject: ${subject})`;
           }
         }
       } catch (err) {
          const exMsg = err.message || "";
          if (exMsg.toLowerCase().includes('restricted to only send')) {
-            finalContent = `⚠️ [RESTRICTED CONTENT]: Your Resend API Key lacks permission to read emails. Please update to "Full Access". (Subject: ${subject})`;
+            finalContent = `⚠️ [RESTRICTED CONTENT]: Your Resend API Key lacks permission to read emails. (Subject: ${subject})`;
             break;
          }
          if (attempts < maxAttempts) {
