@@ -34,50 +34,47 @@ export default async function handler(req, res) {
   if (req.body.data?.email_id) {
     // This is a Resend Metadata Webhook
     const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
-    await sleep(3000); 
+    
+    let finalContent = req.body.data?.text || req.body.data?.html?.replace(/<[^>]*>?/gm, '') || "";
+    
+    if (!finalContent) {
+      await sleep(5000); 
 
-    let finalContent = "";
-    let attempts = 0;
-    const maxAttempts = 2;
+      let attempts = 0;
+      const maxAttempts = 3;
 
-    while (attempts < maxAttempts && !finalContent) {
-      try {
-        attempts++;
-        let response = null;
-        if (resend.emails && resend.emails.receiving && typeof resend.emails.receiving.get === 'function') {
-          response = await resend.emails.receiving.get(req.body.data.email_id);
-        } else if (resend.emails && typeof resend.emails.get === 'function') {
-          response = await resend.emails.get(req.body.data.email_id);
-        } else {
-          throw new Error("Resend SDK: emails namespace missing");
-        }
-        
-        const { data, error } = response || {};
-        
-        if (!error && data) {
-           finalContent = data.text || data.html?.replace(/<[^>]*>?/gm, '') || req.body.data.subject || "No Content";
-        } else {
-          const errMsg = error?.message || "Not Found";
-          if (errMsg.toLowerCase().includes('restricted to only send')) {
-            finalContent = `⚠️ [RESTRICTED CONTENT]: Your API Key is "Sending Only". Update it to "Full Access" on Resend.com. (Subject: ${req.body.data.subject})`;
-            break;
+      while (attempts < maxAttempts && !finalContent) {
+        try {
+          attempts++;
+          let response = null;
+          if (resend.emails?.receiving?.get) {
+            response = await resend.emails.receiving.get(req.body.data.email_id);
+          } else if (resend.emails?.get) {
+            response = await resend.emails.get(req.body.data.email_id);
           }
-          if (attempts < maxAttempts) {
-            await sleep(2000);
+          
+          const { data, error } = response || {};
+          
+          if (!error && data) {
+             finalContent = data.text || data.html?.replace(/<[^>]*>?/gm, '') || req.body.data.subject || "No Content";
           } else {
-            finalContent = `[PLATINUM ERROR]: ${errMsg} (Subject: ${req.body.data.subject})`;
+            const errMsg = error?.message || "Indexing...";
+            if (errMsg.toLowerCase().includes('restricted to only send')) {
+              finalContent = `⚠️ [RESTRICTED]: API Key is "Sending Only". (Subject: ${req.body.data.subject})`;
+              break;
+            }
+            if (attempts < maxAttempts) {
+              await sleep(3000);
+            } else {
+              finalContent = `[PLATINUM ERROR]: Email content still indexing at Resend after 15s. (Subject: ${req.body.data.subject})`;
+            }
           }
-        }
-      } catch (err) {
-        const exMsg = err.message || "";
-        if (exMsg.toLowerCase().includes('restricted to only send')) {
-           finalContent = `⚠️ [RESTRICTED]: API Key limited to "Sending Only". (Subject: ${req.body.data.subject})`;
-           break;
-        }
-        if (attempts < maxAttempts) {
-          await sleep(2000);
-        } else {
-          finalContent = `[PLATINUM EXCEPTION]: ${exMsg} (Subject: ${req.body.data.subject})`;
+        } catch (err) {
+          if (attempts < maxAttempts) {
+            await sleep(3000);
+          } else {
+            finalContent = `[PLATINUM EXCEPTION]: ${err.message} (Subject: ${req.body.data.subject})`;
+          }
         }
       }
     }

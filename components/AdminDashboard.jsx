@@ -23,7 +23,7 @@ const AdminDashboard = () => {
   const [isLoadingMessages, setIsLoadingMessages] = useState(false);
   const [isSyncExpanded, setIsSyncExpanded] = useState(false);
   const [isDashControlsOpen, setIsDashControlsOpen] = useState(false);
-  const [sysVersion] = useState('v33.1 (PLATINUM SYNC)');
+  const [sysVersion] = useState('v34.0 (PLATINUM SYNC)');
   const [apiStatus, setApiStatus] = useState('checking'); // 'online', 'offline', 'checking'
   const [expectedLen, setExpectedLen] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -513,7 +513,7 @@ const AdminDashboard = () => {
             textTransform: 'uppercase',
             letterSpacing: '1px'
           }}>
-            💎 PLATINUM SYNC v33.1 - SYSTEM ONLINE
+            💎 PLATINUM SYNC v34.0 - SYSTEM ONLINE
           </div>
         <div className="admin-login-card">
           <div className="admin-logo">

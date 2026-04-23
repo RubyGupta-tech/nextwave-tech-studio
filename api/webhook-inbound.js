@@ -21,57 +21,53 @@ export default async function handler(req, res) {
     const resend = new Resend(process.env.RESEND_API_KEY || '');
     const sql = neon(process.env.DATABASE_URL || '');
 
-    // We add a delay to allow Resend to index the email content after delivery notification.
+    // v34.0 Maximum Reliability Polling
     const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
-    await sleep(3000); // v33.0: Increased to 3s for reliability
+    
+    // Check payload first (just in case Resend includes it now)
+    let finalContent = payload.data?.text || payload.data?.html?.replace(/<[^>]*>?/gm, '') || "";
+    
+    if (!finalContent) {
+      await sleep(5000); // Initial 5s buffer 
+      
+      let attempts = 0;
+      const maxAttempts = 3;
 
-    let finalContent = "";
-    let attempts = 0;
-    const maxAttempts = 2;
-
-    while (attempts < maxAttempts && !finalContent) {
-      try {
-        attempts++;
-        
-        let response = null;
-        // Hyper-Defensive Namespace Checks (v33.1)
-        if (resend.emails && resend.emails.receiving && typeof resend.emails.receiving.get === 'function') {
-          response = await resend.emails.receiving.get(emailId);
-        } else if (resend.emails && typeof resend.emails.get === 'function') {
-          response = await resend.emails.get(emailId);
-        } else {
-          throw new Error("Resend SDK: emails namespace or get function is missing");
-        }
-        
-        const { data, error } = response || {};
-        
-        if (!error && data) {
-          finalContent = data.text || data.html?.replace(/<[^>]*>?/gm, '') || subject;
-        } else {
-          const errorMsg = error?.message || "Email not found yet";
-          if (errorMsg.toLowerCase().includes('restricted to only send')) {
-            finalContent = `⚠️ [RESTRICTED CONTENT]: New reply received, but your Resend API Key is limited to "Sending Only". Please update to "Full Access" on Resend.com. (Subject: ${subject})`;
-            break;
+      while (attempts < maxAttempts && !finalContent) {
+        try {
+          attempts++;
+          let response = null;
+          
+          if (resend.emails?.receiving?.get) {
+            response = await resend.emails.receiving.get(emailId);
+          } else if (resend.emails?.get) {
+            response = await resend.emails.get(emailId);
           }
           
-          if (attempts < maxAttempts) {
-            console.log(`Email not found (${errorMsg}), retrying...`);
-            await sleep(2000);
+          const { data, error } = response || {};
+          
+          if (!error && data) {
+            finalContent = data.text || data.html?.replace(/<[^>]*>?/gm, '') || subject;
           } else {
-            finalContent = `[PLATINUM ERROR]: ${errorMsg} (Subject: ${subject})`;
+            const errorMsg = error?.message || "Still Indexing...";
+            if (errorMsg.toLowerCase().includes('restricted to only send')) {
+              finalContent = `⚠️ [RESTRICTED]: Update Resend API Key to "Full Access". (Subject: ${subject})`;
+              break;
+            }
+            
+            if (attempts < maxAttempts) {
+              await sleep(3000); // Wait another 3s between retries
+            } else {
+              finalContent = `[PLATINUM ERROR]: Email content still indexing at Resend after 15s. Please refresh dashboard in a moment. (Subject: ${subject})`;
+            }
           }
+        } catch (err) {
+           if (attempts < maxAttempts) {
+             await sleep(3000);
+           } else {
+             finalContent = `[PLATINUM EXCEPTION]: ${err.message} (Subject: ${subject})`;
+           }
         }
-      } catch (err) {
-         const exMsg = err.message || "";
-         if (exMsg.toLowerCase().includes('restricted to only send')) {
-            finalContent = `⚠️ [RESTRICTED CONTENT]: Your Resend API Key lacks permission to read emails. (Subject: ${subject})`;
-            break;
-         }
-         if (attempts < maxAttempts) {
-           await sleep(2000);
-         } else {
-           finalContent = `[PLATINUM EXCEPTION]: ${exMsg} (Subject: ${subject})`;
-         }
       }
     }
 
