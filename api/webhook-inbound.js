@@ -44,12 +44,22 @@ export default async function handler(req, res) {
         } catch (fErr) {
           const errorMsg = error?.message || fErr.message || 'Unknown Fetch Error';
           console.warn('Resend Fetch Error:', errorMsg);
-          finalContent = `[PLATINUM ERROR]: ${errorMsg} (Subject: ${subject})`;
+          
+          if (errorMsg.toLowerCase().includes('restricted to only send')) {
+            finalContent = `⚠️ [RESTRICTED CONTENT]: New reply received, but your Resend API Key is limited to "Sending Only". Please go to Resend.com and update your API Key to "Full Access" to read client replies here. (Subject: ${subject})`;
+          } else {
+            finalContent = `[PLATINUM ERROR]: ${errorMsg} (Subject: ${subject})`;
+          }
         }
       }
     } catch (err) {
        console.error('Fetch Exception:', err);
-       finalContent = `[PLATINUM EXCEPTION]: ${err.message} (Subject: ${subject})`;
+       const exMsg = err.message || "";
+       if (exMsg.toLowerCase().includes('restricted to only send')) {
+         finalContent = `⚠️ [RESTRICTED CONTENT]: Your Resend API Key lacks permission to read emails. Please update it to "Full Access" on Resend.com. (Subject: ${subject})`;
+       } else {
+         finalContent = `[PLATINUM EXCEPTION]: ${exMsg} (Subject: ${subject})`;
+       }
     }
 
     const cleanContent = finalContent.toString().trim();

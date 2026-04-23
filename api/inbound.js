@@ -47,11 +47,21 @@ export default async function handler(req, res) {
              finalContent = fallback.data.text || fallback.data.html?.replace(/<[^>]*>?/gm, '') || req.body.data.subject || "No Content";
           } else { throw new Error(error?.message || "No data"); }
         } catch (fErr) {
-          finalContent = `[PLATINUM ERROR]: ${error?.message || fErr.message} (Subject: ${req.body.data.subject})`;
+          const errMsg = error?.message || fErr.message || 'Unknown Sync Error';
+          if (errMsg.toLowerCase().includes('restricted to only send')) {
+            finalContent = `⚠️ [RESTRICTED CONTENT]: Your API Key is "Sending Only". Update it to "Full Access" on Resend.com to read replies here. (Subject: ${req.body.data.subject})`;
+          } else {
+            finalContent = `[PLATINUM ERROR]: ${errMsg} (Subject: ${req.body.data.subject})`;
+          }
         }
       }
     } catch (err) {
-       finalContent = `[PLATINUM EXCEPTION]: ${err.message} (Subject: ${req.body.data.subject})`;
+       const exMsg = err.message || "";
+       if (exMsg.toLowerCase().includes('restricted to only send')) {
+          finalContent = `⚠️ [RESTRICTED]: API Key limited to "Sending Only". (Subject: ${req.body.data.subject})`;
+       } else {
+          finalContent = `[PLATINUM EXCEPTION]: ${exMsg} (Subject: ${req.body.data.subject})`;
+       }
     }
   } else {
     // Normal Webhook (Zapier/Direct)
