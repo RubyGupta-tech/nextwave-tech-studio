@@ -23,7 +23,7 @@ const AdminDashboard = () => {
   const [isLoadingMessages, setIsLoadingMessages] = useState(false);
   const [isSyncExpanded, setIsSyncExpanded] = useState(false);
   const [isDashControlsOpen, setIsDashControlsOpen] = useState(false);
-  const [sysVersion] = useState('v34.1 (PLATINUM SYNC)');
+  const [sysVersion] = useState('v34.2 (PLATINUM SYNC)');
   const [apiStatus, setApiStatus] = useState('checking'); // 'online', 'offline', 'checking'
   const [expectedLen, setExpectedLen] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -468,6 +468,33 @@ const AdminDashboard = () => {
     }
   };
 
+  const handleReloadBody = async (messageId) => {
+    if (!password.trim()) return;
+    setIsLoadingMessages(true);
+    try {
+      const response = await fetch('/api/sync-body', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-nextwave-auth': password.trim()
+        },
+        body: JSON.stringify({ messageId })
+      });
+      const data = await response.json();
+      if (data.success) {
+        // Update local messages state instantly
+        setMessages(prev => prev.map(m => m.id === messageId ? { ...m, content: data.updatedContent } : m));
+        showToast('✅ Message content synced successfully!', 'success');
+      } else {
+        showToast('❌ Sync failed: ' + (data.error || 'Body still indexing.'), 'error');
+      }
+    } catch (err) {
+      showToast('❌ Error connecting to sync service.', 'error');
+    } finally {
+      setIsLoadingMessages(false);
+    }
+  };
+
   const exportToCSV = () => {
     if (leads.length === 0) return;
     const headers = ["ID", "Date", "Name", "Email", "Service", "Source", "Status", "Message", "Notes"];
@@ -513,7 +540,7 @@ const AdminDashboard = () => {
             textTransform: 'uppercase',
             letterSpacing: '1px'
           }}>
-            💎 PLATINUM SYNC v34.1 - SYSTEM ONLINE
+            💎 PLATINUM SYNC v34.2 - SYSTEM ONLINE
           </div>
         <div className="admin-login-card">
           <div className="admin-logo">
@@ -891,7 +918,19 @@ const AdminDashboard = () => {
                             <div className="bubble-sender">
                               {msg.sender === 'admin' ? 'NextWave Studio' : selectedLead.name}
                             </div>
-                            <div className="bubble-content">{msg.content}</div>
+                            <div className="bubble-content">
+                              {msg.content}
+                              {msg.sender === 'client' && msg.content.includes('still indexing at Resend') && (
+                                <button 
+                                  className="reload-body-btn"
+                                  onClick={() => handleReloadBody(msg.id)}
+                                  disabled={isLoadingMessages}
+                                  title="Try to fetch full email text now"
+                                >
+                                  🔄 Reload Full Text
+                                </button>
+                              )}
+                            </div>
                             <div className="bubble-footer">
                               <span className="bubble-time">
                                 {formatRelativeDate(msg.created_at)}
@@ -1503,6 +1542,31 @@ const AdminDashboard = () => {
           .confirm-btn, .cancel-btn { width: 100%; flex: none; }
           .analytics-summary { flex-direction: column; width: 100%; gap: 10px; }
           .ans-item { width: 100%; justify-content: space-between; display: flex; padding: 15px; }
+        }
+
+        .reload-body-btn {
+          display: block;
+          margin-top: 10px;
+          padding: 6px 12px;
+          background: rgba(255, 255, 255, 0.1);
+          border: 1px dashed rgba(255, 255, 255, 0.3);
+          color: #fff;
+          border-radius: 6px;
+          cursor: pointer;
+          font-size: 11px;
+          transition: all 0.2s;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+        }
+        .reload-body-btn:hover {
+          background: rgba(255, 255, 255, 0.2);
+          border-color: #fff;
+          transform: translateY(-1px);
+        }
+        .reload-body-btn:disabled {
+          opacity: 0.5;
+          cursor: wait;
         }
 
         /* Toast UI */
