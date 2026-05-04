@@ -8,7 +8,7 @@ export default async function handler(req, res) {
       <div style="font-family: sans-serif; padding: 40px; text-align: center; color: #0B1F3A;">
         <h1 style="color: #1ABC9C;">⚡ NextWave PLATINUM Sync Engine</h1>
         <p>Your Inbox Webhook is <b>ONLINE</b> and waiting for deliveries.</p>
-        <p style="font-size: 13px; color: #64748b;">(v31.1 PLATINUM SYNC ACTIVE)</p>
+        <p style="font-size: 13px; color: #64748b;">(v34.2 PLATINUM SYNC ACTIVE)</p>
       </div>
     `);
   }
