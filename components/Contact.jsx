@@ -112,7 +112,7 @@ const Contact = () => {
                             <p>Thank you for reaching out. We'll get back to you within 24 hours.</p>
                         </div>
                     ) : (
-                        <form className="contact-right-form" onSubmit={handleSubmit} noValidate>
+                        <form className="contact-right-form" onSubmit={handleSubmit}>
                             <div className="contact-right-heading">Send a Message</div>
 
                             <div className="crf-row">
