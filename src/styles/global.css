@@ -1735,7 +1735,7 @@ nav a:hover::after {
 .crf-field textarea {
     background: transparent;
     border: none;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
     padding: 14px 2px;
     color: #E2E8F0;
     font-size: 15px;
@@ -1749,7 +1749,7 @@ nav a:hover::after {
 
 .crf-field input::placeholder,
 .crf-field textarea::placeholder {
-    color: #334155;
+    color: #94A3B8;
 }
 
 .crf-field select {
