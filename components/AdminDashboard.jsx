@@ -43,7 +43,7 @@ const AdminDashboard = () => {
     }
 
     // 2. Ping API to check connection
-    fetch('/api/ping?_t=' + Date.now())
+    fetch('/api/get-leads?action=ping&_t=' + Date.now())
       .then(res => res.json())
       .then(data => {
         if (data.status === 'online') {

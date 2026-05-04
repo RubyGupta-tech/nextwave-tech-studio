@@ -7,6 +7,30 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
+  // 1.5 Handle Ping Request (Merged to save Serverless Function space)
+  if (req.query.action === 'ping') {
+    const pStatus = {
+      auth: !!process.env.ADMIN_PASSWORD,
+      db: !!process.env.DATABASE_URL,
+      pLen: process.env.ADMIN_PASSWORD?.length || 0,
+      v: 20,
+      status: 'checking'
+    };
+    try {
+      if (pStatus.db) {
+        const sql = neon(process.env.DATABASE_URL);
+        await sql`SELECT 1`;
+        pStatus.dbStatus = 'online';
+      } else {
+        pStatus.dbStatus = 'config_missing';
+      }
+      pStatus.status = (pStatus.auth && pStatus.db && pStatus.dbStatus === 'online') ? 'online' : 'error';
+      return res.status(200).json(pStatus);
+    } catch (error) {
+      return res.status(200).json({ ...pStatus, status: 'error', error: error.message });
+    }
+  }
+
   // 2. Check for the admin password (headers first, then query param fallback for GET)
   const authHeader = (req.headers['x-crm-admin-key'] || req.headers['x-nextwave-auth'] || req.query.auth)?.trim();
   const correctPassword = process.env.ADMIN_PASSWORD?.trim();
