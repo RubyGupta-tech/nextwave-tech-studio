@@ -1267,7 +1267,7 @@ const AdminDashboard = () => {
           background-size: 20px 20px;
         }
         
-        .chat-bubble-container { display: flex; width: 100%; margin-bottom: 2px; }
+        .chat-bubble-container { display: flex; width: 100%; margin-bottom: 2px; flex-shrink: 0; height: auto; min-height: min-content; }
         .chat-bubble-container.sent { justify-content: flex-end; }
         .chat-bubble-container.received { justify-content: flex-start; }
 
@@ -1285,7 +1285,10 @@ const AdminDashboard = () => {
           width: fit-content !important;
           min-width: 240px !important;
           box-sizing: border-box !important;
-          display: block !important;
+          display: flex !important;
+          flex-direction: column;
+          height: auto !important;
+          min-height: min-content !important;
           border: 1px solid rgba(0,0,0,0.05);
         }
         @keyframes slideUp { 
