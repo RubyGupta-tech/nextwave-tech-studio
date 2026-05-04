@@ -21,11 +21,18 @@ export default async function handler(req, res) {
     const resend = new Resend(process.env.RESEND_API_KEY || '');
     const sql = neon(process.env.DATABASE_URL || '');
 
-    // v34.1 Resilience Polling
+    // v34.2 Resilience Polling
     const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
     
-    // Check payload first
-    let finalContent = payload.data?.text || payload.data?.html?.replace(/<[^>]*>?/gm, '') || "";
+    // Check payload first (Robust extraction for Resend and Zapier)
+    let finalContent = payload.data?.text || 
+                       payload.data?.body_plain || 
+                       payload.data?.html?.replace(/<[^>]*>?/gm, '') || 
+                       payload.text || 
+                       payload.body_plain || 
+                       payload.content || 
+                       payload.html?.replace(/<[^>]*>?/gm, '') || 
+                       "";
     
     if (!finalContent) {
       await sleep(3000); // Wait 3s initially
@@ -64,7 +71,7 @@ export default async function handler(req, res) {
       }
     }
 
-    // v34.1 Graceful Fallback: If still no content, save metadata anyway
+    // v34.2 Graceful Fallback: If still no content, save metadata anyway
     if (!finalContent) {
       finalContent = `📩 **NEW REPLY RECEIVED**\nSubject: ${subject}\n\n[The full text of this message is still indexing at Resend. Please check your inbox directly or refresh the dashboard in a moment.]`;
     }
