@@ -24,6 +24,7 @@ const Contact = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        document.activeElement?.blur(); // Remove blinking cursor from input
         setIsSending(true);
         setError(null);
 
