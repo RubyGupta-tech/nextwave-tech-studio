@@ -47,7 +47,10 @@ export default async function handler(req, res) {
       
       const { data, error } = response || {};
       if (!error && data) {
-        finalContent = data.text || data.html?.replace(/<[^>]*>?/gm, '') || msg.subject;
+        finalContent = data.text || data.html?.replace(/<[^>]*>?/gm, '') || msg.subject || "";
+        if (!finalContent || finalContent.trim() === '') {
+          finalContent = "(No message body provided)";
+        }
       } else {
         return res.status(404).json({ error: error?.message || 'Email still not found at Resend' });
       }

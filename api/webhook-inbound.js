@@ -21,9 +21,6 @@ export default async function handler(req, res) {
     const resend = new Resend(process.env.RESEND_API_KEY || '');
     const sql = neon(process.env.DATABASE_URL || '');
 
-    // v34.2 Resilience Polling
-    const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
-    
     // Check payload first (Robust extraction for Resend and Zapier)
     let finalContent = payload.data?.text || 
                        payload.data?.body_plain || 
@@ -34,46 +31,9 @@ export default async function handler(req, res) {
                        payload.html?.replace(/<[^>]*>?/gm, '') || 
                        "";
     
-    if (!finalContent) {
-      await sleep(3000); // Wait 3s initially
-      
-      let attempts = 0;
-      const maxAttempts = 3;
-
-      while (attempts < maxAttempts && !finalContent) {
-        try {
-          attempts++;
-          let response = null;
-          
-          if (resend.emails?.receiving?.get) {
-            response = await resend.emails.receiving.get(emailId);
-          } else if (resend.emails?.get) {
-            response = await resend.emails.get(emailId);
-          }
-          
-          const { data, error } = response || {};
-          
-          if (!error && data) {
-            finalContent = data.text || data.html?.replace(/<[^>]*>?/gm, '') || subject;
-          } else {
-            const errorMsg = error?.message || "Indexing...";
-            if (errorMsg.toLowerCase().includes('restricted to only send')) {
-              finalContent = `⚠️ [RESTRICTED]: Update Resend API Key to "Full Access". (Subject: ${subject})`;
-              break;
-            }
-            if (attempts < maxAttempts) {
-              await sleep(3000);
-            }
-          }
-        } catch (err) {
-           if (attempts < maxAttempts) await sleep(2000);
-        }
-      }
-    }
-
-    // v34.2 Graceful Fallback: If still no content, save metadata anyway
-    if (!finalContent) {
-      finalContent = `📩 **NEW REPLY RECEIVED**\nSubject: ${subject}\n\n[The full text of this message is still indexing at Resend. Please check your inbox directly or refresh the dashboard in a moment.]`;
+    // If it's still empty, it means the client sent an email with a Subject but NO body text!
+    if (!finalContent || finalContent.trim() === '') {
+      finalContent = "(No message body provided)";
     }
 
     const cleanContent = finalContent.toString().trim();
