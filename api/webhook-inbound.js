@@ -31,9 +31,10 @@ export default async function handler(req, res) {
                        payload.html?.replace(/<[^>]*>?/gm, '') || 
                        "";
     
-    // If it's still empty, it means the client sent an email with a Subject but NO body text!
+    // Resend webhooks DO NOT include text/html in the payload. 
+    // They must be fetched via the API. Since Vercel limits us to 10s, we instantly drop an indexing message.
     if (!finalContent || finalContent.trim() === '') {
-      finalContent = "(No message body provided)";
+      finalContent = `📩 **NEW REPLY RECEIVED**\nSubject: ${subject}\n\n[The full text of this message is still indexing at Resend. Please check your inbox directly or refresh the dashboard in a moment.]`;
     }
 
     const cleanContent = finalContent.toString().trim();
