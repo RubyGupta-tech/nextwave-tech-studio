@@ -42,7 +42,14 @@ export default async function handler(req, res) {
   }
 
   const finalContent = emailContent?.toString().trim() || '(No message body)';
-  const senderEmail = (from_email || req.body.data?.from || '').trim();
+  const senderEmail = (
+    from_email || 
+    req.body.from || 
+    req.body.fromEmail ||
+    req.body.sender ||
+    req.body['from_email'] ||
+    ''
+  ).toString().replace(/^.*<(.+)>.*$/, '$1').trim(); // Handle "Name <email>" format
 
   if (!senderEmail) {
     return res.status(400).json({ error: 'Missing sender email (from_email).' });
