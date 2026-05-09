@@ -46,29 +46,23 @@ export default async function handler(req, res) {
       }
       
       const { data, error } = response || {};
-      if (!error && data) {
-        finalContent = data.text || data.html?.replace(/<[^>]*>?/gm, '') || msg.subject || "";
-        if (!finalContent || finalContent.trim() === '') {
-          finalContent = "(No message body provided)";
-        }
-      } else {
-        return res.status(404).json({ error: error?.message || 'Email still not found at Resend' });
-      }
-    } catch (err) {
-      return res.status(500).json({ error: 'Resend fetch failed: ' + err.message });
-    }
-
-    // 3. Update the database
-    if (finalContent) {
+      
+      // DEBUG: Force the message content to become the raw JSON from Resend so we can see what's going on!
+      const debugContent = `RAW RESEND RESPONSE:\n\n${JSON.stringify({ data, error }, null, 2)}`;
+      
       await sql`
         UPDATE messages 
-        SET content = ${finalContent} 
+        SET content = ${debugContent} 
         WHERE id = ${parseInt(messageId)}
       `;
-      return res.status(200).json({ success: true, updatedContent: finalContent });
-    }
+      return res.status(200).json({ success: true, updatedContent: debugContent });
 
-    return res.status(500).json({ error: 'Failed to extract content' });
+    } catch (err) {
+      // If it fully crashes, save the crash error to the message
+      const crashContent = `CRASH ERROR:\n${err.message}`;
+      await sql`UPDATE messages SET content = ${crashContent} WHERE id = ${parseInt(messageId)}`;
+      return res.status(200).json({ success: true, updatedContent: crashContent });
+    }
   } catch (error) {
     console.error('Sync Error:', error);
     return res.status(500).json({ error: error.message });
