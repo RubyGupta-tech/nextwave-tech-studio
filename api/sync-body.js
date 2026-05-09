@@ -20,49 +20,28 @@ export default async function handler(req, res) {
 
   try {
     const sql = neon(process.env.DATABASE_URL);
-    const resend = new Resend(process.env.RESEND_API_KEY);
 
-    // 1. Get the message and its original Resend ID (stored in message_id column)
     const messages = await sql`SELECT * FROM messages WHERE id = ${parseInt(messageId)}`;
     if (messages.length === 0) {
       return res.status(404).json({ error: 'Message not found in database' });
     }
 
     const msg = messages[0];
-    const resendId = msg.message_id; // This is the emailId from Resend
 
-    if (!resendId || !resendId.includes('-')) {
-       return res.status(400).json({ error: 'Message does not have a valid Resend ID for syncing' });
+    // Resend does NOT store inbound emails via their API (404 always).
+    // The only way to get the body is via Zapier forwarding it.
+    // If the user clicks reload and it's still a placeholder, tell them clearly.
+    if (msg.content && !msg.content.includes('still indexing at Resend')) {
+      // Already has real content - return it
+      return res.status(200).json({ success: true, updatedContent: msg.content });
     }
 
-    // 2. Try fetching from Resend again
-    let finalContent = "";
-    try {
-      let response = null;
-      if (resend.emails?.receiving?.get) {
-        response = await resend.emails.receiving.get(resendId);
-      } else if (resend.emails?.get) {
-        response = await resend.emails.get(resendId);
-      }
-      
-      const { data, error } = response || {};
-      
-      // DEBUG: Force the message content to become the raw JSON from Resend so we can see what's going on!
-      const debugContent = `RAW RESEND RESPONSE:\n\n${JSON.stringify({ data, error }, null, 2)}`;
-      
-      await sql`
-        UPDATE messages 
-        SET content = ${debugContent} 
-        WHERE id = ${parseInt(messageId)}
-      `;
-      return res.status(200).json({ success: true, updatedContent: debugContent });
+    // Still a placeholder - Zapier hasn't forwarded the body yet
+    return res.status(200).json({ 
+      success: false, 
+      error: 'Zapier has not forwarded the email body yet. Please check your Gmail inbox directly. The message will update automatically once Zapier processes it (usually within 1-2 minutes).'
+    });
 
-    } catch (err) {
-      // If it fully crashes, save the crash error to the message
-      const crashContent = `CRASH ERROR:\n${err.message}`;
-      await sql`UPDATE messages SET content = ${crashContent} WHERE id = ${parseInt(messageId)}`;
-      return res.status(200).json({ success: true, updatedContent: crashContent });
-    }
   } catch (error) {
     console.error('Sync Error:', error);
     return res.status(500).json({ error: error.message });
