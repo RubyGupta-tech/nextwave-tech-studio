@@ -65,26 +65,40 @@ export default async function handler(req, res) {
       `;
 
       // 4. Forward to Gmail
-      await resend.emails.send({
-        from: 'NextWave Studio Bridge <notifications@dnextwave.com>',
-        to: ['d.nextwavetech@gmail.com'],
-        subject: `[STUDIO REPLY] From: ${fromEmail} - ${subject}`,
-        html: `
-          <div style="font-family: sans-serif; padding: 20px; border: 1px solid #e2e8f0; border-radius: 12px; max-width: 600px;">
-            <h2 style="color: #1ABC9C;">New Client Response</h2>
-            <p><strong>From:</strong> ${fromEmail}</p>
-            <p><strong>Message:</strong></p>
-            <div style="background: #f8fafc; padding: 15px; border-radius: 8px;">${cleanContent}</div>
-            <br/>
-            <a href="https://dnextwave.com/admin" style="display: inline-block; padding: 10px 20px; background: #0B1F3A; color: #fff; text-decoration: none; border-radius: 6px;">Open Dashboard -></a>
-          </div>
-        `,
-      });
+      try {
+        await resend.emails.send({
+          from: 'NextWave Studio Bridge <notifications@dnextwave.com>',
+          to: ['d.nextwavetech@gmail.com'],
+          subject: `[STUDIO REPLY] From: ${fromEmail} - ${subject}`,
+          html: `
+            <div style="font-family: sans-serif; padding: 20px; border: 1px solid #e2e8f0; border-radius: 12px; max-width: 600px;">
+              <h2 style="color: #1ABC9C;">New Client Response</h2>
+              <p><strong>From:</strong> ${fromEmail}</p>
+              <p><strong>Message:</strong></p>
+              <div style="background: #f8fafc; padding: 15px; border-radius: 8px;">${cleanContent}</div>
+              <br/>
+              <a href="https://dnextwave.com/admin" style="display: inline-block; padding: 10px 20px; background: #0B1F3A; color: #fff; text-decoration: none; border-radius: 6px;">Open Dashboard -></a>
+            </div>
+          `,
+        });
+      } catch (forwardError) {
+        // If forwarding fails, save the error in the notes or message so we can see it
+        await sql`
+          UPDATE messages 
+          SET content = content || '\n\n⚠️ Forwarding Error: ' || ${forwardError.message}
+          WHERE message_id = ${emailId}
+        `;
+      }
     }
 
     return res.status(200).json({ success: true, message: 'Processed' });
   } catch (error) {
     console.error('Webhook Sync Error:', error.message);
+    // Even if it fails, try to log the error to the database
+    try {
+      const sql = neon(process.env.DATABASE_URL || '');
+      await sql`INSERT INTO messages (lead_id, sender, content) VALUES (1, 'admin', ${'CRITICAL WEBHOOK ERROR: ' + error.message})`;
+    } catch (e) {}
     return res.status(500).json({ success: false, error: error.message });
   }
 }
