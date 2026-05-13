@@ -58,18 +58,20 @@ export default async function handler(req, res) {
   try {
     const sql = neon(process.env.DATABASE_URL);
 
-    // Find the lead by email
+    // Find the lead by email - using more robust matching
     const leads = await sql`
-      SELECT id FROM leads 
-      WHERE email ILIKE ${senderEmail} 
+      SELECT id, email FROM leads 
+      WHERE TRIM(LOWER(email)) = TRIM(LOWER(${senderEmail}))
+      OR email ILIKE ${'%' + senderEmail + '%'}
       ORDER BY created_at DESC 
       LIMIT 1
     `;
 
     if (leads.length === 0) {
+      // DEBUG: Send back the email we tried to match so we can see it in Zapier logs
       return res.status(200).json({ 
         success: true, 
-        warning: 'Email received but no matching lead found in CRM.' 
+        warning: `Lead match failed. No client found with email: "${senderEmail}". Check if this email exists in your Leads list.` 
       });
     }
 
