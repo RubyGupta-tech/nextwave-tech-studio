@@ -21,18 +21,36 @@ export default async function handler(req, res) {
     const resend = new Resend(process.env.RESEND_API_KEY || '');
     const sql = neon(process.env.DATABASE_URL || '');
 
-    // Check payload first (Robust extraction for Resend and Zapier)
-    let finalContent = payload.data?.text || 
-                       payload.data?.body_plain || 
-                       payload.data?.html?.replace(/<[^>]*>?/gm, '') || 
-                       payload.text || 
-                       payload.body_plain || 
-                       payload.content || 
-                       payload.html?.replace(/<[^>]*>?/gm, '') || 
-                       "";
+    let finalContent = "";
+
+    // Attempt to fetch full content directly from Resend API first
+    if (emailId) {
+      try {
+        const resendRes = await fetch(`https://api.resend.com/emails/${emailId}`, {
+          headers: { 'Authorization': `Bearer ${process.env.RESEND_API_KEY || ''}` }
+        });
+        if (resendRes.ok) {
+          const emailData = await resendRes.json();
+          finalContent = emailData.text || (emailData.html ? emailData.html.replace(/<[^>]*>?/gm, '') : "");
+        }
+      } catch (err) {
+        console.error('Failed to fetch from Resend API:', err);
+      }
+    }
+
+    // Fallback to webhook payload
+    if (!finalContent || finalContent.trim() === '') {
+      finalContent = payload.data?.text || 
+                     payload.data?.body_plain || 
+                     payload.data?.html?.replace(/<[^>]*>?/gm, '') || 
+                     payload.text || 
+                     payload.body_plain || 
+                     payload.content || 
+                     payload.html?.replace(/<[^>]*>?/gm, '') || 
+                     "";
+    }
     
-    // Resend webhooks DO NOT include text/html in the payload. 
-    // They must be fetched via the API. Since Vercel limits us to 10s, we instantly drop an indexing message.
+    // If still no content, leave a placeholder message
     if (!finalContent || finalContent.trim() === '') {
       finalContent = `📩 **NEW REPLY RECEIVED**\nSubject: ${subject}\n\n[The full text of this message is still indexing at Resend. Please check your inbox directly or refresh the dashboard in a moment.]`;
     }

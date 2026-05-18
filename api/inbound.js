@@ -25,9 +25,31 @@ export default async function handler(req, res) {
     return res.status(401).json({ error: 'Unauthorized: Invalid or missing sync key.' });
   }
 
-  // Extract email body from Zapier payload
-  // Zapier can send it as: content, text, body, body-plain, stripped-text
+  // Helper to extract base64 body from Gmail API raw format
+  const decodeGmailBody = (payload) => {
+    if (!payload) return null;
+    let dataStr = null;
+    if (payload.parts && Array.isArray(payload.parts)) {
+      const textPart = payload.parts.find(p => p.mimeType === 'text/plain');
+      if (textPart && textPart.body && textPart.body.data) dataStr = textPart.body.data;
+      else {
+        const htmlPart = payload.parts.find(p => p.mimeType === 'text/html');
+        if (htmlPart && htmlPart.body && htmlPart.body.data) dataStr = htmlPart.body.data;
+      }
+    } else if (payload.body && payload.body.data) {
+      dataStr = payload.body.data;
+    }
+    if (dataStr) {
+      try {
+        return Buffer.from(dataStr.replace(/-/g, '+').replace(/_/g, '/'), 'base64').toString('utf8');
+      } catch (e) { return null; }
+    }
+    return null;
+  };
+
   let emailContent = (
+    decodeGmailBody(req.body.payload) ||
+    decodeGmailBody(req.body.raw?.payload) ||
     content ||
     req.body.text ||
     req.body.body ||
@@ -42,14 +64,18 @@ export default async function handler(req, res) {
   }
 
   const finalContent = emailContent?.toString().trim() || '(No message body)';
-  const senderEmail = (
-    from_email || 
-    req.body.from || 
-    req.body.fromEmail ||
-    req.body.sender ||
-    req.body['from_email'] ||
-    ''
-  ).toString().replace(/^.*<(.+)>.*$/, '$1').trim(); // Handle "Name <email>" format
+  
+  // Extract fromEmail securely
+  let extractedFrom = req.body.from_email || req.body.from || req.body.fromEmail || req.body.sender || req.body['from_email'];
+  if (!extractedFrom) {
+    const headers = req.body.payload?.headers || req.body.raw?.payload?.headers || [];
+    if (Array.isArray(headers)) {
+      const fromHeader = headers.find(h => h.name && h.name.toLowerCase() === 'from');
+      if (fromHeader) extractedFrom = fromHeader.value;
+    }
+  }
+
+  const senderEmail = (extractedFrom || '').toString().replace(/^.*<(.+)>.*$/, '$1').trim(); // Handle "Name <email>" format
 
   if (!senderEmail) {
     return res.status(400).json({ error: 'Missing sender email (from_email).' });

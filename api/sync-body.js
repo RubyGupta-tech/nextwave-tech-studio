@@ -28,9 +28,25 @@ export default async function handler(req, res) {
 
     const msg = messages[0];
 
-    // Resend does NOT store inbound emails via their API (404 always).
-    // The only way to get the body is via Zapier forwarding it.
-    // If the user clicks reload and it's still a placeholder, tell them clearly.
+    // Try to fetch from Resend directly if we have a messageId and it's a placeholder
+    if (msg.content && msg.content.includes('still indexing at Resend') && msg.message_id) {
+      try {
+        const resendRes = await fetch(`https://api.resend.com/emails/${msg.message_id}`, {
+          headers: { 'Authorization': `Bearer ${process.env.RESEND_API_KEY || ''}` }
+        });
+        if (resendRes.ok) {
+          const emailData = await resendRes.json();
+          const body = emailData.text || (emailData.html ? emailData.html.replace(/<[^>]*>?/gm, '') : "");
+          if (body && body.trim() !== '') {
+            await sql`UPDATE messages SET content = ${body.trim()} WHERE id = ${msg.id}`;
+            return res.status(200).json({ success: true, updatedContent: body.trim() });
+          }
+        }
+      } catch (err) {
+        console.error("Resend Sync Error:", err);
+      }
+    }
+
     if (msg.content && !msg.content.includes('still indexing at Resend')) {
       // Already has real content - return it
       return res.status(200).json({ success: true, updatedContent: msg.content });
@@ -39,7 +55,7 @@ export default async function handler(req, res) {
     // Still a placeholder - Zapier hasn't forwarded the body yet
     return res.status(200).json({ 
       success: false, 
-      error: 'Zapier has not forwarded the email body yet. Please check your Gmail inbox directly. The message will update automatically once Zapier processes it (usually within 1-2 minutes).'
+      error: 'The email body is still not available. Please check your Gmail inbox directly. It will update automatically once Zapier processes it (usually within 1-2 minutes).'
     });
 
   } catch (error) {
