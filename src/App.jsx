@@ -47,23 +47,19 @@ const NavigationMonitor = () => {
 
         const runScrollLock = (targetId) => {
             let attempts = 0;
-            const scrollLockInterval = setInterval(() => {
+            const findElementInterval = setInterval(() => {
                 const element = document.getElementById(targetId);
                 if (element) {
+                    // Element found, scroll to it once and stop checking
+                    clearInterval(findElementInterval);
                     element.scrollIntoView({ behavior: 'smooth' });
+                    window.sessionStorage.removeItem('scroll_to_contact');
                     
-                    // Once we've reached a high enough attempt count or find the element, 
-                    // we can clean up but we keep scrolling for a bit to "lock" it 
-                    // against reveal animations shifting the page height.
-                    if (attempts > 10) {
-                        window.sessionStorage.removeItem('scroll_to_contact');
-                        // Clean URL without refreshing
-                        const newUrl = window.location.pathname + window.location.hash;
-                        window.history.replaceState({}, '', newUrl);
-                    }
+                    const newUrl = window.location.pathname + window.location.hash;
+                    window.history.replaceState({}, '', newUrl);
                 }
                 attempts++;
-                if (attempts > 30) clearInterval(scrollLockInterval); // 3 seconds total lock
+                if (attempts > 30) clearInterval(findElementInterval); // Give up after 3 seconds
             }, 100);
         };
 
