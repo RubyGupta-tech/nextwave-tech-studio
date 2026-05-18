@@ -148,10 +148,10 @@ const Testimonials = () => {
                         strokeWidth="4"
                     />
             
-                    {/* White fill to blend into form */}
+                    {/* Dark fill to blend into next section */}
                     <path
                         d="M0,140 C360,80 1080,200 1440,140 L1440,180 L0,180 Z"
-                        fill="#ffffff"
+                        fill="#0F172A"
                     />
                 </svg>
             </div>

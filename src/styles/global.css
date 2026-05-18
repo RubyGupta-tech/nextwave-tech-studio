@@ -1069,7 +1069,7 @@ nav a:hover::after {
     padding: 100px 20px 200px 20px; /* Reduced top, kept large bottom */
     background-color: #0F172A;
     position: relative;
-    overflow: visible; /* Show waves */
+    overflow: hidden; /* Prevent horizontal scrollbar flickering from wave animation */
 }
 
 /* Highly Modern Top Inner Glow */
