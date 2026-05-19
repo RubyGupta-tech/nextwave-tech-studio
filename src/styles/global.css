@@ -1865,7 +1865,8 @@ body {
   background-color: var(--bg-dark);
   color: var(--text-light);
   line-height: 1.6;
-  overflow-x: hidden;
+  overflow-x: clip;
+  max-width: 100vw;
 }
 
 .crf-submit svg {
