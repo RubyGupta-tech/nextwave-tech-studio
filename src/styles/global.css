@@ -5724,3 +5724,11 @@ body {
         border-top: 1px solid rgba(6, 182, 212, 0.1);
     }
 }
+
+
+/* === STRICT LAYOUT HEIGHT LOCKS === */
+.typewriter-text { white-space: nowrap; }
+.hero-heading { min-height: 160px; }
+.testimonials-track { align-items: stretch !important; }
+.testimonial-slide { height: auto !important; }
+.testimonial-group { height: 100%; }
