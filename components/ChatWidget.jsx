@@ -10,6 +10,8 @@ const ChatWidget = () => {
     const widgetRef = useRef(null);
     const location = useLocation();
 
+    const [hasInteracted, setHasInteracted] = useState(false);
+
     // 1. Close chat on ANY Navigation (Route, Search, or Hash Change)
     useEffect(() => {
         setIsOpen(false);
@@ -18,14 +20,11 @@ const ChatWidget = () => {
     // 2. Hyper-Reliable "Outside Interaction" (Desktop & Mobile)
     useEffect(() => {
         const handleOutsideInteraction = (event) => {
-            // If the chat is open and the click/touch target is NOT inside the widgetRef
             if (isOpen && widgetRef.current && !widgetRef.current.contains(event.target)) {
                 setIsOpen(false);
             }
         };
 
-        // We use 'mousedown' and 'touchstart' for faster and more reliable detection than 'click'
-        // Using capture phase (true) ensures we catch it before other elements can block it
         if (isOpen) {
             window.addEventListener('mousedown', handleOutsideInteraction, true);
             window.addEventListener('touchstart', handleOutsideInteraction, true);
@@ -40,17 +39,24 @@ const ChatWidget = () => {
         };
     }, [isOpen]);
 
-    // Show the lead hook message after 3 seconds
+    // Show the lead hook message after 3 seconds ONLY IF they haven't interacted with the chat yet
     useEffect(() => {
+        if (hasInteracted) return;
         const timer = setTimeout(() => {
             if (!isOpen) setShowLeadHook(true);
         }, 3000);
         return () => clearTimeout(timer);
-    }, [isOpen]);
+    }, [isOpen, hasInteracted]);
 
     const toggleChat = () => {
         setIsOpen(!isOpen);
         setShowLeadHook(false);
+        setHasInteracted(true);
+    };
+
+    const closeHook = () => {
+        setShowLeadHook(false);
+        setHasInteracted(true);
     };
 
     const handleSubmit = async (e) => {
@@ -117,7 +123,7 @@ const ChatWidget = () => {
                         <span className="hook-text-desktop">Hi! Are you looking to get a website? 👋</span>
                         <span className="hook-text-mobile">Hi! Want to connect?👋</span>
                     </p>
-                    <button onClick={() => setShowLeadHook(false)} className="close-hook">×</button>
+                    <button onClick={closeHook} className="close-hook">×</button>
                 </div>
             )}
 
