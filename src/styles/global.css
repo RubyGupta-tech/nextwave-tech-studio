@@ -1859,11 +1859,13 @@ nav a:hover::after {
   font-family: 'Inter', 'Plus Jakarta Sans', sans-serif;
 }
 
-body {
+html, body {
   background-color: var(--bg-dark);
   color: var(--text-light);
   line-height: 1.6;
   overflow-x: hidden;
+  max-width: 100vw;
+  width: 100%;
 }
 
 .crf-submit svg {
