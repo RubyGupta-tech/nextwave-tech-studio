@@ -1109,11 +1109,11 @@ nav a:hover::after {
 }
 
 .testimonials-wave .wave-line-1 {
-    animation: drift-wave-1 12s ease-in-out infinite alternate;
+    /* Animation removed to prevent distraction near contact form */
 }
 
 .testimonials-wave .wave-line-2 {
-    animation: drift-wave-2 15s ease-in-out infinite alternate-reverse;
+    /* Animation removed to prevent distraction near contact form */
 }
 
 @keyframes drift-wave-1 {
