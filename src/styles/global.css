@@ -31,7 +31,7 @@
     filter: blur(80px);
     z-index: -1;
     pointer-events: none;
-    animation: float-slow 20s ease-in-out infinite alternate;
+    /* animation: float-slow 20s ease-in-out infinite alternate; */ /* Disabled per user request */
 }
 
 .light-pool-magenta {
@@ -53,7 +53,7 @@
 }
 
 .animate-floating {
-    animation: floating 6s ease-in-out infinite;
+    /* animation: floating 6s ease-in-out infinite; */ /* Disabled per user request */
 }
 
 /* Global Styles */
@@ -280,12 +280,12 @@ nav a:hover::after {
 }
 
 .wave-1 {
-    animation: driftWave 25s linear infinite;
+    /* animation: driftWave 25s linear infinite; */ /* Disabled per user request */
     z-index: 1;
 }
 
 .wave-2 {
-    animation: driftWave 35s linear infinite reverse;
+    /* animation: driftWave 35s linear infinite reverse; */ /* Disabled per user request */
     opacity: 0.5;
     z-index: 2;
 }
@@ -314,7 +314,7 @@ nav a:hover::after {
     border-radius: 50%;
     /* Layered glow for realism */
     box-shadow: 0 0 10px #FFFFFF, 0 0 20px rgba(255, 255, 255, 0.4); 
-    animation: floatParticleMain 15s linear infinite;
+    /* animation: floatParticleMain 15s linear infinite; */ /* Disabled per user request */
     opacity: 0;
     pointer-events: none;
     filter: blur(0.5px); /* Soft focus */
@@ -419,7 +419,7 @@ nav a:hover::after {
     opacity: 0.35;
     pointer-events: none;
     z-index: 0;
-    animation: floatOrb 8s ease-in-out infinite alternate;
+    /* animation: floatOrb 8s ease-in-out infinite alternate; */ /* Disabled per user request */
 }
 
 .hero-glow-1 {
@@ -1826,7 +1826,7 @@ nav a:hover::after {
     filter: blur(80px);
     z-index: -1;
     pointer-events: none;
-    animation: float-slow 20s ease-in-out infinite alternate;
+    /* animation: float-slow 20s ease-in-out infinite alternate; */ /* Disabled per user request */
 }
 
 .light-pool-magenta {
@@ -1848,7 +1848,7 @@ nav a:hover::after {
 }
 
 .animate-floating {
-    animation: floating 6s ease-in-out infinite;
+    /* animation: floating 6s ease-in-out infinite; */ /* Disabled per user request */
 }
 
 /* ==========================================================================
@@ -2985,7 +2985,7 @@ body {
     display: flex;
     gap: 100px;
     width: max-content;
-    animation: scrollLogos 40s linear infinite;
+    /* animation: scrollLogos 40s linear infinite; */ /* Disabled per user request */
 }
 
 .client-logo {
@@ -4376,7 +4376,7 @@ body {
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
-    animation: shine 3s linear infinite;
+    /* animation: shine 3s linear infinite; */ /* Disabled per user request */
     display: inline-block;
 }
 
