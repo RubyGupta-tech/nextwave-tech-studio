@@ -5727,7 +5727,7 @@ body {
 
 
 /* === STRICT LAYOUT HEIGHT LOCKS === */
-.hero-heading { min-height: 250px !important; }
+.hero h1 { min-height: 250px !important; }
 .testimonials-track { align-items: stretch !important; min-height: 400px; }
 .testimonial-slide { height: auto !important; }
 .testimonial-group { height: 100%; }
