@@ -5727,8 +5727,7 @@ body {
 
 
 /* === STRICT LAYOUT HEIGHT LOCKS === */
-.typewriter-text { white-space: nowrap; }
-.hero-heading { min-height: 160px; }
-.testimonials-track { align-items: stretch !important; }
+.hero-heading { min-height: 250px !important; }
+.testimonials-track { align-items: stretch !important; min-height: 400px; }
 .testimonial-slide { height: auto !important; }
 .testimonial-group { height: 100%; }
