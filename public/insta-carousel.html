@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Instagram Carousel Generator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Montserrat:wght@400;500;700;800;900&family=Great+Vibes&display=swap" rel="stylesheet">
+  
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      background: #333;
+      padding: 50px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 40px;
+    }
+
+    .download-btn {
+      position: fixed; top: 20px; right: 20px;
+      padding: 12px 24px; background: #1ABC9C; color: #fff;
+      font-size: 16px; font-family: 'Montserrat', sans-serif; font-weight: bold;
+      border: none; border-radius: 8px; cursor: pointer; z-index: 100;
+      box-shadow: 0 4px 15px rgba(26, 188, 156, 0.4);
+      transition: transform 0.2s;
+    }
+    .download-btn:hover {
+      transform: scale(1.05);
+    }
+
+    .carousel-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 30px;
+      justify-content: center;
+      max-width: 1800px;
+    }
+
+    .slide-wrapper {
+      transform: scale(0.5); /* Scale down so they all fit on screen */
+      transform-origin: top center;
+      margin-bottom: -450px; /* pull up the space since they are scaled */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .download-single-btn {
+      margin-top: 20px;
+      padding: 15px 30px;
+      background: #0F172A;
+      color: #fff;
+      font-size: 24px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: bold;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(15, 23, 42, 0.4);
+      transition: background 0.2s;
+    }
+    .download-single-btn:hover { background: #1ABC9C; }
+
+    .insta-post {
+      width: 1080px; height: 1080px;
+      position: relative;
+      overflow: hidden;
+      
+      /* Layered Background: Ultra Bright White Overlay + Workspace Image */
+      background-color: #ffffff;
+      background-image: 
+        linear-gradient(rgba(255, 255, 255, 0.89), rgba(255, 255, 255, 0.89)),
+        url("./workspace-bg.jpg");
+      background-size: cover, cover;
+      background-position: center, center;
+      
+      border: 1px solid #0F172A; 
+      
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 80px;
+    }
+    
+    /* Replaces the buggy inset box-shadow with safe borders for html2canvas */
+    .insta-post::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      border: 40px solid rgba(255, 255, 255, 0.5);
+      pointer-events: none;
+      z-index: 1;
+    }
+    .insta-post::after {
+      content: '';
+      position: absolute;
+      top: 40px; left: 40px; right: 40px; bottom: 40px;
+      border: 2px solid #0F172A;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .text-serif {
+      font-family: 'Playfair Display', serif;
+      color: #0F172A;
+      line-height: 1.2;
+    }
+
+    .text-sans {
+      font-family: 'Montserrat', sans-serif;
+      color: #0F172A;
+    }
+
+    .accent {
+      color: #1ABC9C;
+    }
+
+    /* Slide 1 Styles */
+    .s1-top-text { 
+      font-family: 'Great Vibes', cursive;
+      font-size: 190px; 
+      color: #0F172A;
+      margin-bottom: -40px; 
+      text-transform: lowercase;
+      z-index: 2;
+      transform: rotate(-5deg);
+    }
+    .s1-bottom-text { 
+      font-family: 'Montserrat', sans-serif;
+      font-size: 95px; 
+      font-weight: 800; 
+      text-transform: uppercase; 
+      letter-spacing: 25px; 
+      color: #1ABC9C;
+      margin-top: -20px;
+      z-index: 2;
+    }
+    .s1-image-container {
+      width: 400px; height: 400px;
+      border-radius: 50%;
+      margin: 40px 0;
+      border: 1px solid #0F172A;
+      box-shadow: 0 0 0 10px #e6dfd3, 0 0 0 14px #0F172A, 0 20px 40px rgba(0,0,0,0.2);
+      overflow: hidden; 
+      z-index: 2;
+    }
+    .s1-image-bg {
+      width: 100%; height: 100%;
+      background-image: url('./Ruby-pic-cheery-picking.jpeg');
+      background-size: 115%; /* Zoomed out to reveal shoulders */
+      background-position: center top; /* Align to the very top so no head is cut off */
+      background-repeat: no-repeat;
+      filter: brightness(1.25) contrast(1.05); /* Made much brighter! */
+    }
+
+    /* Slide 2 Styles */
+    .s2-top { 
+      font-family: 'Great Vibes', cursive;
+      font-size: 190px; 
+      color: #0F172A;
+      margin-bottom: -90px; 
+      margin-left: -400px;
+      text-transform: lowercase;
+      z-index: 2;
+      transform: rotate(-6deg);
+    }
+    .s2-bottom { 
+      font-family: 'Montserrat', sans-serif;
+      font-size: 105px; 
+      font-weight: 900; 
+      text-transform: uppercase; 
+      letter-spacing: 25px; 
+      color: #1ABC9C;
+      margin-bottom: 60px;
+      z-index: 1;
+      text-shadow: 0 10px 30px rgba(26,188,156, 0.2);
+    }
+    .s2-list { font-size: 45px; text-align: left; line-height: 2.2; list-style: none; font-weight: 500; }
+    .s2-list li::before { content: '✨'; margin-right: 25px; }
+
+    /* Slide 3 & 4 Styles */
+    .big-statement { font-size: 85px; font-weight: 600; font-style: italic; line-height: 1.4; }
+    .signature-highlight {
+      font-family: 'Great Vibes', cursive;
+      font-size: 180px;
+      color: #1ABC9C;
+      display: block;
+      margin: -20px 0;
+      transform: rotate(-4deg);
+      font-weight: 400;
+      font-style: normal;
+    }
+
+    /* Sparkles */
+    .sparkle {
+      position: absolute;
+      font-size: 80px;
+      color: #1ABC9C;
+      z-index: 5;
+    }
+    .sp-1 { top: 180px; left: 160px; transform: scale(1.2) rotate(15deg); }
+    .sp-2 { bottom: 250px; right: 120px; transform: scale(0.8) rotate(-10deg); }
+    .sp-3 { top: 150px; right: 180px; transform: scale(1.5) rotate(5deg); }
+
+    /* Slide 5 Styles */
+    .s5-text { font-size: 75px; font-weight: 600; font-style: italic; margin-bottom: 80px; line-height: 1.4; }
+    .s5-cta { 
+      background: linear-gradient(135deg, #1ABC9C, #0F172A); 
+      color: #fff; 
+      padding: 40px 90px; font-size: 50px; 
+      border-radius: 100px; text-transform: uppercase; 
+      font-weight: 900; font-family: 'Montserrat', sans-serif;
+      box-shadow: 0 20px 50px rgba(26, 188, 156, 0.4);
+      letter-spacing: 5px;
+      border: 4px solid #fff;
+    }
+
+    .logo-mark {
+      position: absolute;
+      bottom: 60px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      color: #0F172A;
+      opacity: 0.6;
+    }
+    
+    .swipe-arrow {
+      position: absolute;
+      bottom: 60px;
+      right: 60px;
+      font-size: 30px;
+      color: #0F172A;
+      opacity: 0.6;
+    }
+  </style>
+</head>
+<body>
+
+  <button class="download-btn" onclick="downloadAll()">Download All 5 Slides</button>
+
+  <div class="carousel-container">
+    
+    <!-- Slide 1 -->
+    <div class="slide-wrapper">
+      <div class="insta-post" id="slide1">
+        <div class="sparkle sp-1">✦</div>
+        <div class="sparkle sp-2">✦</div>
+        <div class="s1-top-text">let's work</div>
+        <div class="s1-image-container">
+          <div class="s1-image-bg"></div>
+        </div>
+        <div class="s1-bottom-text">TOGETHER</div>
+        <div class="logo-mark">NEXTWAVE TECH STUDIO &nbsp;|&nbsp; WWW.DNEXTWAVE.COM</div>
+        <div class="swipe-arrow">Swipe ➔</div>
+      </div>
+      <button class="download-single-btn" id="btn-slide1" onclick="downloadSingle('slide1', 1)">Download Slide 1</button>
+    </div>
+
+    <!-- Slide 2 -->
+    <div class="slide-wrapper">
+      <div class="insta-post" id="slide2">
+        <div class="sparkle sp-3">✦</div>
+        <div class="s2-top">my</div>
+        <div class="s2-bottom">SERVICES</div>
+        <ul class="text-sans s2-list">
+          <li>Custom Web Design</li>
+          <li>Tech Strategy & Consulting</li>
+          <li>SEO & Performance</li>
+          <li>Digital Transformations</li>
+        </ul>
+        <div class="logo-mark">NEXTWAVE TECH STUDIO &nbsp;|&nbsp; WWW.DNEXTWAVE.COM</div>
+        <div class="swipe-arrow">Swipe ➔</div>
+      </div>
+      <button class="download-single-btn" id="btn-slide2" onclick="downloadSingle('slide2', 2)">Download Slide 2</button>
+    </div>
+
+    <!-- Slide 3 -->
+    <div class="slide-wrapper">
+      <div class="insta-post" id="slide3">
+        <div class="text-serif big-statement">
+          "I love to bring<br>digital visions to<br><span class="signature-highlight">life...</span>"
+        </div>
+        <div class="logo-mark">NEXTWAVE TECH STUDIO &nbsp;|&nbsp; WWW.DNEXTWAVE.COM</div>
+        <div class="swipe-arrow">Swipe ➔</div>
+      </div>
+      <button class="download-single-btn" id="btn-slide3" onclick="downloadSingle('slide3', 3)">Download Slide 3</button>
+    </div>
+
+    <!-- Slide 4 -->
+    <div class="slide-wrapper">
+      <div class="insta-post" id="slide4">
+        <div class="text-serif big-statement">
+          ...for purpose-driven brands and<br><span class="signature-highlight">visionary women</span><br>doing big things."
+        </div>
+        <div class="logo-mark">NEXTWAVE TECH STUDIO &nbsp;|&nbsp; WWW.DNEXTWAVE.COM</div>
+        <div class="swipe-arrow">Swipe ➔</div>
+      </div>
+      <button class="download-single-btn" id="btn-slide4" onclick="downloadSingle('slide4', 4)">Download Slide 4</button>
+    </div>
+
+    <!-- Slide 5 -->
+    <div class="slide-wrapper">
+      <div class="insta-post" id="slide5">
+        <div class="text-serif s5-text">
+          So if you are a business ready to make an impact...
+        </div>
+        <div class="s5-cta">LET'S CONNECT!</div>
+        <div class="logo-mark">NEXTWAVE TECH STUDIO &nbsp;|&nbsp; WWW.DNEXTWAVE.COM</div>
+      </div>
+      <button class="download-single-btn" id="btn-slide5" onclick="downloadSingle('slide5', 5)">Download Slide 5</button>
+    </div>
+
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script>
+    async function executeDownload(element, filename) {
+      await document.fonts.ready;
+      
+      const canvas = await html2canvas(element, {
+        scale: 2, 
+        useCORS: true,
+        backgroundColor: null,
+        onclone: (clonedDoc) => {
+          // Remove the scaling from the parent wrapper in the cloned document
+          // so html2canvas renders it perfectly at its true 1080x1080 size!
+          const clonedElement = clonedDoc.getElementById(element.id);
+          const wrapper = clonedElement.parentElement;
+          if (wrapper) {
+            wrapper.style.transform = 'none';
+            wrapper.style.margin = '0';
+          }
+        }
+      });
+      
+      const imgData = canvas.toDataURL('image/jpeg', 0.95);
+      const link = document.createElement('a');
+      link.download = filename;
+      link.href = imgData;
+      link.click();
+    }
+
+    async function downloadAll() {
+      const btn = document.querySelector('.download-btn');
+      btn.innerText = 'Generating Slides...';
+      btn.style.opacity = '0.7';
+      btn.disabled = true;
+
+      const slides = ['slide1', 'slide2', 'slide3', 'slide4', 'slide5'];
+      for (let i = 0; i < slides.length; i++) {
+        const post = document.getElementById(slides[i]);
+        await executeDownload(post, `carousel-slide-${i + 1}.jpg`);
+        await new Promise(r => setTimeout(r, 600)); // small delay
+      }
+      
+      btn.innerText = 'Download All 5 Slides';
+      btn.style.opacity = '1';
+      btn.disabled = false;
+    }
+
+    async function downloadSingle(slideId, index) {
+      const btn = document.getElementById('btn-' + slideId);
+      const originalText = btn.innerText;
+      btn.innerText = 'Generating...';
+      btn.disabled = true;
+      
+      const post = document.getElementById(slideId);
+      await executeDownload(post, `carousel-slide-${index}.jpg`);
+      
+      btn.innerText = originalText;
+      btn.disabled = false;
+    }
+  </script>
+</body>
+</html>
