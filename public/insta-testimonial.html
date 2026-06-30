@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Instagram Testimonial Generator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Montserrat:wght@400;500&display=swap" rel="stylesheet">
+  
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      background: #333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .download-btn {
+      position: fixed; top: 20px; right: 20px;
+      padding: 12px 24px; background: #000; color: #fff;
+      font-size: 16px; font-family: sans-serif;
+      border: none; border-radius: 8px; cursor: pointer; z-index: 100;
+    }
+
+    /* Instagram Square Post: 1080x1080 */
+    .insta-post {
+      width: 1080px; height: 1080px;
+      position: relative;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    /* Background image with blur, similar to the reference */
+    .bg-image {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      /* Elegant bright interior with flowers/decor */
+      background-image: url('https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1080&q=80'); 
+      background-size: cover;
+      background-position: center;
+      filter: blur(8px) brightness(1.15);
+      transform: scale(1.05); /* hide blurred edges */
+      z-index: 1;
+    }
+    
+    .bg-overlay {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(255, 255, 255, 0.3); /* Lighten it up to match the reference */
+      z-index: 2;
+    }
+
+    .top-left-text {
+      position: absolute;
+      top: 80px; left: 80px;
+      font-family: 'Playfair Display', serif;
+      font-size: 85px;
+      line-height: 1.0;
+      color: #0F172A; /* Brand accent */
+      z-index: 20;
+      text-transform: uppercase;
+      letter-spacing: -1px;
+    }
+
+    .main-box {
+      position: absolute;
+      top: 310px;
+      left: 120px;
+      width: 840px;
+      background-color: #e6dfd3; 
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.08'/%3E%3C/svg%3E");
+      
+      /* Double Editorial Border */
+      border: 1px solid #0F172A; 
+      box-shadow: 0 0 0 8px #e6dfd3, 0 0 0 11px #0F172A, 0 20px 40px rgba(0,0,0,0.15);
+      
+      padding: 60px 80px 110px 80px;
+      z-index: 10;
+      text-align: center;
+    }
+
+    .main-box::before {
+      content: '“';
+      position: absolute;
+      top: -40px;
+      left: 40px;
+      font-family: 'Playfair Display', serif;
+      font-size: 350px;
+      color: rgba(26, 188, 156, 0.15); /* Brand teal watermark */
+      line-height: 1;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .quote-text {
+      position: relative;
+      z-index: 5;
+      font-family: 'Playfair Display', serif;
+      font-size: 30px;
+      line-height: 1.55;
+      color: #000;
+      margin-bottom: 40px;
+    }
+
+    .author-text {
+      position: relative;
+      z-index: 5;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 19px;
+      line-height: 1.6;
+      color: #000;
+    }
+
+    .author-name {
+      font-weight: 600;
+      font-size: 22px;
+      margin-bottom: 5px;
+      color: #1ABC9C; /* Brand teal */
+    }
+
+    .circle-logo {
+      position: absolute;
+      bottom: -80px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 160px; height: 160px;
+      background-color: #e6dfd3;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.08'/%3E%3C/svg%3E");
+      
+      /* Double Editorial Border for Circle */
+      border: 1px solid #0F172A;
+      box-shadow: 0 0 0 6px #e6dfd3, 0 0 0 9px #0F172A;
+      
+      border-radius: 50%;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 18px;
+      font-weight: 500;
+      color: #0F172A;
+      text-align: center;
+      line-height: 1.3;
+      padding: 10px;
+      z-index: 10;
+    }
+
+    .box-url {
+      position: absolute;
+      bottom: 20px; right: 30px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 16px;
+      color: #1ABC9C; /* Brand teal */
+      font-weight: 600;
+      z-index: 20;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 1080x1080 Canvas for Instagram -->
+  <div class="insta-post" id="post">
+    <div class="bg-image"></div>
+    <div class="bg-overlay"></div>
+    
+    <div class="top-left-text">
+      COMMUNITY<br>IMPACT
+    </div>
+
+    <div class="main-box">
+
+      <div class="quote-text">
+        "Ruby has done a remarkable job in her support of the websites. She has successfully completed a number of key tasks and has consistently demonstrated resourcefulness, professionalism, and a strong commitment to quality. Her work ethic and reliability have been evident throughout the project, and her contributions have added real value to our ongoing website improvements."
+      </div>
+      
+      <div class="author-text">
+        <div class="author-name">Debra M.</div>
+        CEO/President, Adorable Babies Jump Start Corporation<br>
+        (ABJS) & Drone Girlz
+      </div>
+
+      <div class="circle-logo">
+        ABJS &<br>Drone Girlz
+      </div>
+
+      <div class="box-url">
+        dronegirlz.org  |  adorablebabies.org
+      </div>
+    </div>
+  </div>
+
+  <button class="download-btn" onclick="downloadPost()">Download Post</button>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script>
+    function downloadPost() {
+      const btn = document.querySelector('.download-btn');
+      btn.innerText = 'Generating...';
+      btn.style.opacity = '0.7';
+      btn.disabled = true;
+
+      const post = document.getElementById('post');
+      
+      html2canvas(post, {
+        scale: 2, 
+        useCORS: true
+      }).then(canvas => {
+        const imgData = canvas.toDataURL('image/jpeg', 0.95);
+        const link = document.createElement('a');
+        link.download = 'instagram-testimonial-post.jpg';
+        link.href = imgData;
+        link.click();
+
+        btn.innerText = 'Download Post';
+        btn.style.opacity = '1';
+        btn.disabled = false;
+      });
+    }
+  </script>
+</body>
+</html>

@@ -28,7 +28,7 @@ const Testimonials = () => {
 
         const interval = setInterval(() => {
             setActiveIndex((current) => (current + 1) % numPages);
-        }, 5000);
+        }, 10000);
 
         return () => clearInterval(interval);
     }, [isAutoPlaying, numPages]);
