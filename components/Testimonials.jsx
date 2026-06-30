@@ -49,6 +49,29 @@ const Testimonials = () => {
         setIsAutoPlaying(false);
     };
 
+    const renderCard = (t, index) => (
+        <div key={index} className="testimonial-card">
+            <div className="testimonial-stars">
+                {[...Array(5)].map((_, i) => (
+                    <svg key={i} viewBox="0 0 24 24" className="star-icon"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                ))}
+            </div>
+            <div className="testimonial-quote-wrapper">
+                <svg className="testimonial-quote-svg" width="40" height="30" viewBox="0 0 40 30" fill="currentColor">
+                    <path d="M0 18.2857C0 14.6667 0.933333 11.2381 2.8 8C4.66667 4.7619 7.4 2.09524 11 0V7.14286C8.86667 7.71429 7.23333 8.7619 6.1 10.2857C4.96667 11.8095 4.4 13.5238 4.4 15.4286V18.2857H11V30H0V18.2857ZM20.4 18.2857C20.4 14.6667 21.3333 11.2381 23.2 8C25.0667 4.7619 27.8 2.09524 31.4 0V7.14286C29.2667 7.71429 27.6333 8.7619 26.5 10.2857C25.3667 11.8095 24.8 13.5238 24.8 15.4286V18.2857H31.4V30H20.4V18.2857Z" />
+                </svg>
+                <p className="testimonial-text">{t.quote}</p>
+            </div>
+            <div className="testimonial-author">
+                <div className="testimonial-avatar">{t.avatar}</div>
+                <div>
+                    <div className="testimonial-name">{t.name}</div>
+                    <div className="testimonial-title">{t.title}</div>
+                </div>
+            </div>
+        </div>
+    );
+
     return (
         <section className="testimonials-section">
             <div className="testimonials-container">
@@ -59,58 +82,45 @@ const Testimonials = () => {
                 </p>
                 
                 <div className="testimonials-display-wrapper">
-                    {numPages > 1 && (
-                        <button className="slider-nav-btn prev" onClick={prevSlide} aria-label="Previous testimonial">
-                            <svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
-                        </button>
-                    )}
-
-                    <div className="testimonials-viewport">
-                        <div 
-                            className="testimonials-track"
-                            style={{ transform: `translateX(-${activeIndex * 100}%)` }}
-                            onMouseEnter={() => setIsAutoPlaying(false)}
-                            onMouseLeave={() => setIsAutoPlaying(true)}
-                        >
-                            {groupedTestimonials.map((group, groupIndex) => (
-                                <div key={groupIndex} className="testimonial-slide">
-                                    <div className="testimonial-group">
-                                        {group.map((t, index) => (
-                                            <div key={index} className="testimonial-card">
-                                                <div className="testimonial-stars">
-                                                    {[...Array(5)].map((_, i) => (
-                                                        <svg key={i} viewBox="0 0 24 24" className="star-icon"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                                                    ))}
-                                                </div>
-                                                <div className="testimonial-quote-wrapper">
-                                                    <svg className="testimonial-quote-svg" width="40" height="30" viewBox="0 0 40 30" fill="currentColor">
-                                                        <path d="M0 18.2857C0 14.6667 0.933333 11.2381 2.8 8C4.66667 4.7619 7.4 2.09524 11 0V7.14286C8.86667 7.71429 7.23333 8.7619 6.1 10.2857C4.96667 11.8095 4.4 13.5238 4.4 15.4286V18.2857H11V30H0V18.2857ZM20.4 18.2857C20.4 14.6667 21.3333 11.2381 23.2 8C25.0667 4.7619 27.8 2.09524 31.4 0V7.14286C29.2667 7.71429 27.6333 8.7619 26.5 10.2857C25.3667 11.8095 24.8 13.5238 24.8 15.4286V18.2857H31.4V30H20.4V18.2857Z" />
-                                                    </svg>
-                                                    <p className="testimonial-text">{t.quote}</p>
-                                                </div>
-                                                <div className="testimonial-author">
-                                                    <div className="testimonial-avatar">{t.avatar}</div>
-                                                    <div>
-                                                        <div className="testimonial-name">{t.name}</div>
-                                                        <div className="testimonial-title">{t.title}</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                            ))}
+                    {isMobile ? (
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', width: '100%' }}>
+                            {testimonialsData.map((t, index) => renderCard(t, index))}
                         </div>
-                    </div>
+                    ) : (
+                        <>
+                            {numPages > 1 && (
+                                <button className="slider-nav-btn prev" onClick={prevSlide} aria-label="Previous testimonial">
+                                    <svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+                                </button>
+                            )}
 
-                    {numPages > 1 && (
-                        <button className="slider-nav-btn next" onClick={nextSlide} aria-label="Next testimonial">
-                            <svg viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
-                        </button>
+                            <div className="testimonials-viewport">
+                                <div 
+                                    className="testimonials-track"
+                                    style={{ transform: `translateX(-${activeIndex * 100}%)` }}
+                                    onMouseEnter={() => setIsAutoPlaying(false)}
+                                    onMouseLeave={() => setIsAutoPlaying(true)}
+                                >
+                                    {groupedTestimonials.map((group, groupIndex) => (
+                                        <div key={groupIndex} className="testimonial-slide">
+                                            <div className="testimonial-group">
+                                                {group.map((t, index) => renderCard(t, index))}
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {numPages > 1 && (
+                                <button className="slider-nav-btn next" onClick={nextSlide} aria-label="Next testimonial">
+                                    <svg viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+                                </button>
+                            )}
+                        </>
                     )}
                 </div>
 
-                {numPages > 1 && (
+                {!isMobile && numPages > 1 && (
                     <div className="testimonials-dots">
                         {[...Array(numPages)].map((_, index) => (
                             <button
