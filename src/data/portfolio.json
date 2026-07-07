@@ -1,6 +1,14 @@
 {
     "sampleProjects": [
         {
+            "title": "Cartify",
+            "description": "A modern, high-performance e-commerce storefront featuring summer collections, categorized shopping, and seamless user experience.",
+            "tags": ["E-Commerce", "Fashion", "Full Stack"],
+            "image": "/images/portfolio/cartify.jpg",
+            "link": "https://web-store-kohl-sigma.vercel.app/",
+            "color": "#F97316"
+        },
+        {
             "title": "Local Services Business",
             "description": "A high-performance landing page for local service providers, optimized for lead generation and mobile responsiveness.",
             "tags": ["Local Business", "Lead Gen", "Modern UI"],
