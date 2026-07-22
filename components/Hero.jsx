@@ -22,10 +22,10 @@ const Hero = () => {
                 <div className="hero-split-wrapper">
                     <div className="hero-content-left reveal">
                         <div className="hero-badge-glass animate-floating">Freelance Web Developer</div>
-                        
+
                         <h1>
-                            We build Powerful websites for{' '}
-                            <span className="typing-text">
+                            We build Powerful<br />
+                            websites for <span className="typing-text">
                                 <Typewriter
                                     words={['Small Businesses.', 'Non-Profits.', 'Brands.']}
                                     loop={0}
@@ -33,22 +33,38 @@ const Hero = () => {
                                     cursorStyle='_'
                                     typeSpeed={70}
                                     deleteSpeed={50}
-                                    delaySpeed={1500}
+                                    delaySpeed={1600}
                                 />
                             </span>
                         </h1>
+                        <h2 className="hero-sf-heading">
+                            We connect Your Business to <span className="sf-gradient-text">Salesforce CRM</span>
+                        </h2>
                         <p className="hero-lead-text">
-                            We transform your vision into scalable, high-conversion digital experiences that drive growth.
+                            Premium websites, Salesforce CRM setup &amp; sales coordination - helping small businesses and non-profits grow smarter and faster.
                         </p>
 
                         <div className="service-highlights-glass">
-                            <span className="highlight-pill">Design</span>
+                            <span className="highlight-pill">Web Design</span>
+                            <span className="highlight-pill highlight-pill--sf">☁️ Salesforce CRM</span>
                             <span className="highlight-pill">SEO</span>
                             <span className="highlight-pill">Development</span>
+                            <span className="highlight-pill">Sales Coordination</span>
                         </div>
 
-                        <Link 
-                            to="/?nav=contact" 
+                        {/* Salesforce trust strip */}
+                        <div className="hero-sf-trust">
+                            <span className="hero-sf-trust-label">Salesforce services include:</span>
+                            <div className="hero-sf-badges">
+                                <span className="hero-sf-badge">CRM Implementation</span>
+                                <span className="hero-sf-badge">Sales Team Setup</span>
+                                <span className="hero-sf-badge">Pipeline Configuration</span>
+                                <span className="hero-sf-badge">Team Onboarding</span>
+                            </div>
+                        </div>
+
+                        <Link
+                            to="/?nav=contact"
                             className="hero-cta-premium"
                             onClick={() => window.sessionStorage.setItem('scroll_to_contact', 'true')}
                         >
@@ -58,9 +74,9 @@ const Hero = () => {
 
                     <div className="hero-asset-right animate-floating reveal">
                         <div className="asset-glow-aura"></div>
-                        <img 
-                            src={heroShowcaseImg} 
-                            alt="NextWave Tech Showcase" 
+                        <img
+                            src={heroShowcaseImg}
+                            alt="NextWave Tech Showcase"
                             className="hero-3d-asset"
                         />
                     </div>

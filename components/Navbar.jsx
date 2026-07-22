@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+﻿import React, { useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import "../src/styles/global.css";
 
@@ -24,7 +24,7 @@ const Navbar = () => {
                 </div>
             </Link>
 
-            {/* Hamburger button — visible only on mobile */}
+            {/* Hamburger button - visible only on mobile */}
             <button
                 className={`hamburger ${menuOpen ? "hamburger-open" : ""}`}
                 onClick={() => setMenuOpen(!menuOpen)}

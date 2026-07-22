@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+﻿import React, { useState, useEffect, useRef } from "react";
 import "../src/styles/global.css";
 
 const Counter = ({ end, duration = 2000, suffix = "" }) => {
